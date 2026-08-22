@@ -146,7 +146,7 @@ signal at $C = 5$ and $1.15$ at $C = 8$. Against a flat recording response of
 magnitude $\kappa = 0.45$ at $G = 51$ and $C = 5$, the label-permutation test
 with the two-sided Wald statistic attains size-adjusted power $0.383$, while
 the cluster sign-change test applied to the directed statistic attains $0.983$
-and has a null rejection rate between $0.0435$ and $0.0645$ over
+and has a null rejection rate between $0.044$ and $0.065$ over
 $G \in \{20,30,51,100\}$ and $C \in \{3,5,8\}$ at nominal level $0.05$, with a
 Monte Carlo standard error of $0.005$ from $2{,}000$ replications. The
 label-permutation test fixes a reference distribution valid for every $G$ under
@@ -274,15 +274,15 @@ the fixed linear combination of per-category event studies that Lemma
 \ref{lem:sep} gives and each category has to be fitted on its own cells, while
 the randomization of Section \ref{sec:perm} acts in the category direction and
 needs only Assumption \ref{as:CE}.\footnote{Fitting each category on its own
-cells, the label-permutation test of \eqref{eq:null} rejects at $0.0467$ when
-the missing cells are tied to the category label and at $0.0492$ when they are
+cells, the label-permutation test of \eqref{eq:null} rejects at $0.047$ when
+the missing cells are tied to the category label and at $0.049$ when they are
 independent of it, against a nominal $0.05$ over $1{,}200$ replications with a
-Monte Carlo standard error of $0.0063$
+Monte Carlo standard error of $0.006$
 (\texttt{verification\_extra6\_3.json} in \texttt{results/theory/inference/}). With the
 observation rate falling from $1.00$ to $0.40$ across categories ordered by
-$d_c$, the rate is $0.040$, against $0.0527$ for a control that assigns the same
+$d_c$, the rate is $0.040$, against $0.053$ for a control that assigns the same
 five rates to a category drawn at random in each replication, over $1{,}500$
-replications with a Monte Carlo standard error of $0.0056$
+replications with a Monte Carlo standard error of $0.006$
 (\texttt{verification\_extra7\_8.json}, same directory). The second
 departure is downward, so the test stays at or below its nominal level and the
 cost falls on power.} Section \ref{sec:app} reports one application in which
@@ -1087,11 +1087,11 @@ which is the one Proposition \ref{prop:anatomy} licenses under Assumption
 \ref{as:I}, rejects between $0.082$ and $0.175$ over the twelve cells.
 
 The two-sided label-permutation test is at nominal size for $C \in \{5,8\}$,
-ranging from $0.0425$ to $0.059$ over all eight such cells, and its directed
+ranging from $0.043$ to $0.059$ over all eight such cells, and its directed
 version from $0.043$ to $0.053$. At $C = 3$ both have rejection rate $0.000$,
 which is Proposition \ref{prop:resolution}(iii) rather than a numerical
-artifact. The wild cluster bootstrap ranges from $0.0505$ to $0.067$. The
-two-sided cluster sign-change test ranges from $0.0215$ to $0.066$ and is
+artifact. The wild cluster bootstrap ranges from $0.051$ to $0.067$. The
+two-sided cluster sign-change test ranges from $0.022$ to $0.066$ and is
 conservative at $G = 20$, where its three rates are $0.027$, $0.022$ and
 $0.033$; the directed version rejects at $0.058$, $0.058$ and $0.055$ in those
 same three cells.
@@ -1105,7 +1105,8 @@ $W = \omega_2 T^2$ holds to a maximum relative error of $4.0 \times 10^{-14}$
 at $G = 20$ and $1.3 \times 10^{-15}$ at $G = 100$. Referring the statistic to
 the $F$ law of \eqref{eq:Fexact} at the nominal $G$ gives null rejection rates
 of $0.0495$, $0.0489$, $0.0502$ and $0.0499$ at $G = 20$, $30$, $51$ and
-$100$. Kolmogorov-Smirnov tests of the resulting $p$-values against the uniform
+$100$, quoted to four decimals here because the claim is that they are
+indistinguishable from the nominal $0.05$ rather than merely close to it. Kolmogorov-Smirnov tests of the resulting $p$-values against the uniform
 return $p = 0.81$, $0.02$, $0.06$ and $0.77$ at those four $G$, so the pooled
 $G = 30$ draws reject uniformity at the $5\%$ level. The closed-form
 chi-square size implied by \eqref{eq:Fexact} matches the simulated one to
