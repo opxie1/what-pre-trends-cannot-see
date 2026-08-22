@@ -204,6 +204,10 @@ written in score form.
 
 A small-sample cluster-robust literature already corrects both the variance
 estimator and the reference distribution for statistics of this kind.
+\citet{bester2011cluster} hold the number of clusters fixed and let cluster
+size grow, and obtain limiting $t$ and $F$ distributions in which $G$ plays
+the role of the sample size; the $F(m,G-m)$ shape of \eqref{eq:Fexact} is
+theirs as a large-cluster approximation.
 \citet{bell2002bias} remove the downward bias of the cluster-robust variance
 estimator under a working model and pair the correction with Satterthwaite
 degrees of freedom, and \citet{panwall2002} do the same for generalized
@@ -220,10 +224,16 @@ It states an algebraic identity between the CR1 Wald statistic and a Hotelling
 $T^2$, and, under Assumption \ref{as:I}, an exact $F(m,G-m)$ law for the joint
 null that the post-treatment coefficients do not vary with exposure, holding at
 every $G$ and $m$ with $G - m \ge 1$ rather than at denominator degrees of
-freedom matched from the data. Corollary \ref{cor:asym} is the second
+freedom matched from the data, and rather than in the large-cluster limit of
+\citet{bester2011cluster}. What is added is the finite-sample statement and
+the explicit constant $\omega_2$, not the family. Corollary \ref{cor:asym} is the second
 difference. It gives the rate $m = o(G^{2/3})$ at which the chi-square
 calibration stays valid, the limit the size converges to when $m^{3/2}/G$ tends
 to a positive constant, and the convergence of the size to one when $m/G$ does.
+\citet{calhoun2011testing} derives the corresponding correction for the
+regression $F$ test when the number of restrictions grows with the number of
+observations rather than with the number of clusters, and reports the same
+direction of failure for the uncorrected test.
 
 The design that motivates the problem is the use of graded outcome categories to
 detect a treatment-induced change in how outcomes are recorded.
@@ -1084,7 +1094,13 @@ freedom at $G - m$, which is $38$ rather than $50$ at $G = 51$ and $m = 13$,
 and the patch removes about a quarter of the excess over the nominal level:
 $0.309$ against $0.389$ at $G = 51$, $C = 5$. The Hotelling calibration at $G$,
 which is the one Proposition \ref{prop:anatomy} licenses under Assumption
-\ref{as:I}, rejects between $0.082$ and $0.175$ over the twelve cells.
+\ref{as:I}, rejects between $0.082$ and $0.175$ over the twelve cells. That
+calibration is model-based rather than randomization-based, and Assumption
+\ref{as:I}(i) is what it rests on: with centred $\chi^2_1$ cluster
+contributions, whose skewness is $2.83$, its size is $0.184$
+(\texttt{verification\_extra.json}, entry \texttt{E4}). We report it as a
+diagnostic and recommend the randomization calibrations of Sections
+\ref{sec:perm} and \ref{sec:cluster} in its place.
 
 The two-sided label-permutation test is at nominal size for $C \in \{5,8\}$,
 ranging from $0.043$ to $0.059$ over all eight such cells, and its directed
@@ -1147,7 +1163,11 @@ $C = 8$, for variance ratios $1$, $2$, $4$, $9$ and $25$. Placing the inflated
 variance on the lowest-exposure category instead moves those rates by at most
 $0.009$. The distortion is monotone in the ratio, and its largest value in the
 grid stays below the chi-square rate of $0.356$ measured at $G = 51$, $C = 8$,
-$m = 13$.
+$m = 13$. \citet{diciccio2017robust} show for a regression coefficient that
+studentizing the statistic makes the permutation test exact under
+independence and asymptotically valid under heteroskedasticity, so a
+studentized category-level statistic is the natural repair for this
+departure; we have not derived its behaviour under Assumption \ref{as:CE}.
 
 The sign of the distortion depends on how the variance spread lines up with
 the exposure index. In the implementation used for Tables \ref{tab:size} and
@@ -2016,6 +2036,11 @@ Bell, R.~M. and D.~F. McCaffrey (2002). Bias reduction in standard errors for
 linear regression with multi-stage samples. \emph{Survey Methodology} 28(2),
 169--181.
 
+\bibitem[Bester et al.(2011)]{bester2011cluster}
+Bester, C.~A., T.~G. Conley, and C.~B. Hansen (2011). Inference with
+dependent data using cluster covariance estimators. \emph{Journal of
+Econometrics} 165(2), 137--151.
+
 \bibitem[Borusyak et al.(2024)]{borusyak2024revisiting}
 Borusyak, K., X.~Jaravel, and J.~Spiess (2024). Revisiting event-study designs:
 Robust and efficient estimation. \emph{Review of Economic Studies} 91(6),
@@ -2024,6 +2049,10 @@ Robust and efficient estimation. \emph{Review of Economic Studies} 91(6),
 \bibitem[Callaway and Sant'Anna(2021)]{callaway2021did}
 Callaway, B. and P.~H.~C. Sant'Anna (2021). Difference-in-differences with
 multiple time periods. \emph{Journal of Econometrics} 225(2), 200--230.
+
+\bibitem[Calhoun(2011)]{calhoun2011testing}
+Calhoun, G. (2011). Hypothesis testing in linear regression when $k/n$ is
+large. \emph{Journal of Econometrics} 165(2), 163--174.
 
 \bibitem[Cameron et al.(2008)]{cameron2008bootstrap}
 Cameron, A.~C., J.~B. Gelbach, and D.~L. Miller (2008). Bootstrap-based
@@ -2043,6 +2072,11 @@ Economics and Statistics} 99(4), 698--709.
 de Chaisemartin, C. and X.~D'Haultf\oe uille (2020). Two-way fixed effects
 estimators with heterogeneous treatment effects. \emph{American Economic
 Review} 110(9), 2964--2996.
+
+\bibitem[DiCiccio and Romano(2017)]{diciccio2017robust}
+DiCiccio, C.~J. and J.~P. Romano (2017). Robust permutation tests for
+correlation and regression coefficients. \emph{Journal of the American
+Statistical Association} 112(519), 1211--1220.
 
 \bibitem[Denteh and K\'edagni(2022)]{denteh2026misclassdid}
 Denteh, A. and D.~K\'edagni (2022). Misclassification in
