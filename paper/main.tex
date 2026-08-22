@@ -6,6 +6,8 @@
 \usepackage{natbib}
 \usepackage[hidelinks]{hyperref}
 \usepackage{setspace}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 \bibpunct{(}{)}{;}{a}{}{,}
 
@@ -28,34 +30,44 @@
 
 \numberwithin{equation}{section}
 
-\title{Exact Randomization Inference for Cross-Outcome\\ Falsification Tests with Few Clusters}
+\title{Cross-Outcome Falsification Tests with Few Clusters:\\ Size Distortion and Randomization Calibrations}
 
 \author{Ethan Xie\thanks{Charter School of Wilmington, Wilmington, DE.
-Email: \texttt{ethanxie@udel.edu}. Replication code and all output files
-underlying the tables are available at
-\url{https://github.com/opxie1/Exact-Randomization-Inference-for-Cross-Outcome-Falsification-Tests-with-Few-Clusters};
-every number reported below names the file it comes from.}}
+Email: \texttt{ethanxie@udel.edu}. Replication code, the simulation scripts and
+the output files underlying the tables are at
+\url{https://github.com/opxie1/Exact-Randomization-Inference-for-Cross-Outcome-Falsification-Tests-with-Few-Clusters},
+commit \texttt{da19a4e}. The note to each table and figure names the output
+file its entries are read from. The simulations are written in Python and need
+version 3.11 or later with \texttt{numpy}, \texttt{scipy} and \texttt{pandas}.
+They draw pseudo-random numbers from the NumPy PCG64 generator, seeded once per
+replication by the CRC-32 checksum of a string naming the design cell and the
+replication index, so that any cell can be regenerated on its own. Producing
+every output file cited here takes $61.2$ minutes in total
+(\texttt{results/theory/inference/summary.json}, field
+\texttt{runtime\_min\_total}).}}
 
-\date{August 21, 2026}
+\date{August 22, 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
 \noindent
-Applied researchers test identifying assumptions by asking whether an estimated
-treatment effect varies across outcome categories that differ in how susceptible
-they are to a suspected violation. We show that the cluster-robust Wald statistic
-for the joint null of no cross-category gradient is exactly a scalar multiple of
-a Hotelling $T^2$, so its chi-square calibration is wrong by an amount governed
-by the ratio of restrictions to clusters. At a design with $51$ clusters and $13$
-post-treatment restrictions the nominal $5\%$ test rejects a true null $38.9\%$
-of the time. We give three correctly sized alternatives: a label-permutation test
-that is exact in finite samples under category exchangeability, a cluster
-sign-change test, and a restricted wild cluster bootstrap. Permutation has a
-resolution floor of $2/C!$ that makes it unusable below five categories. In a
-crime-reporting application the chi-square test rejects at $p=0.018$ and no
-correctly sized procedure rejects.
+Falsification tests compare estimated effects across outcome categories
+differing in exposure to a suspected violation. The cluster-robust Wald
+statistic for the joint null of no cross-category gradient is exactly a scaled
+Hotelling $T^2$, so chi-square calibration errs by an amount set by $m/G$: with
+$G=51$ clusters and $m=13$ restrictions a nominal $5\%$ test has size $0.389$.
+We characterize the size of three alternatives: label permutation, exact in
+finite samples under category exchangeability; cluster sign changes, exact
+under sign symmetry of cluster contributions, asymptotically level $\alpha$
+otherwise; and the restricted wild cluster bootstrap, simulated only.
+Permutation $p$-values floor at $2/C!$ for a two-sided statistic with exposure
+indices symmetric about their mean, so permutation needs $C\ge5$ at the $5\%$
+level; at $C=5$ its size-adjusted power is $0.383$ against $0.983$ for the
+directed cluster sign-change test. In a six-category crime-reporting design
+under an equivariant loading normalization, chi-square gives $p=0.025$ and
+permutation $p=0.115$.
 \end{abstract}
 
 \smallskip
@@ -70,13 +82,20 @@ falsification tests; permutation tests; Hotelling's $T^2$; difference-in-differe
 
 \section{Introduction}
 
-Falsification tests built from several outcomes are common in applied work, and
-their inference is usually asymptotic. The design is familiar: a researcher
-suspects that an estimated effect is contaminated by some mechanism, observes
-several outcome categories that differ in exposure to that mechanism, and tests
-whether the estimated effects line up with exposure. \citet{weisburd2024crs}
-run a version of this across crime categories graded by reporting propensity.
-The test is then a joint restriction on interaction coefficients, and the
+Falsification tests built from several outcomes are standard in applied work.
+The design is familiar: a researcher suspects that an estimated effect is
+contaminated by some mechanism, observes several outcome categories that differ
+in exposure to that mechanism, and tests whether the estimated effects line up
+with exposure. \citet{iyer2012political} separate reporting from incidence by
+contrasting documented crimes against women with crimes against men and
+gender-neutral crimes, and \citet{miller2019female} run that contrast for
+violent victimization by sex of the victim. \citet{weisburd2024crs} run a
+version of it across crime categories graded by reporting propensity.
+\citet{baicker2013oregon} report effects of Medicaid coverage on measured blood
+pressure and cholesterol next to self-reported diagnoses of the corresponding
+conditions. In epidemiology the device is formalized as the negative-control
+outcome \citep{lipsitch2010negative}. Run as a single test across categories,
+the contrast is a joint restriction on interaction coefficients, and the
 $p$-value comes from a chi-square reference distribution with cluster-robust
 standard errors.
 
@@ -84,12 +103,12 @@ That calibration fails in the sample sizes where these tests are run. We derive
 the exact null distribution of the cluster-robust Wald statistic for this
 problem and show it is $\omega_2$ times a Hotelling $T^2$ with dimension $m$ and
 $G-1$ degrees of freedom, where $m$ is the number of restrictions, $G$ is the
-number of clusters, and $\omega_2$ is a fitting correction within $0.002$ of one
-in our designs \citep{hotelling1931}. The chi-square reference ignores the
-estimation of the $m \times m$ meat matrix from $G$ cluster scores. The
-resulting size distortion is not a small-sample curiosity. At $G = 51$ and
-$m = 13$ we measure a null rejection rate of $0.389$ against a nominal $0.05$,
-and at $G = 20$ the rate is $0.905$.
+number of clusters, and $\omega_2$ is a fitting correction lying between
+$0.995$ and $0.9996$ across the designs of Section \ref{sec:sim}
+\citep{hotelling1931}. The chi-square reference ignores the
+estimation of the $m \times m$ meat matrix from $G$ cluster scores. At
+$G = 51$ and $m = 13$ we measure a null rejection rate of $0.389$ against a
+nominal $0.05$, and at $G = 20$ the rate is $0.905$.
 
 The distortion is governed by $m$ and $G$ jointly, and the chi-square
 calibration is valid only when $m$ grows slower than $G^{2/3}$. Along sequences
@@ -99,33 +118,49 @@ fraction the size converges to one. This gives a design rule computable before
 any outcome is observed: at $36.4$ effective clusters, size stays below $0.075$
 only for $m \le 2$.
 
-We give three procedures that are correctly sized. The first permutes the
-exposure labels across outcome categories. Under an exchangeability condition on
-the joint law of the category data arrays, this test has size at most $\alpha$
-in finite samples for every $N$, $T$, $G$ and $C$, with no distributional,
-clustering or cluster-count assumption. The condition is not free: with $C$
-categories the smallest attainable $p$-value for a two-sided quadratic statistic
-is $2/C!$, so the test cannot reject at the $5\%$ level with fewer than five
-categories. The second procedure randomizes cluster-level sign changes and the
-third is the restricted wild cluster bootstrap of \citet{cameron2008bootstrap};
-both remain usable when $C$ is small.
+We give three alternative calibrations and characterize the size of each. The
+first permutes the exposure labels across outcome categories. Under an
+exchangeability condition on the joint law of the category data arrays, this
+test has size at most $\alpha$ in finite samples for every $N$, $T$, $G$ and
+$C$, with no distributional, clustering or cluster-count assumption. The
+randomization group is the set of $C!$ relabelings, and its order bounds the
+resolution: the smallest attainable $p$-value is $2/C!$ when the statistic is
+even in the labels and the exposure indices are symmetric about their mean, and
+$1/C!$ otherwise, so a two-sided test at level $0.05$ with equally spaced
+indices requires $C \ge 5$. The second procedure randomizes sign changes over
+clusters, and it is exactly level $\alpha$ when the cluster contributions are
+sign-symmetric under the null of no cross-category gradient, asymptotically
+level $\alpha$ in $G$ otherwise. The third is the restricted wild cluster
+bootstrap of \citet{cameron2008bootstrap}, for which we report simulated size
+rather than a theorem. Both cluster-level procedures remain usable at
+$C \le 4$.
 
 Two results concern power rather than size. The Wald statistic is not optimal
 against the alternative these tests are designed to detect. When the shape of
 the response across horizons is known up to scale, a directed statistic is
 uniformly most powerful invariant, and recalibrating both tests to deliver size
-$\alpha$ puts the ratio of minimum detectable responses at $0.393$ at $36.4$
-effective clusters. Label randomization also carries a price, which we quantify:
+$\alpha$ puts the ratio of minimum detectable responses at power $0.80$ at
+$0.393$ at $36.4$ effective clusters. Label randomization carries a price:
 relative to a normal benchmark the permutation test needs $1.35$ times the
-signal at $C = 5$ and $1.15$ at $C = 8$.
+signal at $C = 5$ and $1.15$ at $C = 8$. Against a flat recording response of
+magnitude $\kappa = 0.45$ at $G = 51$ and $C = 5$, the label-permutation test
+with the two-sided Wald statistic attains size-adjusted power $0.383$, while
+the cluster sign-change test applied to the directed statistic attains $0.983$
+and has a null rejection rate between $0.0435$ and $0.0645$ over
+$G \in \{20,30,51,100\}$ and $C \in \{3,5,8\}$ at nominal level $0.05$, with a
+Monte Carlo standard error of $0.005$ from $2{,}000$ replications. The
+label-permutation test fixes a reference distribution valid for every $G$ under
+Assumption \ref{as:CE}, and we use it as the finite-sample benchmark. The
+directed cluster sign-change test is the procedure we recommend running.
 
 Section \ref{sec:setup} states the design and the null. Section \ref{sec:anatomy}
 derives the exact null law of the Wald statistic and the condition under which
 its chi-square calibration is valid. Section \ref{sec:perm} gives the
 label-permutation test, its exactness condition, and its resolution floor.
-Section \ref{sec:cluster} gives the two cluster-level procedures. Section
-\ref{sec:power} derives local power, a closed-form minimum detectable effect,
-and the optimal statistic. Section \ref{sec:sim} reports size and power over
+Section \ref{sec:cluster} gives the two cluster-level procedures and the sign
+symmetry condition under which the first is exactly level $\alpha$. Section
+\ref{sec:power} derives local power and a closed-form minimum detectable
+response, and Theorem \ref{thm:umpi} gives the optimal statistic. Section \ref{sec:sim} reports size and power over
 $G \in \{20,30,51,100\}$ and $C \in \{3,5,8\}$. Section \ref{sec:app} applies
 the procedures to two panels. Appendix \ref{app:proofs} contains the proofs.
 
@@ -140,11 +175,55 @@ joint $m$-restriction case in which $m$ is comparable to $G$, which is where
 cross-outcome falsification tests sit. \citet{carter2017cluster} show that
 cluster heterogeneity reduces the number of clusters that the asymptotics
 effectively deliver, and define the effective cluster count we use in Section
-\ref{sec:anatomy}. \citet{canay2017randomization} give asymptotic validity for
-randomization tests when the invariance holds only in the limit, and we use
-their framework for the case where our finite-sample exchangeability condition
-fails. The finite-sample argument itself is the classical group-invariance
-construction, for which we follow \citet{lehmann2005testing}.
+\ref{sec:anatomy}. \citet{canay2017randomization} give asymptotic
+validity for a randomization test built on a group of fixed cardinality when
+the invariance holds only in the limit. The label-permutation group of Section
+\ref{sec:perm} has cardinality $C!$, which does not vary with $G$, so their
+framework covers designs in which the exchangeability of Assumption
+\ref{as:CE} holds for the category statistics only as $G$ grows. The
+finite-sample argument itself is the classical group-invariance construction,
+for which we follow \citet{lehmann2005testing}.
+
+Four further results enter directly. \citet{mackinnon2023guide} set out current
+practice for cluster-robust inference, and Section \ref{sec:cluster} takes the
+restricted wild cluster bootstrap in the form given there.
+\citet{ibragimov2010tstat} obtain a $t$-test on cluster-level estimates whose
+level is controlled with a small fixed number of heterogeneous clusters and no
+appeal to $G \to \infty$; that construction and the label-permutation test of
+Section \ref{sec:perm} differ in what is treated as the repeated unit, clusters
+there and outcome categories here. \citet{young2019fisher} recomputes
+$p$-values by randomization inference for a sample of published experimental
+papers in economics and reports that a substantial share of the rejections at
+conventional levels do not survive, which is the direction of the gap between
+the chi-square and the permutation $p$-value in Section \ref{sec:app}.
+\citet{djogbenou2019asymptotic} prove a central limit theorem for the wild
+cluster bootstrap distribution conditional on the data, and that theorem
+supplies the asymptotic level of the cluster sign-change test of Section
+\ref{sec:cluster}, which is the null-imposed Rademacher wild cluster bootstrap
+written in score form.
+
+A small-sample cluster-robust literature already corrects both the variance
+estimator and the reference distribution for statistics of this kind.
+\citet{bell2002bias} remove the downward bias of the cluster-robust variance
+estimator under a working model and pair the correction with Satterthwaite
+degrees of freedom, and \citet{panwall2002} do the same for generalized
+estimating equations. \citet{imbens2016robust} give degrees-of-freedom
+adjustments for the heteroskedasticity-robust case. For a hypothesis with
+$m > 1$ constraints, \citet{tipton2015small} refer the statistic to an
+approximate Hotelling $T^2$ whose denominator degrees of freedom are matched
+from the data, and \citet{pustejovsky2018small} extend that test to models with
+arbitrary sets of fixed effects and report Type I error close to the nominal
+level across the designs they simulate.
+
+Proposition \ref{prop:anatomy} does not introduce that reference distribution.
+It states an algebraic identity between the CR1 Wald statistic and a Hotelling
+$T^2$, and, under Assumption \ref{as:I}, an exact $F(m,G-m)$ law for the joint
+null that the post-treatment coefficients do not vary with exposure, holding at
+every $G$ and $m$ with $G - m \ge 1$ rather than at denominator degrees of
+freedom matched from the data. Corollary \ref{cor:asym} is the second
+difference. It gives the rate $m = o(G^{2/3})$ at which the chi-square
+calibration stays valid, the limit the size converges to when $m^{3/2}/G$ tends
+to a positive constant, and the convergence of the size to one when $m/G$ does.
 
 The design that motivates the problem is the use of graded outcome categories to
 detect a treatment-induced change in how outcomes are recorded.
@@ -153,9 +232,13 @@ detect a treatment-induced change in how outcomes are recorded.
 depends on treatment status in a cross-sectional discrete-response setting, and
 \citet{denteh2026misclassdid} and \citet{gutknecht2026cic} study misclassified
 outcomes in difference-in-differences and changes-in-changes designs
-respectively. \citet{fhs2019pretrends} use an auxiliary series loading on a
-common latent factor to purge event-study coefficients, which is the closest
-existing device to the loading normalization our statistic requires. We take the
+respectively. \citet{fhs2019pretrends} use an auxiliary series that loads
+on the same latent confound as the outcome and use it to purge event-study
+coefficients of that confound. The device is close to the normalization that
+Assumption \ref{as:CE} calls for here, and it is put to a different use:
+dividing each category outcome by an estimate of its loading on the common
+factor equalizes those loadings, which is what makes the category arrays
+exchangeable, and it removes nothing from the coefficient under test. We take the
 estimand and the identification argument from that literature as given. This
 paper is about the reference distribution.
 
@@ -185,8 +268,26 @@ g(i)$ do not depend on $c$.
 
 Assumption \ref{as:B} rules out designs in which categories are measured on
 different subsamples or at different frequencies. It is verifiable from the data
-layout. Section \ref{sec:app} reports one application where it fails, and the
-exact procedures below do not apply there.
+layout. It is a hypothesis of Lemma \ref{lem:sep} rather than of Theorem
+\ref{thm:exact}: when it fails, $\hat{\gamma}$ in \eqref{eq:pooled} is no longer
+the fixed linear combination of per-category event studies that Lemma
+\ref{lem:sep} gives and each category has to be fitted on its own cells, while
+the randomization of Section \ref{sec:perm} acts in the category direction and
+needs only Assumption \ref{as:CE}.\footnote{Fitting each category on its own
+cells, the label-permutation test of \eqref{eq:null} rejects at $0.0467$ when
+the missing cells are tied to the category label and at $0.0492$ when they are
+independent of it, against a nominal $0.05$ over $1{,}200$ replications with a
+Monte Carlo standard error of $0.0063$
+(\texttt{verification\_extra6\_3.json} in \texttt{results/theory/inference/}). With the
+observation rate falling from $1.00$ to $0.40$ across categories ordered by
+$d_c$, the rate is $0.040$, against $0.0527$ for a control that assigns the same
+five rates to a category drawn at random in each replication, over $1{,}500$
+replications with a Monte Carlo standard error of $0.0056$
+(\texttt{verification\_extra7\_8.json}, same directory). The second
+departure is downward, so the test stays at or below its nominal level and the
+cost falls on power.} Section \ref{sec:app} reports one application in which
+Assumption \ref{as:B} fails through a cell pattern that depends on the category
+label, which breaks Assumption \ref{as:CE} as well.
 
 Let $L$ collect the included event-time horizons with $|L| = q$, omitting
 $\ell = -1$ and binning endpoints, let $X \in \mathbb{R}^{n_0 \times q}$ hold the
@@ -215,8 +316,8 @@ contrast. The procedure tests one joint hypothesis, not $C$ separate hypotheses,
 so no multiplicity adjustment arises and the error rate controlled is the
 per-comparison rate for \eqref{eq:null}.
 
-Write $M$ for the two-way within projection on $\mathcal{C}$, $\tilde{X} = MX$,
-$S = \tilde{X}'\tilde{X}$, and $b_c = S^{-1}\tilde{X}'M y_c$ for the
+Write $\Pi$ for the two-way within projection on $\mathcal{C}$,
+$\tilde{X} = \Pi X$, $S = \tilde{X}'\tilde{X}$, and $b_c = S^{-1}\tilde{X}'\Pi y_c$ for the
 within-category event-study coefficient vector.
 
 \begin{lemma}[separability]
@@ -253,6 +354,25 @@ alongside every non-rejection.
 The size distortion has a closed form. We isolate it under an idealization that
 is used only for this diagnosis and is not maintained elsewhere in the paper.
 
+Let $\tilde{X}_g$ collect the rows of $\tilde{X}$ belonging to cluster $g$, let
+$u_{gc}$ be the corresponding errors in \eqref{eq:pooled}, let $e_{gc} =
+\tilde{y}_{gc} - \tilde{X}_g b_c$ be the within-category residuals, and let
+$n = C n_0$ be the number of observations in \eqref{eq:pooled}. The cluster
+score of the gradient block and its fitted counterpart are
+\begin{equation}
+a_g = \frac{\tilde{X}_g'\sum_c \delta_c u_{gc}}{\sum_c \delta_c^2},
+\qquad
+a^f_g = \frac{\tilde{X}_g'\sum_c \delta_c e_{gc}}{\sum_c \delta_c^2},
+\qquad
+\eta_g = S^{-1}a_g, \qquad \eta^f_g = S^{-1}a^f_g ,
+\label{eq:eta}
+\end{equation}
+all in $\mathbb{R}^q$. Lemma \ref{lem:sep} gives $\hat{\gamma} - \gamma =
+\sum_g \eta_g$, and the CR1 covariance of $\hat{\gamma}$ is $\omega \sum_g
+\eta^f_g \eta^{f\prime}_g$ with $\omega = \{G/(G-1)\}\{(n-1)/(n-2q)\}$. A
+subscript $P$ denotes the subvector or submatrix indexed by the post block, and
+$\bar{\eta}_P = G^{-1}\sum_g \eta_{gP}$.
+
 \begin{assumption}[ideal cluster experiment]
 \label{as:I}
 (i) Under $H_0$ in \eqref{eq:null}, the cluster score contributions
@@ -270,7 +390,7 @@ Definition \ref{def:geff} handles that case.
 \label{prop:anatomy}
 Let Assumptions \ref{as:B} and \ref{as:I} hold, let
 $\operatorname{rank}(\tilde{X}) = q$, let $H_0$ in \eqref{eq:null} hold, and let
-$G - m \ge 1$. Put $\omega_2 = (n-2q)/(n-1)$ with $n = C n_0$, let $\hat{S}_P$
+$G - m \ge 1$. Put $\omega_2 = (n-2q)/(n-1) = G/\{(G-1)\omega\}$, let $\hat{S}_P$
 be the sample covariance of the $\eta_{gP}$ and $T^2 = G \bar{\eta}_P'
 \hat{S}_P^{-1} \bar{\eta}_P$. Then the CR1 Wald statistic $W$ for
 \eqref{eq:null} satisfies $W = \omega_2 T^2$ identically, and
@@ -278,27 +398,53 @@ be the sample covariance of the $\eta_{gP}$ and $T^2 = G \bar{\eta}_P'
 \frac{(G-m)\,W}{\omega_2 (G-1) m} \sim F(m, G-m)
 \label{eq:Fexact}
 \end{equation}
-exactly for every $G$ and $m$ with $G - m \ge 1$.
+exactly for every $G$ and $m$ with $G - m \ge 1$. If instead $G - 1 < m$, the
+CR1 meat $\sum_g \eta^f_{gP}\eta^{f\prime}_{gP}$ has rank at most $G-1$, the
+Moore--Penrose version of $W$ has no Hotelling representation, and
+\eqref{eq:Fexact} is void.
 \end{proposition}
 
 The chi-square calibration treats the estimated meat matrix as known. Under
 Assumption \ref{as:I} the cost of that substitution is exactly the $F$
 denominator in \eqref{eq:Fexact}, which has $G - m$ degrees of freedom. The
 statement is a degrees-of-freedom result: nothing about the errors beyond
-Assumption \ref{as:I}(i) enters, and $\omega_2$ equals $0.9981$ at the design of
-Section \ref{sec:sim}. Proposition \ref{prop:anatomy} also supplies a valid
-reference distribution, since \eqref{eq:Fexact} can be inverted for a critical
-value.
+Assumption \ref{as:I}(i) enters, and $\omega_2$ equals $0.9989$ at the headline
+design of Section \ref{sec:sim} ($G = 51$, $C = 5$). The factor $(n-2q)/(n-1)$
+counts the $2q$ interacted event-time regressors in \eqref{eq:pooled} and not
+the $C(N+T-1)$ absorbed unit-by-category and period-by-category effects, so a
+user calibrating through \eqref{eq:Fexact} must supply the $\omega_2$ that
+matches the degrees-of-freedom convention of their own CR1 implementation.
+
+Inverting \eqref{eq:Fexact} for a critical value gives a reference distribution
+that is exact for the null \eqref{eq:null} under Assumption \ref{as:I}, whose
+part (ii) requires every cluster to carry the same design weight. Where that
+part fails the calibration is neither exact nor conservative. In the staggered
+design of Section \ref{sec:sim} with $C = 5$, referring $W$ to \eqref{eq:Fexact}
+at the true $G$ gives null rejection rates of $0.174$, $0.160$, $0.124$ and
+$0.092$ at $G = 20$, $30$, $51$ and $100$ against the nominal $0.05$, over
+$2{,}000$ replications per cell (\texttt{anatomy\_table.csv}, which is also the
+source for $\omega_2$ above). The version evaluated at the $G_{\mathrm{eff}}$ of
+Definition \ref{def:geff} is an approximation whose accuracy Section
+\ref{sec:sim} measures.
+The $F$ family in \eqref{eq:Fexact} is the one that \citet{tipton2015small} and
+\citet{pustejovsky2018small} reach by matching denominator degrees of freedom to
+the data; under Assumption \ref{as:I} no matching is needed, because
+\eqref{eq:Fexact} holds exactly with $G - m$.
 
 \begin{corollary}[when the chi-square calibration is valid]
 \label{cor:asym}
 Let $\mathrm{size}(G,m)$ denote the null rejection probability of the nominal
 level-$\alpha$ chi-square test under the conditions of Proposition
-\ref{prop:anatomy}, and assume $\sqrt{m}\,|\log \omega_2| \to 0$.
+\ref{prop:anatomy}. Assume $G(1-\omega_2) = O(1)$ in part (i) and
+$\sqrt{m}\,|\log \omega_2| \to 0$ in part (ii), where $1 - \omega_2 =
+(2q-1)/(n-1)$.
 
 \noindent (i) For fixed $m$, $\mathrm{size}(G,m) = \alpha + c_m f_m(c_m)
-(m + c_m)/\{2(G-1)\} + O(G^{-2})$ where $c_m = \chi^2_{m,1-\alpha}$ and $f_m$ is
-the $\chi^2_m$ density, so $\mathrm{size}(G,m) \to \alpha$ as $G \to \infty$.
+\big[(m + c_m)/\{2(G-1)\} - (1-\omega_2)\big] + O(G^{-2})$ where $c_m =
+\chi^2_{m,1-\alpha}$ and $f_m$ is the $\chi^2_m$ density, so
+$\mathrm{size}(G,m) \to \alpha$ as $G \to \infty$. The correction is positive,
+and the chi-square test over-rejects at all large $G$, when
+$2(G-1)(1-\omega_2) < m + c_m$.
 
 \noindent (ii) Let $m \to \infty$ with $m/G \to 0$ and $\chi_{m,G} =
 \sqrt{m/2}\,\log\{(G-1)/(G-m)\} \to \chi \in [0,\infty]$. Then
@@ -309,26 +455,119 @@ $m/G \to r \in (0,1)$, then $\mathrm{size}(G,m) \to 1$.
 
 Part (ii) is the operative statement. The chi-square calibration is
 asymptotically valid if and only if $m^{3/2}/G \to 0$, that is $m = o(G^{2/3})$.
-The number of restrictions and the number of clusters cannot be considered
-separately.
+
+Figure \ref{fig:sizem} plots the exact size implied by \eqref{eq:Fexact}
+against $m$ at five cluster counts.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.84\textwidth, height=0.50\textwidth,
+  xlabel={Restrictions $m$},
+  ylabel={Null rejection probability},
+  xmin=0, xmax=21.5, ymin=0, ymax=1,
+  xtick={1,2,3,6,13,20},
+  ytick={0,0.2,0.4,0.6,0.8,1.0},
+  legend pos=north west,
+  legend cell align=left,
+  legend columns=2,
+  legend style={font=\footnotesize, draw=none, fill=none},
+  tick label style={font=\footnotesize},
+  label style={font=\small},
+]
+\addplot[thick, mark=*, mark size=1.3] coordinates
+  {(1,0.0648) (2,0.0849) (3,0.1106) (6,0.2345) (13,0.7734)};
+\addlegendentry{$G = 20$}
+\addplot[thick, mark=square*, mark size=1.3] coordinates
+  {(1,0.0597) (2,0.0721) (3,0.0874) (6,0.1556) (13,0.4844) (20,0.8833)};
+\addlegendentry{$G = 30$}
+\addplot[thick, mark=triangle*, mark size=1.6] coordinates
+  {(1,0.0556) (2,0.0625) (3,0.0706) (6,0.1036) (13,0.2514) (20,0.5142)};
+\addlegendentry{$G = 51$}
+\addplot[thick, mark=diamond*, mark size=1.6] coordinates
+  {(1,0.0528) (2,0.0562) (3,0.0600) (6,0.0744) (13,0.1293) (20,0.2246)};
+\addlegendentry{$G = 100$}
+\addplot[thick, mark=pentagon*, mark size=1.6] coordinates
+  {(1,0.0506) (2,0.0512) (3,0.0519) (6,0.0544) (13,0.0621) (20,0.0724)};
+\addlegendentry{$G = 500$}
+\addplot[dashed, thick, mark=none, domain=0:21.5, samples=2] {0.075};
+\addlegendentry{tolerance $0.075$}
+\addplot[only marks, mark=x, mark size=3.2, thick] coordinates
+  {(13,0.905) (13,0.686) (13,0.389) (13,0.187)};
+\addlegendentry{measured at $m = 13$}
+\end{axis}
+\end{tikzpicture}
+
+\caption{Exact size of the nominal $5\%$ chi-square test against the number of
+restrictions}
+\label{fig:sizem}
+
+\smallskip
+\begin{minipage}{0.95\textwidth}
+\footnotesize Note: each curve gives the rejection probability of the nominal
+level-$0.05$ chi-square test of the joint null $H_0: \gamma_P = 0$ in
+\eqref{eq:null}, computed from \eqref{eq:Fexact} under Assumptions \ref{as:B}
+and \ref{as:I} at $\omega_2 = 1$, against the number of restrictions $m$, at
+five cluster counts $G$. The dashed line marks a tolerance of $0.075$. The
+crosses are the measured rejection rates at $m = 13$ and $C = 5$ from Table
+\ref{tab:size}, at $G = 20$, $30$, $51$ and $100$ reading down, over $2{,}000$
+replications each with a Monte Carlo standard error of at most $0.011$. They
+lie above the corresponding curves because the simulated design gives
+$G_{\mathrm{eff}} = 0.727\,G$ rather than the equal cluster weights of
+Assumption \ref{as:I}(ii). Sources:
+\texttt{results/theory/inference/anatomy\_expansion.csv},
+\texttt{results/theory/inference/size\_table.csv} and
+\texttt{results/theory/inference/anatomy\_effective\_clusters.csv}.
+\end{minipage}
+\end{figure}
+
+The limit in Corollary \ref{cor:asym}(ii) is not accurate at the $m$ this paper
+works with: along the sequence with $\chi = 0.5$, the exact size from \eqref{eq:Fexact}
+exceeds $\Phi(\chi - z_{1-\alpha})$ by $5.95$ percentage points at $m = 13$,
+$4.21$ at $m = 25$ and $2.91$ at $m = 50$, an error falling like $m^{-1/2}$
+(\texttt{anatomy\_asymptotics.csv}). Every admissible-$m$ figure reported below
+is computed from \eqref{eq:Fexact} and not from the limit.
 
 \begin{definition}[effective clusters]
 \label{def:geff}
-For a contrast $w \in \mathbb{R}^m$ put $a = S^{-1}[\cdot,P]w$ and $\varphi_g =
-a'S_g a \ge 0$. Then $G_{\mathrm{eff}}(w) = (\sum_g \varphi_g)^2 / \sum_g
+Let $J_P$ be the $q \times m$ selection matrix whose columns are the standard
+basis vectors indexed by $P$, so that $[S^{-1}]_{PP} = J_P'S^{-1}J_P$. For a
+contrast $w \in \mathbb{R}^m$ put $a = S^{-1}J_P w$ and $\varphi_g = a'S_g a
+\ge 0$. Then $G_{\mathrm{eff}}(w) = (\sum_g \varphi_g)^2 / \sum_g
 \varphi_g^2$.
 \end{definition}
 
-Definition \ref{def:geff} is the effective cluster count of
-\citet{carter2017cluster}, specialized to the contrast $w$. It satisfies
+Under errors that are homoskedastic and independent across clusters,
+$\varphi_g / \sum_h \varphi_h$ is the share of
+$\operatorname{Var}(w'\hat{\gamma}_P)$ carried by cluster $g$. Write
+$\bar{\varphi} = G^{-1}\sum_g \varphi_g$ and $\Gamma = G^{-1}\sum_g
+\{(\varphi_g - \bar{\varphi})/\bar{\varphi}\}^2$. Then $G/(1+\Gamma) =
+G\bar{\varphi}^2 / (G^{-1}\sum_g \varphi_g^2) = (\sum_g \varphi_g)^2 /
+\sum_g \varphi_g^2$, so Definition \ref{def:geff} is the count $G/(1+\Gamma)$
+of \citet{carter2017cluster} evaluated at the design weights $\varphi_g$. That
+paper defines $\Gamma$ for the $t$-statistic on a scalar contrast through
+cluster-level contributions to the variance of the estimator; Definition
+\ref{def:geff} fixes those contributions at their homoskedastic design values,
+which is what makes it computable before any outcome is observed. It satisfies
 $1 \le G_{\mathrm{eff}}(w) \le G$, with equality on the right when the
 $\varphi_g$ are equal, which is what Assumption \ref{as:I}(ii) imposes.
 Substituting $G_{\mathrm{eff}}$ for $G$ in \eqref{eq:Fexact} is an
 approximation; Proposition \ref{prop:anatomy} does not license it. Section
-\ref{sec:sim} reports its accuracy. Both $G_{\mathrm{eff}}$ and $m$ are
-computable from the design alone, before any outcome is observed, which turns
-Corollary \ref{cor:asym} into an ex-ante restriction on how many horizons a
-researcher may test.
+\ref{sec:sim} reports its accuracy.
+
+Every $G_{\mathrm{eff}}$ quoted below is the equal-weight contrast
+$w = \mathbf{1}_m$, and the design rule should be read at
+$\min_w G_{\mathrm{eff}}(w)$ over the eigen-directions of $[S^{-1}]_{PP}$. The
+two differ little in the designs run here. At the $G = 51$, $C = 5$, $m = 13$
+design of Section \ref{sec:sim}, $G_{\mathrm{eff}}(w)$ ranges from $35.92$ to
+$36.42$ over those directions, the size that \eqref{eq:Fexact} predicts for the
+nominal $0.05$ chi-square test at $m = 13$ ranges from $0.378$ to $0.385$, and
+the largest $m$ holding that predicted size below $0.075$ is $2$ at either end
+(\texttt{geff\_eigen\_sweep.csv}). Both $G_{\mathrm{eff}}$ and $m$ are
+computable from the design alone, which
+turns Corollary \ref{cor:asym} into an ex-ante restriction on how many horizons
+a researcher may test.
 
 \section{The label-permutation test}
 \label{sec:perm}
@@ -339,61 +578,163 @@ design, which is common to all categories under Assumption \ref{as:B}. Let
 $\mathcal{T}(\mathcal{D},\delta)$ be a statistic with large values evidence
 against $H_0$ in \eqref{eq:null}.
 
+The statistic is computed on loading-normalized arrays. Let
+$\hat{\Sigma}_{ck}$ be the sample covariance of the two-way demeaned categories
+$c$ and $k$ over the untreated cells $\{(i,t) \in \mathcal{C}: D_{it} = 0\}$,
+and put $L_{ck} = \log|\hat{\Sigma}_{ck}|$. The log-triad loading estimate is
+$\hat{\rho}_c \propto \exp(\hat{a}_c)$, scaled to geometric mean one, with
+\begin{equation}
+\hat{a}_c = \frac{1}{C-1}\sum_{k \ne c} L_{ck}
+ \;-\; \frac{1}{2(C-1)(C-2)} \sum_{k \ne l,\; k,l \ne c} L_{kl} ,
+\qquad C \ge 3 .
+\label{eq:triad}
+\end{equation}
+Under a one-factor structure with $\hat{\Sigma}_{ck} \to_p \theta_c\theta_k s^2$
+for $c \ne k$, the limit of $L_{ck}$ is $\log|\theta_c| + \log|\theta_k| +
+\log s^2$, and the two averages in \eqref{eq:triad} isolate $\log|\theta_c|$ up
+to a constant common to all $c$, so $\hat{\rho}_c \to_p |\theta_c| /
+(\prod_j |\theta_j|)^{1/C}$. There is no reference category and no ordering
+convention in \eqref{eq:triad}, which is what Lemma \ref{lem:equi} records.
+
 \begin{definition}[label-permutation test]
 \label{def:perm}
-For $\pi \in S_C$ let $\delta_\pi = (\delta_{\pi(1)},\dots,\delta_{\pi(C)})$ and
-$T(\pi) = \mathcal{T}(\mathcal{D},\delta_\pi)$. With $M = C!$ the test rejects
-at level $\alpha$ when $\hat{p} = M^{-1}\#\{\pi \in S_C: T(\pi) \ge
-T(\mathrm{id})\} \le \alpha$.
+Normalize each array, $\mathcal{Y}^{\dagger}_c = \mathcal{Y}_c/\hat{\rho}_c$,
+and drop every category with $|\hat{\rho}_c| \le \rho_{\min}$, where
+$\rho_{\min} = 0.1$ throughout; write $C_0$ for the count of Section
+\ref{sec:setup}, $C$ for the number of categories that survive the screen, and
+$\mathcal{D}^{\dagger}$ for the surviving normalized arrays. For
+$\pi \in S_C$ let $\delta_\pi = (\delta_{\pi(1)},\dots,\delta_{\pi(C)})$ and
+$T(\pi) = \mathcal{T}(\mathcal{D}^{\dagger},\delta_\pi)$. With reference set
+$\mathcal{R} = S_C$ and $M = C!$, the test rejects at level $\alpha$ when
+$\hat{p} = M^{-1}\#\{\pi \in \mathcal{R}: T(\pi) \ge T(\mathrm{id})\} \le
+\alpha$. When $C! > B$ the reference set is instead $\mathcal{R} =
+\{\mathrm{id},\pi_2,\dots,\pi_B\}$, with $\pi_2,\dots,\pi_B$ drawn
+independently and uniformly from $S_C$, and $M = B$.
 \end{definition}
 
-The randomization is over the $C!$ assignments of the exposure labels to the
-category data arrays, holding the arrays and the design fixed. Nothing is
-permuted at the unit, cluster or period level.
+The randomization is over the assignments of the exposure labels to the
+normalized category data arrays, holding the arrays and the design fixed.
+Nothing is permuted at the unit, cluster or period level. Every run reported
+below sets $B = 999$, so the reference set is all of $S_C$ at $C \le 6$ and a
+Monte Carlo sample at $C = 8$.
+
+\begin{lemma}[equivariance of the normalization]
+\label{lem:equi}
+Under Assumption \ref{as:B}, relabelling the arrays relabels the loading
+estimates identically: writing $\mathcal{D}_\sigma =
+(\mathcal{Y}_{\sigma(1)},\dots,\mathcal{Y}_{\sigma(C)})$, one has
+$\hat{\rho}_c(\mathcal{D}_\sigma) = \hat{\rho}_{\sigma(c)}(\mathcal{D})$ for
+every $\sigma \in S_C$. The retained set $\{c: |\hat{\rho}_c| > \rho_{\min}\}$
+is relabelled with them, so $\mathcal{D} \mapsto \mathcal{D}^{\dagger}$ is
+$S_C$-equivariant.
+\end{lemma}
+
+A statistic that is order-invariant in the normalized arrays is therefore
+order-invariant in the raw arrays, and Theorem \ref{thm:exact} below applies to
+$\mathcal{D}^{\dagger}$ unchanged.
+
+Two conditions scope \eqref{eq:triad}, and both restrict the procedure rather
+than the proof. First, $L_{ck}$ discards the sign of $\hat{\Sigma}_{ck}$, so
+\eqref{eq:triad} estimates $|\theta_c|$: dividing a negatively loaded category
+by a positive $\hat{\rho}_c$ leaves its factor component with the wrong sign,
+and the exchangeability of Assumption \ref{as:CE} below then fails at every
+sample size. The maintained condition is that the loadings share a sign, which is checkable from the
+observed signs of the $\hat{\Sigma}_{ck}$. Second, the estimator is unstable at
+a loading near zero. At $\theta = (0.5,0.8,0.02,1.4,2.0)$ the largest error in
+$\hat{\rho}$ is $1.18$ at $2{,}000$ untreated cells and still $0.34$ at
+$4 \times 10^4$, against $0.009$ at $4 \times 10^4$ when the smallest loading is
+$0.5$; the guard drops such a category rather than normalizing by it. The guard
+did not fire in any run reported here: over $400$ replications in each of the
+twelve $(G,C)$ cells of Section \ref{sec:sim} the smallest $|\hat{\rho}_c|$ is
+$0.539$. Sources: \texttt{verification.json} for the loading errors and
+\texttt{loading\_guard\_check.csv} for the guard.
 
 \begin{assumption}[category exchangeability]
 \label{as:CE}
-Conditional on $\mathcal{Z}$, $(\mathcal{Y}_{\pi(1)},\dots,
-\mathcal{Y}_{\pi(C)}) \overset{d}{=} (\mathcal{Y}_1,\dots,\mathcal{Y}_C)$ for
-every $\pi \in S_C$, and $d_1,\dots,d_C$ are fixed constants.
+Conditional on $\mathcal{Z}$,
+\[
+(\mathcal{Y}_{\pi(1)},\dots,\mathcal{Y}_{\pi(C)})
+  \overset{d}{=} (\mathcal{Y}_1,\dots,\mathcal{Y}_C)
+\quad\text{for every } \pi \in S_C,
+\]
+and $d_1,\dots,d_C$ are fixed constants.
 \end{assumption}
 
-Assumption \ref{as:CE} rules out categories with different error variances,
-different loadings on a common factor unless the outcome is normalized, and any
-dependence of the labels on the data. It is not implied by $H_0$ in
-\eqref{eq:null} and it is not directly testable, though its leading failure mode
-has an observable signature: Section \ref{sec:sim} prices the size distortion as
-a function of the ratio of the largest to smallest category error variance.
+Assumption \ref{as:CE} rules out categories with different error variances and
+any dependence of the labels on the data. It restricts the category direction
+only: heteroskedasticity across units and periods, serial correlation, and
+within-cluster dependence of any form are unrestricted, and $G$ is unrestricted.
+Normalizing the outcome does not restore it under fixed heterogeneous loadings.
+Dividing category $c$ by its true loading $\theta_c$ equalizes the factor
+component and leaves $\operatorname{Var}(\varepsilon_c/\theta_c) =
+\sigma^2/\theta_c^2$ category-specific, and at $C = 5$ with
+$\theta = (0.4,0.7,1.0,1.3,1.6)$ the label-permutation test of Definition
+\ref{def:perm} run on the true-loading normalization has size $0.030$ against
+the nominal $0.05$, with Monte Carlo standard error $0.006$
+(\texttt{verification.json}, entry \texttt{V24}). Exchangeability
+does hold when the loadings are exchangeable draws independent of $d$, which is
+what the simulation of Section \ref{sec:sim} imposes, and by Lemma
+\ref{lem:equi} estimating them through \eqref{eq:triad} preserves it.
+Assumption \ref{as:CE} is not implied by $H_0$ in \eqref{eq:null} and it is not
+directly testable, though its leading failure mode has an observable signature:
+Section \ref{sec:sim} prices the size distortion as a function of the ratio of
+the largest to smallest category error variance.
 
 \begin{theorem}[exact finite-sample validity]
 \label{thm:exact}
 Suppose Assumption \ref{as:CE} holds and $\mathcal{T}$ is order-invariant, in
 the sense that it is a function of the multiset
-$\{(\delta_c,\mathcal{Y}_c)\}_{c=1}^C$ and not of the order in which the pairs
-are listed. Then for every $N$, $T$, $G$ and $C$, the test of Definition
-\ref{def:perm} for the null \eqref{eq:null} under the randomization over $S_C$
-satisfies $\Pr(\text{reject}) \le \alpha$, with $\Pr(\text{reject}) =
-\lfloor \alpha M \rfloor / M$ when the $M$ values are almost surely distinct.
-The randomized version has size exactly $\alpha$.
+$\{(\delta_c,\mathcal{Y}^{\dagger}_c)\}_{c=1}^C$ and not of the order in which
+the pairs are listed. Then for every $N$, $T$, $G$ and $C$, the test of
+Definition \ref{def:perm} for the null \eqref{eq:null} under the randomization
+over its reference set $\mathcal{R}$ satisfies $\Pr(\text{reject}) \le \alpha$.
+If the distinct values among $\{T(\pi): \pi \in \mathcal{R}\}$ are almost surely
+attained with a common multiplicity $\varkappa$, then $\Pr(\text{reject}) =
+\varkappa \lfloor \alpha M/\varkappa \rfloor / M$. Here $\varkappa = 2$ for the
+two-sided Wald statistic with $\{\delta_c\}$ symmetric about zero, by
+Proposition \ref{prop:resolution}(ii), and $\varkappa = 1$ for the one-sided
+directed statistic. At $C = 5$ and $\alpha = 0.05$ the two give $0.05$ alike.
 \end{theorem}
 
 Exactness here is finite-sample exactness for the null \eqref{eq:null} under the
 randomization distribution of Definition \ref{def:perm}, and it requires
 Assumption \ref{as:CE}. No condition on $G$, on the error distribution, or on
 the within-cluster dependence structure is used. Order-invariance holds for the
-OLS estimates and CR1 covariance in \eqref{eq:pooled}, and it fails for any
-loading normalization that selects a reference category by its position in an
-ordering of $d$.
+OLS estimates and CR1 covariance in \eqref{eq:pooled}, and by Lemma
+\ref{lem:equi} it survives the normalization of Definition \ref{def:perm}. It
+fails when the normalization is not $S_C$-equivariant, which a reference-category
+rule keyed to $\arg\min_c d_c$ is not. A position-keyed rule that acts as an
+order-invariant rescaling times a scalar common to all categories remains valid,
+because $\hat{\gamma}$ and its CR1 covariance in \eqref{eq:pooled} are
+homogeneous of degree one and two in the outcome and the Wald statistic is
+therefore unchanged by a common rescaling: a normalization whose reference
+column is chosen by the position of the largest permuted label has size $0.052$
+against the nominal $0.05$, with Monte Carlo standard error $0.005$
+(\texttt{verification.json}).
+
+A randomized version has size exactly $\alpha$. It rejects with probability one
+when $\hat{p} \le \alpha_-$ and with probability $(\alpha-\alpha_-)/
+(\alpha_+-\alpha_-)$ when $\hat{p} = \alpha_+$, where $\alpha_-$ is the largest
+attainable value of $\hat{p}$ not exceeding $\alpha$ and $\alpha_+$ the smallest
+value exceeding it. No procedure reported below uses it.
 
 \begin{proposition}[attainable $p$-values]
 \label{prop:resolution}
-(i) $\hat{p} \ge 1/C!$ always. (ii) If $\mathcal{T}$ is even in the labels, so
-that $\mathcal{T}(\mathcal{D},-\delta) = \mathcal{T}(\mathcal{D},\delta)$, and
-the multiset $\{\delta_c\}$ is symmetric about zero, then $\hat{p} \ge 2/C!$.
-(iii) A level-$\alpha$ label-permutation test therefore requires $C! \ge
-2/\alpha$ for the two-sided Wald statistic with equally spaced $d$, that is
-$C \ge 5$ at $\alpha = 0.05$, and $C! \ge 1/\alpha$ for a one-sided statistic,
-that is $C \ge 4$.
+(i) On the exhaustive reference set, $\hat{p} \ge |\mathrm{Stab}(\delta)|/C!$,
+where $\mathrm{Stab}(\delta) = \{\pi \in S_C : \delta_\pi = \delta\}$ has order
+the product of the factorials of the sizes of the tied groups of
+$d_1,\dots,d_C$, so the bound is $1/C!$ when $d$ has no ties. On the Monte Carlo
+reference set of Definition \ref{def:perm}, $\hat{p} \ge 1/B$. (ii) If
+$\mathcal{T}$ is even in the labels, so that
+$\mathcal{T}(\mathcal{D}^{\dagger},-\delta) =
+\mathcal{T}(\mathcal{D}^{\dagger},\delta)$, and the multiset $\{\delta_c\}$ is
+symmetric about zero and not identically zero, then $\hat{p} \ge
+2|\mathrm{Stab}(\delta)|/C!$ on the exhaustive reference set. Equally spaced $d$
+is the leading sufficient case for the symmetry. (iii) On the exhaustive
+reference set with $d$ untied, a level-$\alpha$ label-permutation test therefore
+requires $C! \ge 2/\alpha$ for a statistic even in the labels with
+$\{\delta_c\}$ symmetric about zero, that is $C \ge 5$ at $\alpha = 0.05$, and
+$C! \ge 1/\alpha$ otherwise, that is $C \ge 4$.
 \end{proposition}
 
 The Wald statistic is even in the labels because $\hat{\gamma}(-\delta) =
@@ -410,9 +751,26 @@ rate of exactly $0.000$.
 Two procedures remain available when $C \le 4$. Both randomize over clusters
 rather than category labels, so Proposition \ref{prop:resolution} does not bind.
 
-The first randomizes sign changes over $\mathcal{E} = \{-1,+1\}^G$, applied to
-the cluster contributions $\zeta_1,\dots,\zeta_G$ to the gradient score with the
-null \eqref{eq:null} imposed.
+The first randomizes sign changes over $\mathcal{E} = \{-1,+1\}^G$. Let
+$\gamma^r$ be the restricted estimate, with $\gamma^r_P = 0$ and
+$\gamma^r_{\mathrm{pre}} = (S_{\mathrm{pre},\mathrm{pre}})^{-1}
+(S\hat{\gamma})_{\mathrm{pre}}$, let $z^r_g = \sum_c \delta_c \tilde{X}_g'
+\{\tilde{y}_{gc} - \tilde{X}_g(\hat{\beta} + \delta_c \gamma^r)\}$ be the
+cluster-$g$ score of the gradient block at that restricted fit, and put
+\begin{equation}
+\zeta_g = \frac{(S^{-1}z^r_g)_P}{\sum_c \delta_c^2} \in \mathbb{R}^m ,
+\qquad \sum_g \zeta_g = \hat{\gamma}_P .
+\label{eq:zeta}
+\end{equation}
+The test randomizes $\mathcal{Q}(\epsilon) = (\sum_g \epsilon_g \zeta_g)'
+\hat{\Omega}^{-1}(\sum_g \epsilon_g \zeta_g)$ over $\epsilon \in \mathcal{E}$,
+with $\hat{\Omega}$ proportional to $\sum_g \zeta_g\zeta_g'$, and rejects when
+$\mathcal{Q}(\mathbf{1}) = \hat{\gamma}_P'\hat{\Omega}^{-1}\hat{\gamma}_P$ falls
+in the upper $\alpha$ tail of $\{\mathcal{Q}(\epsilon)\}$. The CR1 scale factor
+in $\hat{\Omega}$ is common to every $\epsilon$ and cancels from the comparison,
+and $\hat{\Omega}$ itself does not depend on $\epsilon$ because
+$\epsilon_g^2 = 1$. Write $\zeta^0_g$ for the same functional of the true errors
+under \eqref{eq:null}.
 
 \begin{theorem}[cluster sign-change test]
 \label{thm:signflip}
@@ -423,24 +781,103 @@ then the sign-change test is exactly level $\alpha$ in finite samples, and so is
 its Monte Carlo version using $B-1$ random sign vectors together with the
 identity. Sign symmetry holds for the infeasible statistic built from the true
 errors under \eqref{eq:null} whenever the cluster error contributions are
-independent across $g$ and symmetric about zero. The feasible statistic differs
+independent across $g$ and symmetric about zero. Under Assumption
+\ref{as:I}(ii) the feasible and infeasible contributions coincide exactly on
+$P$, so the feasible test is then exactly level $\alpha$ in finite samples. The feasible statistic differs
 from the infeasible one by $O_p(G^{-1/2})$ and is asymptotically level $\alpha$
-as $G \to \infty$.
+as $G \to \infty$ under conditions (W1) to (W3) of Appendix \ref{app:proofs}.
 \end{theorem}
 
-Exactness for the feasible version does not follow from Theorem
-\ref{thm:signflip}, and we do not claim it. The finite-sample statement applies
-to the infeasible statistic; the feasible statistic inherits validity only
-asymptotically in $G$, by the approximate-symmetry argument of
-\citet{canay2017randomization}. Section \ref{sec:sim} measures the finite-sample
-gap.
+Under Assumption \ref{as:I}(ii) the gap between the two statistics is zero,
+because $\zeta_g - \zeta^0_g = -(S^{-1}S_g\gamma^r)_P = -\gamma^r_P/G = 0$ by
+construction of $\gamma^r$, and the measured gap is exactly zero at $G = 12$,
+$24$, $48$, $96$ and $192$ (\texttt{verification.json}). Outside that condition the finite-sample statement
+applies to the infeasible statistic alone, and the feasible statistic inherits
+validity only asymptotically in $G$. The argument for that limit in Appendix
+\ref{app:proofs} is a conditional bootstrap central limit theorem rather than an
+approximate-symmetry argument, because the sign-change group has cardinality
+$2^G$. Section \ref{sec:sim} measures the finite-sample gap.
+
+The statistic $\mathcal{Q}$ is even in $\epsilon$, so its $2^G$ values pair and
+the smallest attainable $p$-value is $2^{1-G}$ rather than $2^{-G}$. An
+exhaustive enumeration at $G = 7$ gives $64$ distinct values out of $128$ and a
+minimum $p$-value of $2/128$ (\texttt{verification.json}, entry \texttt{E14}).
+That floor does not bind at any $G$ reported below, the smallest of which is
+$20$.
 
 The second procedure is the restricted wild cluster bootstrap of
 \citet{cameron2008bootstrap}, drawing Rademacher weights at the cluster level
-with \eqref{eq:null} imposed on the residuals. \citet{mackinnon2017wild}
-document the conditions under which it fails, and those conditions concern
-cluster heterogeneity rather than the ratio $m/G$ that drives Corollary
-\ref{cor:asym}.
+with \eqref{eq:null} imposed on the residuals. The implementation partials the
+unit-by-category and period-by-category effects out once and applies the weights
+to the cluster residuals of the partialled-out regression, rather than
+re-absorbing those effects on every draw; the two versions of the statistic
+differ by $O_p(G^{-1})$. No finite-sample result is claimed for this procedure.
+\citet{djogbenou2019asymptotic} give conditions for asymptotic validity of the
+wild cluster bootstrap in a linear regression with clustered errors:
+independence across clusters, moment conditions on the cluster-level scores, and
+a number of clusters growing without bound with no cluster dominating. Section
+\ref{sec:sim} reports its size in the designs run there and claims nothing
+beyond that.
+
+\citet{mackinnon2017wild} report simulations in which the cluster-robust
+$t$-test over-rejects more when the $G = 50$ cluster sizes are proportional to
+United States state populations than when they are balanced, in which the wild
+cluster bootstrap corrects most of that over-rejection, and in which it fails
+when only a few clusters are treated. Their designs vary the cluster-size
+distribution and the number of treated clusters, not the ratio $m/G$ that drives
+Corollary \ref{cor:asym}. Every cluster in the simulation of Section
+\ref{sec:sim} holds one unit observed for $T = 120$ periods, so that simulation
+cannot test their failure mode either.
+
+\subsection*{Implementation}
+
+The three procedures are run as follows. Steps 1 and 2 use only the design and
+can be carried out before any outcome is observed.
+
+\begin{enumerate}
+\item Form $\tilde{X} = \Pi X$ and $S = \tilde{X}'\tilde{X}$ on the common cell set
+of Assumption \ref{as:B}, fix the post-treatment block $P$, and record
+$m = |P|$. For a contrast $w \in \mathbb{R}^m$ set $a = S^{-1}[\cdot,P]w$ and
+$\varphi_g = a'S_g a$, and evaluate $G_{\mathrm{eff}}(w)$ from Definition
+\ref{def:geff}. Where one number is wanted for a joint test, take
+$\min_w G_{\mathrm{eff}}(w)$ over the $m$ coordinate contrasts
+$w = e_1,\dots,e_m$, which is the least favorable of the directions the joint
+statistic combines.
+
+\item Evaluate \eqref{eq:Fexact} at $m$ and at $G_{\mathrm{eff}}(w)$ in place of
+$G$ to obtain the size the nominal level-$\alpha$ chi-square test would have, as
+in Figure \ref{fig:sizem}. If that size is larger than the researcher is willing
+to carry, either reduce $m$ until it is not, or calibrate by Steps 3 and 4.
+
+\item With $C \ge 5$ categories, use the label-permutation test of Definition
+\ref{def:perm}, enumerating all $C!$ assignments while that is feasible and
+sampling from $S_C$ otherwise. Proposition \ref{prop:resolution}(iii) rules the
+two-sided version out at $\alpha = 0.05$ when $C \le 4$, and Assumption
+\ref{as:CE} is what buys its finite-sample validity.
+
+\item With $C \le 4$, or when Assumption \ref{as:CE} is doubtful, use the
+cluster sign-change test of Theorem \ref{thm:signflip} or the restricted wild
+cluster bootstrap, both with the null \eqref{eq:null} imposed on the residuals
+and $B-1$ draws.
+
+\item When the response shape $k_P$ is known up to scale, replace the two-sided
+Wald statistic by the directed statistic of Theorem \ref{thm:umpi} inside
+whichever randomization Step 3 or Step 4 selected. Table \ref{tab:power} reports
+what that substitution is worth at $G = 51$.
+
+\item To use \eqref{eq:Fexact} as a reference distribution rather than as a
+diagnostic, match $\omega_2$ to the finite-sample factor the software applies.
+Proposition \ref{prop:anatomy} sets $\omega_2 = (n-2q)/(n-1)$, counting the $2q$
+interacted regressors and not the absorbed unit and period effects, and the
+factor multiplying the sandwich is then $\{G/(G-1)\}\omega_2^{-1}$. A CR1
+implementation that counts the absorbed effects reports a larger factor, so
+recover $\omega_2$ by dividing $G/(G-1)$ by the factor the software used. In the
+test design used to check Proposition \ref{prop:anatomy} the two conventions
+differ by a factor of $1.178$ (\texttt{verification.json}, entry \texttt{V1b}).
+\end{enumerate}
+
+The code implementing Steps 1 to 6 is
+\texttt{src/did\_measurement/inference.py} in the replication archive.
 
 \section{Power, the minimum detectable response, and the optimal statistic}
 \label{sec:power}
@@ -449,8 +886,19 @@ Let the alternative be $\gamma_\ell = \kappa\, k(\ell)$ for a response path
 $k(\cdot) \ge 0$ and a scalar magnitude $\kappa > 0$, so that $H_1: \kappa > 0$.
 Under local alternatives the noncentrality of the Wald statistic depends on the
 design through two scalars: $\Sigma_\delta^2 = \sum_c (d_c - \bar{d})^2$, a
-property of the exposure index, and a timing quantity $I_k$ determined by the
-treatment-timing design and the horizon window.
+property of the exposure index, and the timing quantity
+\begin{equation}
+I_k = k_P'\big([S^{-1}]_{PP}\big)^{-1}k_P ,
+\label{eq:ik}
+\end{equation}
+where $k_P = (k(\ell))_{\ell \in P}$ is the response shape on the
+post-treatment block. In the single-cohort design with $N$ units, an adopting
+share $p$, $T_0$ omitted reference periods and the constant path
+$k \equiv \mathbf{1}$, $[S^{-1}]_{PP} = \{Np(1-p)\}^{-1}(I_m +
+\mathbf{1}\mathbf{1}'/T_0)$ and $I_k = Np(1-p)\,mT_0/(m+T_0)$, which saturates
+in $T$: with a single omitted period the information about a level shift never
+exceeds $Np(1-p)$, however long the panel. The staggered design of Section
+\ref{sec:sim} gives $I_k = 23.62$.
 
 \begin{corollary}[closed-form minimum detectable response]
 \label{cor:mde}
@@ -467,149 +915,366 @@ categories,
 \end{equation}
 \end{corollary}
 
-Both $\Sigma_\delta^2$ and $I_k$ are computable before any outcome is observed,
-and $\sigma^2$ is the only quantity requiring pilot data, so \eqref{eq:mde} is
-an ex-ante design rule. The expression for $\kappa^{\mathrm{Wald}}_{\mathrm{MDE}}$
-is stated against the chi-square critical value, which Proposition
-\ref{prop:anatomy} shows is the wrong one; it therefore understates the minimum
-detectable response of any correctly calibrated Wald test. Replacing
-$\chi^2_{m,1-\alpha}$ by the exact critical value from \eqref{eq:Fexact} raises
-the required noncentrality from $17.85$ to $41.46$ at $G_{\mathrm{eff}} = 36.42$
-and $m = 13$, inflating the minimum detectable response by a factor of $1.524$.
+Both $\Sigma_\delta^2$ and $I_k$ are computable before any outcome is observed.
+The third input, $\sigma^2$, is the $\delta^2$-weighted mean $\sum_c \delta_c^2
+\sigma_c^2/\sum_c \delta_c^2$ of the category residual variances $\sigma_c^2$ of
+the loading-normalized outcome, and it is the only quantity requiring pilot
+data; a researcher estimates it by the residual variance of the within-category
+regression in \eqref{eq:pooled} run on the normalized outcome over untreated
+cells. Every figure below sets $\beta = 0.20$, so power is $1-\beta = 0.80$, and
+$\lambda^*(0.05,0.20,13) = 17.85$. The expression for
+$\kappa^{\mathrm{Wald}}_{\mathrm{MDE}}$ is stated against the chi-square
+critical value, which Proposition \ref{prop:anatomy} shows is the wrong one; it
+therefore understates the minimum detectable response of any correctly
+calibrated Wald test. Replacing $\chi^2_{m,1-\alpha}$ by the exact critical
+value from \eqref{eq:Fexact} raises the required noncentrality from $17.85$ to
+$41.46$ at $G_{\mathrm{eff}} = 36.42$ and $m = 13$, inflating the minimum
+detectable response by a factor of $1.524$
+(\texttt{results/theory/inference/verification.json}, entry \texttt{E11}).
+
+At the design of Section \ref{sec:sim} with $C = 5$ and $m = 13$,
+\eqref{eq:mde} returns $\kappa^{\mathrm{Wald}}_{\mathrm{MDE}} = 0.363$ and
+$\kappa^{\mathrm{dir}}_{\mathrm{MDE}} = 0.242$ for the linear wedge; solving the
+same noncentrality equation at the nonlinear wedge that design actually
+generates raises the Wald figure to $0.450$. The simulated magnitude at which
+size-adjusted power first crosses $0.80$ in that design is $0.254$ for the
+directed cluster sign-change test, $0.477$ for the directed label-permutation
+test and $0.566$ for the chi-square Wald at its size-adjusted critical value.
+Those crossings are interpolated on a coarse $\kappa$ grid with $600$
+replications per cell and are accurate to roughly $0.05$. Sources:
+\texttt{mde\_table.csv} for the closed forms, including $I_k$ and
+$\lambda^*(0.05,0.20,13)$ above, and \texttt{perm\_mde\_vs\_sim.csv} for the
+crossings.
 
 The Wald statistic is not the right statistic against this alternative.
 
 \begin{theorem}[optimal directed test]
 \label{thm:umpi}
-Suppose $V = \operatorname{Var}(\hat{\gamma}_P)$ and the response shape $k_P$
-are known. Among tests of $H_0: \kappa = 0$ against $H_1: \kappa > 0$ that are
-invariant under shifts of the common event-study component and depend on the
-data only through the maximal invariant, the test rejecting when $t = k_P'V^{-1}
+Consider the Gaussian limit experiment in which the category event studies
+satisfy $b_c \sim N(\tau + \kappa d_c k, \Sigma)$ independently across $c$, with
+$\tau \in \mathbb{R}^q$ a free nuisance and $\Sigma$ common across categories,
+so that $\hat{\gamma}_P \sim N(\kappa k_P, V)$ exactly with $V =
+\operatorname{Var}(\hat{\gamma}_P)$, and suppose $V$ and the response shape
+$k_P$ are known. Among tests of $H_0: \kappa = 0$ against $H_1: \kappa > 0$ that
+are invariant under the group of shifts $b_c \mapsto b_c + a$, $a \in
+\mathbb{R}^q$, common to all categories, the test rejecting when $t = k_P'V^{-1}
 \hat{\gamma}_P / \sqrt{k_P'V^{-1}k_P} > z_{1-\alpha}$ is uniformly most
 powerful, with power $\Phi(\kappa \sqrt{k_P'V^{-1}k_P} - z_{1-\alpha})$.
 \end{theorem}
+
+Theorem \ref{thm:umpi} is stated for known $V$. In practice $V$ is unknown, and
+the feasible directed statistic substitutes the CR1 estimate built from $G$
+clusters; that is the statistic reported in Tables \ref{tab:size} and
+\ref{tab:power}. The substitution costs the normal calibration, and the feasible
+statistic is the one that the label permutation of Theorem \ref{thm:exact} and
+the cluster sign-change randomization of Theorem \ref{thm:signflip} calibrate
+without a normal approximation.
+
+Misspecifying the direction costs power and not level. Running the test at
+$\tilde{k}$ when the truth is $\gamma_P = \kappa k_P$ makes $t =
+\tilde{k}'V^{-1}\hat{\gamma}_P/\sqrt{\tilde{k}'V^{-1}\tilde{k}}$ normal with
+unit variance and mean $\kappa \cos\vartheta \sqrt{k_P'V^{-1}k_P}$, where
+$\vartheta$ is the angle between $\tilde{k}$ and $k_P$ in the inner product
+$\langle a,b \rangle = a'V^{-1}b$. Its power is
+$\Phi(\kappa\cos\vartheta\sqrt{k_P'V^{-1}k_P} - z_{1-\alpha})$, so the minimum
+detectable response is the $\kappa^{\mathrm{dir}}_{\mathrm{MDE}}$ of
+\eqref{eq:mde} divided by $\cos\vartheta$, and it is unbounded as $\tilde{k}$
+approaches orthogonality to $k_P$ in that metric. The test is level $\alpha$ for
+every choice of $\tilde{k}$.
 
 When $k_P$ is restricted only to the non-negative orthant no uniformly most
 powerful invariant test exists, and the likelihood-ratio statistic has the
 chi-bar-square null distribution of \citet{kudo1963} and \citet{shapiro1988},
 a mixture $\sum_{j=0}^m w_j(V)\chi^2_j$ in which $w_j(V)$ is the probability
 that the projection of $N(0,V)$ onto the non-negative orthant in the $V^{-1}$
-metric has exactly $j$ positive coordinates. Its power lies between the directed
-test and the two-sided Wald.
+metric has exactly $j$ positive coordinates. In the designs of Section
+\ref{sec:sim}, its size-adjusted power under the label-permutation calibration
+lies between that of the two-sided Wald and that of the directed statistic at
+every $\kappa$ on the grid and at both $C = 5$ and $C = 8$. We have not
+established that ordering in general.
 
-Calibrating each test so that it delivers size $\alpha$, the ratio of minimum
-detectable responses between the directed and Wald tests is $0.393$ at
-$G_{\mathrm{eff}} = 36.42$, $0.448$ at $G = 51$ and $0.516$ at $G = 100$.
-Directing the test cuts the detectable response by roughly $61\%$ at the
-smallest of these designs.
+The ratio of minimum detectable responses depends on how each test is
+calibrated. Taking the Wald at the exact critical value from \eqref{eq:Fexact}
+and the directed test at the $t_{G_{\mathrm{eff}}-1}$ critical value that its
+estimated CR1 variance requires, that ratio at power $0.80$ is $0.393$ at
+$G_{\mathrm{eff}} = 36.42$, $0.448$ at $G_{\mathrm{eff}} = 51$ and $0.516$ at
+$G_{\mathrm{eff}} = 100$ (\texttt{results/theory/inference/verification.json},
+entry \texttt{E11}). Calibrating the directed test at $z_{1-\alpha}$ instead, as
+Theorem \ref{thm:umpi} does under known $V$, gives $0.386$, $0.442$ and $0.512$.
+At the first of these designs the direction restriction divides the
+$\Sigma_\delta^2 I_k$ required to detect a given $\kappa$, and so the number of
+clusters required at fixed per-cluster information, by $6.5$.
 
 \section{Simulations}
 \label{sec:sim}
 
-\paragraph{Design.} We simulate a two-layer panel. A latent factor $F_{it} =
-f_i + g_t + \tau D_{it} + v_{it}$ drives $C$ category outcomes $Y^*_{itc} =
-a_{ic} + \lambda_{tc} + \theta_c F_{it} + \varepsilon_{itc}$, and the recorded
-outcome adds a time-invariant unit-by-category distortion and a
-treatment-induced term, $Y_{itc} = Y^*_{itc} + \mu_{ic} + \kappa k(\ell_{it})
-d_c D_{it} + u_{itc}$. All disturbances are Gaussian and independent across
-clusters. The null \eqref{eq:null} corresponds to $\kappa = 0$. We vary
-$G \in \{20,30,51,100\}$ with one unit per cluster, $C \in \{3,5,8\}$, and set
-$T = 120$ with three adoption cohorts, $q = 18$ included horizons and $m = 13$
-post-treatment restrictions. Exposure indices are equally spaced. Every size
-cell uses $2{,}000$ replications at nominal level $0.05$; permutation tests
-enumerate all $C!$ label assignments and the bootstrap and sign-change tests use
-$1{,}999$ draws. Monte Carlo standard errors for a rejection rate near $0.05$
-are $0.005$.
+\paragraph{Design.} The simulated panel is a two-layer recording model with
+count outcomes. A latent factor $F_{it} = f_i + g_t + \tau D_{it} + v_{it}$
+with $\tau = 0.4$ drives $C$ category indices $Y^*_{itc} = a_{ic} +
+\lambda_{tc} + \theta_c F_{it} + \varepsilon_{itc}$, in which the loadings
+$\theta_c$ are a uniformly random permutation of $C$ values evenly spaced in
+$1 \pm 0.3$, drawn independently of $d$. Recording thins counts. With
+$\mu_{ic} \sim N(0, 0.5^2)$ the untreated recording rate is $r_{ic} =
+\min\{\max(0.6\, e^{0.2\mu_{ic}},\, 0.02),\, 1\}$; on treated cells it becomes
+$\tilde{r}_{itc} = \min\{r_{ic}(1 + \kappa k(\ell_{it}) d_c),\, 1\}$ and equals
+$r_{ic}$ elsewhere; and $Y_{itc} \sim \mathrm{Poisson}(500\, \tilde{r}_{itc}\,
+e^{0.25 Y^*_{itc}})$. The regression outcome is
+$\log\{(Y_{itc}+0.5)/500{,}000\}$, so the recording wedge enters
+\eqref{eq:pooled} as $\log(1 + \kappa k(\ell) d_c)$ rather than as
+$\kappa k(\ell) d_c$. The response path is flat: $k(\ell) = 1$ at every
+post-treatment horizon. All disturbances are Gaussian, independent across
+clusters and serially independent within cluster. The null \eqref{eq:null}
+corresponds to $\kappa = 0$.
 
-\paragraph{Size.} Table \ref{tab:size} reports null rejection rates. The
-chi-square calibration rejects at $0.920$, $0.693$, $0.393$ and $0.172$ at
-$G = 20$, $30$, $51$ and $100$ with $C = 3$, and the pattern is nearly identical
-across $C$, consistent with Proposition \ref{prop:anatomy}, in which $C$ enters
-only through $\omega_2$. The $F$ calibration reduces but does not remove the
-distortion. The permutation test is at nominal size for $C \in \{5,8\}$,
-ranging from $0.0425$ to $0.059$ across all eight such cells. At $C = 3$ it
-rejects exactly $0.000$ of the time, which is Proposition
-\ref{prop:resolution}(iii) rather than a numerical artifact. The wild cluster
-bootstrap ranges from $0.0505$ to $0.067$ and the sign-change test from $0.0215$
-to $0.066$, the latter conservative at $G = 20$.
+We vary $G \in \{20,30,51,100\}$ with one unit per cluster, so every cluster
+carries the same number of observations, and $C \in \{3,5,8\}$ with exposure
+indices equally spaced on $[0.1,1]$. Every design has $T = 120$, adoption at
+$t = 48$, $72$ and $96$ by $20\%$ of units each and $40\%$ never treated,
+which gives $G_{\mathrm{eff}}/G = 0.714$. Six pre-treatment and twelve
+post-treatment horizons enter \eqref{eq:pooled}, omitting $\ell = -1$, so
+$q = 18$ and $m = 13$ in every cell of every block. Each size cell uses
+$2{,}000$ replications at nominal level $0.05$.
 
-\paragraph{Accuracy of the exact law.} Evaluating \eqref{eq:Fexact} at
-$G_{\mathrm{eff}}$ from Definition \ref{def:geff} predicts a null rejection rate
-of $0.378$ against the observed $0.389$ at $G = 51$, $C = 5$, $m = 13$. Across
-the twelve $(G,C)$ cells the mean absolute prediction error is $2.37$ percentage
-points using $G_{\mathrm{eff}}$ and $13.13$ percentage points using $G$. In this
-design $G_{\mathrm{eff}} = 36.42$, or $71.4\%$ of $G$, and it is a design object
-rather than a random one: its standard deviation across replications is
-$10^{-13}$. The exact Hotelling calibration evaluated at $G_{\mathrm{eff}}$
-rejects at $0.0445$ to $0.0470$ at $G = 51$ and is conservative at $G = 20$,
-where it rejects at $0.000$.
+The wild cluster bootstrap uses $499$ draws and the cluster sign-change test
+$999$, each including the identity draw, so $\hat{p} = (1 + \#\{b \ge 2 :
+T_b \ge T_{\mathrm{obs}}\})/B$. The label-permutation test of Definition
+\ref{def:perm} enumerates all $C!$ assignments at $C = 3$ and $C = 5$. At
+$C = 8$ it is the Monte Carlo version with $B = 999$, namely $998$ sampled
+assignments together with the identity; the largest level it can attain
+without exceeding $\alpha = 0.05$ is then $\lfloor \alpha B \rfloor / B =
+0.049$, and its resolution floor is $1/B$ rather than the $2/C!$ of
+Proposition \ref{prop:resolution}.
+The chi-bar-square statistic uses $B = 199$ at $C = 8$. Monte Carlo standard
+errors are $0.005$ at a rejection rate of $0.05$, $0.011$ at $0.39$ and
+$0.006$ at $0.92$. Output files named in this section sit in
+\texttt{results/theory/inference/} unless another directory is given.
+
+Two features of the design bear on what the tables can show. The loadings are
+drawn independently of $d$ and the $\varepsilon_{itc}$ are i.i.d.\ across
+categories, so Assumption \ref{as:CE} holds by construction and the
+permutation rows of Table \ref{tab:size} measure the size of a test to which
+Theorem \ref{thm:exact} applies, for the null \eqref{eq:null} under the
+randomization of Definition \ref{def:perm}; the departure from Assumption
+\ref{as:CE} is priced separately below. Assumption \ref{as:I} does not hold
+here: part (i) fails because the cluster scores come from Poisson counts
+through a nonlinear wedge, and part (ii) fails through the never-treated
+share. Proposition \ref{prop:anatomy} is therefore an approximation in this
+design, and the accuracy paragraph below reports the error. Cluster sizes are
+equal and no disturbance is serially correlated, so nothing in this section
+tests the cluster-size heterogeneity that \citet{mackinnon2017wild} identify
+as the bootstrap's failure mode, and nothing tests within-cluster serial
+dependence.
+
+\paragraph{Size.} Table \ref{tab:size} reports null rejection rates for
+\eqref{eq:null} at nominal level $0.05$. The chi-square calibration rejects at
+$0.920$, $0.693$, $0.393$ and $0.172$ at $G = 20$, $30$, $51$ and $100$ with
+$C = 3$. Across $C$ at $G = 51$ the rates are $0.393$, $0.389$ and $0.356$ at
+$C = 3$, $5$ and $8$, against $0.378$, $0.378$ and $0.378$ predicted by
+Proposition \ref{prop:anatomy} evaluated at $G_{\mathrm{eff}}$, which moves in
+$C$ only through $\omega_2$. The measured decline of $0.037$ from $C = 3$ to
+$C = 8$ runs the other way. The two cells are independently seeded, so the
+standard error of the difference is $0.015$ and the decline is $2.5$ standard
+errors of it.
+One candidate is the loading normalization, whose estimate improves with $C$,
+and we have not isolated it.
+
+The second block of rows refers $W/m$ to $F(m, G-1)$, the usual small-sample
+patch. Proposition \ref{prop:anatomy} puts the correct denominator degrees of
+freedom at $G - m$, which is $38$ rather than $50$ at $G = 51$ and $m = 13$,
+and the patch removes about a quarter of the excess over the nominal level:
+$0.309$ against $0.389$ at $G = 51$, $C = 5$. The Hotelling calibration at $G$,
+which is the one Proposition \ref{prop:anatomy} licenses under Assumption
+\ref{as:I}, rejects between $0.082$ and $0.175$ over the twelve cells.
+
+The two-sided label-permutation test is at nominal size for $C \in \{5,8\}$,
+ranging from $0.0425$ to $0.059$ over all eight such cells, and its directed
+version from $0.043$ to $0.053$. At $C = 3$ both have rejection rate $0.000$,
+which is Proposition \ref{prop:resolution}(iii) rather than a numerical
+artifact. The wild cluster bootstrap ranges from $0.0505$ to $0.067$. The
+two-sided cluster sign-change test ranges from $0.0215$ to $0.066$ and is
+conservative at $G = 20$, where its three rates are $0.027$, $0.022$ and
+$0.033$; the directed version rejects at $0.058$, $0.058$ and $0.055$ in those
+same three cells.
+
+\paragraph{The exact null law in the ideal experiment.} Assumption \ref{as:I} is
+not satisfied by the panel design, so Proposition \ref{prop:anatomy} is checked
+separately in an experiment built to satisfy it: cluster contributions drawn
+i.i.d.\ $N(0,\Sigma)$ with $m = 13$, $\Sigma$ redrawn for each of three seeds,
+and $60{,}000$ replications in total at each $G$. The identity
+$W = \omega_2 T^2$ holds to a maximum relative error of $4.0 \times 10^{-14}$
+at $G = 20$ and $1.3 \times 10^{-15}$ at $G = 100$. Referring the statistic to
+the $F$ law of \eqref{eq:Fexact} at the nominal $G$ gives null rejection rates
+of $0.0495$, $0.0489$, $0.0502$ and $0.0499$ at $G = 20$, $30$, $51$ and
+$100$. Kolmogorov-Smirnov tests of the resulting $p$-values against the uniform
+return $p = 0.81$, $0.02$, $0.06$ and $0.77$ at those four $G$, so the pooled
+$G = 30$ draws reject uniformity at the $5\%$ level. The closed-form
+chi-square size implied by \eqref{eq:Fexact} matches the simulated one to
+within $0.003$ at every $G$. Source: \texttt{anatomy\_identity.csv}.
+
+\paragraph{Accuracy of the substitution of $G_{\mathrm{eff}}$.} Evaluating
+\eqref{eq:Fexact} at $G_{\mathrm{eff}}$ from Definition \ref{def:geff} predicts
+a null rejection rate of $0.378$ against the observed $0.389$ at $G = 51$,
+$C = 5$, $m = 13$. Across the twelve $(G,C)$ cells the mean absolute prediction
+error is $2.37$ percentage points using $G_{\mathrm{eff}}$ and $13.13$
+percentage points using $G$. In this design $G_{\mathrm{eff}} = 36.42$, or
+$71.4\%$ of $G$, and it is a design object rather than a random one: its
+standard deviation across replications is $10^{-13}$. The Hotelling
+calibration evaluated at $G_{\mathrm{eff}}$ tracks the nominal level only in
+the middle of the grid. It rejects at $0.000$ in all three cells at $G = 20$,
+at $0.022$, $0.020$ and $0.021$ at $G = 30$, at $0.047$, $0.045$ and $0.045$ at
+$G = 51$, and at $0.061$, $0.065$ and $0.055$ at $G = 100$, so the substitution
+is conservative at twenty clusters and mildly liberal at a hundred.
 
 \paragraph{The design rule.} Applying Corollary \ref{cor:asym} through
 \eqref{eq:Fexact}, the largest number of restrictions holding chi-square size
 below $0.075$ is $m = 2$ at $G_{\mathrm{eff}} = 36.4$, $m = 4$ at $72.7$, $m =
 6$ at $100$ and $m = 8$ at $150$. Testing $m = 13$ restrictions at
-$G_{\mathrm{eff}} = 36.4$ gives a predicted size of $0.379$.
+$G_{\mathrm{eff}} = 36.4$ gives a predicted size of $0.379$. These are
+evaluations of \eqref{eq:Fexact} at values of $m$ that no simulated cell runs;
+every cell of every block in this section has $m = 13$, so the rule has no
+simulated counterpart here.
 
-\paragraph{When exchangeability fails.} We vary the ratio of the largest to
-smallest category error variance, which violates Assumption \ref{as:CE}. At
-$C = 5$ the permutation test using the Wald statistic rejects at $0.050$,
-$0.0635$, $0.0772$ and $0.0901$ for variance ratios $1$, $2$, $4$ and $9$. The
-distortion is monotone in the ratio and is an order of magnitude smaller than
-the chi-square distortion it replaces.
+\paragraph{When exchangeability fails.} A departure from Assumption
+\ref{as:CE} is priced in a Gaussian limit experiment rather than in the panel:
+one $N(0,\omega_c)$ draw per category, a single restriction, the same
+randomization over the $C!$ label assignments, a covariance estimate that
+treats the categories as homoskedastic, and $20{,}000$ replications. With the
+inflated variance on the highest-exposure category, the label-permutation test
+using the Wald statistic rejects at $0.050$, $0.064$, $0.077$, $0.090$ and
+$0.102$ at $C = 5$, and at $0.048$, $0.062$, $0.079$, $0.100$ and $0.125$ at
+$C = 8$, for variance ratios $1$, $2$, $4$, $9$ and $25$. Placing the inflated
+variance on the lowest-exposure category instead moves those rates by at most
+$0.009$. The distortion is monotone in the ratio, and its largest value in the
+grid stays below the chi-square rate of $0.356$ measured at $G = 51$, $C = 8$,
+$m = 13$.
 
-\paragraph{The price of label randomization.} Relative to a normal benchmark,
-the permutation test requires a noncentrality inflated by $1.892$ at $C = 4$,
-$1.352$ at $C = 5$, $1.235$ at $C = 6$, $1.149$ at $C = 8$ and $1.098$ at
-$C = 10$. Exactness is bought with power, and the price falls as $C$ grows.
+The sign of the distortion depends on how the variance spread lines up with
+the exposure index. In the implementation used for Tables \ref{tab:size} and
+\ref{tab:power}, which recomputes the CR1 covariance for every permuted label
+vector, a $C = 6$ design with category variances decreasing in exposure moves
+the permutation rejection rate the other way, from $0.047$ at variance ratio
+$1$ to $0.021$ at ratio $25$ over $2{,}000$ replications. Sources:
+\texttt{exchangeability\_failure.csv}, and
+\texttt{a2\_size\_heteroskedastic.csv} under
+\texttt{results/fixes/referee/}.
+
+\paragraph{The price of label randomization.} Relative to a normal benchmark
+at level $0.05$ and power $0.80$, the label-permutation test requires the
+standardized signal inflated by a factor of $1.892$ at $C = 4$, $1.352$ at
+$C = 5$, $1.235$ at $C = 6$, $1.149$ at $C = 8$ and $1.098$ at $C = 10$, so the
+price falls as $C$ grows. The factor is a large-sample calculation and it
+holds up only at the larger $C$. The minimum detectable response it implies is
+$0.231$ at $C = 8$ against $0.243$ in simulation, and $0.327$ at $C = 5$
+against $0.477$, where the simulated value is $46\%$ larger, at the smallest
+$C$ for which Proposition \ref{prop:resolution}(iii) makes the two-sided test
+usable.
+Sources: \texttt{perm\_power\_ceiling.csv} and
+\texttt{perm\_mde\_vs\_sim.csv}.
 
 \paragraph{Power.} Table \ref{tab:power} reports size-adjusted power at
-$G = 51$ against a linear recording response of magnitude $\kappa$, over $600$
-replications per cell. Two patterns are visible and they point in opposite
-directions. Label randomization with the two-sided Wald statistic is the least
-powerful procedure at every $\kappa$ and every $C$ we ran: at $C = 5$ and
-$\kappa = 0.45$ it attains $0.383$ against $0.705$ for the chi-square statistic
-at its size-adjusted critical value. Directing the statistic more than reverses
-that loss. The directed cluster sign-change test attains $0.983$ in the same
-cell, and at $C = 8$ it reaches $0.842$ at $\kappa = 0.20$ where the two-sided
-Wald reaches $0.277$. A researcher who buys exactness with label permutation and
-then spends it on a two-sided statistic is worse off than before; the gain comes
-from the direction restriction, not from the randomization.
+$G = 51$ against a recording response with a flat path, $k(\ell) = 1$ at every
+post-treatment horizon, indexed by the magnitude $\kappa$, over $600$
+replications per cell. Two patterns run in opposite directions. Label
+randomization with the two-sided Wald statistic is the least powerful
+procedure at every $\kappa$ at or above $0.10$ in both $C$ of Table
+\ref{tab:power}: at $C = 5$ and $\kappa = 0.45$ it attains $0.383$ against
+$0.705$ for the Wald statistic at its oracle critical value. At
+$\kappa = 0.05$ the three two-sided procedures sit within one Monte Carlo
+standard error of one another, at $0.083$, $0.082$ and $0.080$ at $C = 5$, so
+the ordering is not measured there. Directing the statistic more than reverses
+the loss. The directed cluster sign-change test attains $0.983$ at $C = 5$ and
+$\kappa = 0.45$, and at $C = 8$ it reaches $0.842$ at $\kappa = 0.20$ where the
+two-sided Wald reaches $0.277$. The gain comes from the direction restriction
+rather than from the randomization.
+
+The directed statistics in Table \ref{tab:power} use the contrast $w =
+\mathbf{1}_m$, which is the true response path in every cell of the block,
+since $k(\ell) = 1$ throughout. Theorem \ref{thm:umpi} is stated for known
+$k_P$, and the table measures the directed tests under that condition.
+No cell was run in which the assumed direction differs from the true one, so
+these entries bound what a researcher who has to guess the shape can expect,
+and the table carries no evidence on how much of the gain survives a wrong
+guess.
 
 The size-adjusted power of the two-sided permutation test is non-monotone in
 $\kappa$ at $C = 5$, falling from $0.452$ at $\kappa = 0.60$ to $0.383$ at
-$\kappa = 0.80$. The Monte Carlo standard error at these rates is $0.020$, so
-the decline is about three standard errors and we do not attribute it to
-simulation noise. We have not established its cause.
+$\kappa = 0.80$. The two rates come from independently seeded replications, so
+the standard error of the difference is $0.028$ and the decline of $0.068$ is
+$2.4$ of them.
+
+The same disagreement appears twice more at $C = 5$. The large-sample local
+power calculation for the label-permutation test predicts $0.538$, $0.768$ and
+$0.927$ at $\kappa = 0.45$, $0.60$ and $0.80$ against simulated $0.383$,
+$0.452$ and $0.383$, overstatements of $15$, $32$ and $54$ percentage points,
+and it predicts $0.041$ at $\kappa = 0$ against the nominal level of $0.05$. The
+minimum detectable response it implies is $0.327$ against a simulated $0.477$,
+while at $C = 8$ the same calculation gives $0.231$ against $0.243$. The
+non-monotonicity and the theory-simulation gap are the same disagreement at
+small $C$, and we have not isolated its cause. Sources:
+\texttt{local\_power\_check.csv} and \texttt{perm\_mde\_vs\_sim.csv}.
+
+\paragraph{Exposure spread, panel length and the pre-window.} Three further
+blocks vary the design rather than the procedure, at $G = 51$ and $C = 5$.
+Compressing the exposure indices from $[0.1,1]$ to $[0.4,0.6]$ cuts
+$\Sigma_\delta^2$ from $0.506$ to $0.025$ and raises the closed-form minimum
+detectable response of the Wald test from $0.363$ to $1.639$, a factor of
+$4.5$, with the directed test moving from $0.242$ to $1.854$. Halving the panel
+to $T = 60$ moves the Wald figure by under $2\%$, from $0.363$ to $0.370$.
+Replacing the six-period pre-window by the single omitted period $\ell = -1$
+raises $I_k$ from $23.6$ to $448$ and cuts the closed-form directed minimum
+detectable response to $0.050$, against $0.081$ for the simulated directed
+cluster sign-change test; the chi-square null rejection rate in that block is
+$0.405$ over $600$ replications, so narrowing the pre-window buys power without
+repairing the calibration. Sources: \texttt{mde\_table.csv} and
+\texttt{reference\_block\_table.csv}.
 
 \begin{table}[htbp]
 \centering
+\small
+\begin{spacing}{1.0}
 \caption{Null rejection rates, nominal level $0.05$}
 \label{tab:size}
 \begin{tabular}{llrrrr}
 \toprule
  & & \multicolumn{4}{c}{Clusters $G$} \\
 \cmidrule(lr){3-6}
-Calibration & $C$ & 20 & 30 & 51 & 100 \\
+Statistic and calibration & $C$ & 20 & 30 & 51 & 100 \\
 \midrule
-Chi-square             & 3 & 0.920 & 0.693 & 0.393 & 0.172 \\
-                       & 5 & 0.905 & 0.686 & 0.389 & 0.187 \\
-                       & 8 & 0.917 & 0.690 & 0.356 & 0.172 \\
+Wald, $\chi^2_m$                  & 3 & 0.920 & 0.693 & 0.393 & 0.172 \\
+                                  & 5 & 0.905 & 0.686 & 0.389 & 0.187 \\
+                                  & 8 & 0.917 & 0.690 & 0.356 & 0.172 \\
 \addlinespace
-$F$                    & 3 & 0.838 & 0.586 & 0.311 & 0.143 \\
-                       & 5 & 0.821 & 0.558 & 0.309 & 0.153 \\
-                       & 8 & 0.834 & 0.571 & 0.283 & 0.138 \\
+$W/m$, $F(m,G-1)$                 & 3 & 0.838 & 0.586 & 0.311 & 0.143 \\
+                                  & 5 & 0.821 & 0.558 & 0.309 & 0.153 \\
+                                  & 8 & 0.834 & 0.571 & 0.283 & 0.138 \\
 \addlinespace
-Label permutation      & 3 & 0.000 & 0.000 & 0.000 & 0.000 \\
-                       & 5 & 0.053 & 0.050 & 0.046 & 0.059 \\
-                       & 8 & 0.051 & 0.051 & 0.043 & 0.058 \\
+Hotelling at $G$                  & 3 & 0.175 & 0.164 & 0.122 & 0.082 \\
+                                  & 5 & 0.174 & 0.160 & 0.124 & 0.092 \\
+                                  & 8 & 0.172 & 0.167 & 0.106 & 0.088 \\
 \addlinespace
-Wild cluster bootstrap & 3 & 0.053 & 0.055 & 0.053 & 0.061 \\
-                       & 5 & 0.064 & 0.062 & 0.051 & 0.067 \\
-                       & 8 & 0.061 & 0.061 & 0.051 & 0.056 \\
+Hotelling at $G_{\mathrm{eff}}$   & 3 & 0.000 & 0.022 & 0.047 & 0.061 \\
+                                  & 5 & 0.000 & 0.020 & 0.045 & 0.065 \\
+                                  & 8 & 0.000 & 0.021 & 0.045 & 0.055 \\
 \addlinespace
-Cluster sign-change    & 3 & 0.027 & 0.036 & 0.046 & 0.058 \\
-                       & 5 & 0.022 & 0.041 & 0.050 & 0.066 \\
-                       & 8 & 0.033 & 0.041 & 0.048 & 0.053 \\
+Label permutation, Wald           & 3 & 0.000 & 0.000 & 0.000 & 0.000 \\
+                                  & 5 & 0.053 & 0.050 & 0.046 & 0.059 \\
+                                  & 8 & 0.051 & 0.051 & 0.043 & 0.058 \\
+\addlinespace
+Label permutation, directed       & 3 & 0.000 & 0.000 & 0.000 & 0.000 \\
+                                  & 5 & 0.052 & 0.053 & 0.048 & 0.052 \\
+                                  & 8 & 0.046 & 0.050 & 0.043 & 0.051 \\
+\addlinespace
+Wild cluster bootstrap, Wald      & 3 & 0.053 & 0.055 & 0.053 & 0.061 \\
+                                  & 5 & 0.064 & 0.062 & 0.051 & 0.067 \\
+                                  & 8 & 0.061 & 0.061 & 0.051 & 0.056 \\
+\addlinespace
+Cluster sign-change, Wald         & 3 & 0.027 & 0.036 & 0.046 & 0.058 \\
+                                  & 5 & 0.022 & 0.041 & 0.050 & 0.066 \\
+                                  & 8 & 0.033 & 0.041 & 0.048 & 0.053 \\
+\addlinespace
+Cluster sign-change, directed     & 3 & 0.058 & 0.056 & 0.044 & 0.045 \\
+                                  & 5 & 0.058 & 0.061 & 0.057 & 0.046 \\
+                                  & 8 & 0.055 & 0.055 & 0.057 & 0.065 \\
 \bottomrule
 \end{tabular}
 
@@ -617,57 +1282,88 @@ Cluster sign-change    & 3 & 0.027 & 0.036 & 0.046 & 0.058 \\
 \begin{minipage}{0.95\textwidth}
 \footnotesize Note: rejection rates for the joint null $H_0: \gamma_P = 0$ of
 \eqref{eq:null} in the pooled gradient regression \eqref{eq:pooled}, estimated
-by OLS with the CR1 covariance clustered on $g$. Design: $m = 13$
-post-treatment restrictions, $q = 18$ included horizons, $T = 120$, three
-adoption cohorts, one unit per cluster, equally spaced exposure indices. Label
-permutation randomizes the $C!$ assignments of the exposure index to category
-data arrays and enumerates all of them; the wild cluster bootstrap and the
-cluster sign-change test use $1{,}999$ draws. $2{,}000$ replications per cell;
-Monte Carlo standard error at a rate of $0.05$ is $0.005$. Source:
-\texttt{results/theory/inference/size\_table.csv}.
+by OLS with the CR1 covariance clustered on $g$, at nominal level $0.05$.
+Design: $m = 13$ post-treatment restrictions, $q = 18$ included horizons,
+$T = 120$, adoption at $t = 48$, $72$ and $96$ by $20\%$ of units each with
+$40\%$ never treated, one unit per cluster, exposure indices equally spaced on
+$[0.1,1]$. The Hotelling rows refer $W$ to the $F$ law of \eqref{eq:Fexact}
+evaluated at $G$ and at $G_{\mathrm{eff}} = 0.714\,G$. Label permutation
+randomizes the $C!$ assignments of the exposure index to the category data
+arrays, enumerating all of them at $C = 3$ and $C = 5$ and using $998$ sampled
+assignments together with the identity at $C = 8$. The wild cluster bootstrap
+uses $499$ draws and the cluster sign-change test $999$, each including the
+identity draw. The directed rows use the contrast $w = \mathbf{1}_m$.
+$2{,}000$ replications per cell; the Monte Carlo standard error is $0.005$ at
+a rate of $0.05$, $0.011$ at $0.39$ and $0.006$ at $0.92$. Sources:
+\texttt{results/theory/inference/size\_table.csv} and
+\texttt{anatomy\_table.csv}.
 \end{minipage}
+\end{spacing}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Size-adjusted power against the recording response $\kappa$, $G = 51$}
+\small
+\begin{spacing}{1.0}
+\caption{Size-adjusted power against a flat recording response of magnitude
+$\kappa$, $G = 51$}
 \label{tab:power}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{llrrrrrrrr}
 \toprule
- & & \multicolumn{6}{c}{Recording response $\kappa$} \\
-\cmidrule(lr){3-8}
-Statistic and calibration & $C$ & 0.05 & 0.10 & 0.15 & 0.20 & 0.30 & 0.45 \\
+ & & \multicolumn{8}{c}{Recording response $\kappa$} \\
+\cmidrule(lr){3-10}
+Statistic and calibration & $C$ & 0.05 & 0.10 & 0.15 & 0.20 & 0.30 & 0.45 & 0.60 & 0.80 \\
 \midrule
-Wald, chi-square              & 5 & 0.082 & 0.107 & 0.145 & 0.212 & 0.362 & 0.705 \\
-                              & 8 & 0.058 & 0.113 & 0.150 & 0.277 & 0.537 & 0.850 \\
+Wald, oracle critical value   & 5 & 0.082 & 0.107 & 0.145 & 0.212 & 0.362 & 0.705 & 0.828 & 0.872 \\
+                              & 8 & 0.058 & 0.113 & 0.150 & 0.277 & 0.537 & 0.850 & 0.930 & 0.953 \\
 \addlinespace
-Wald, wild cluster bootstrap  & 5 & 0.080 & 0.110 & 0.147 & 0.220 & 0.362 & 0.715 \\
-                              & 8 & 0.053 & 0.112 & 0.157 & 0.273 & 0.532 & 0.852 \\
+Wald, wild cluster bootstrap  & 5 & 0.080 & 0.110 & 0.147 & 0.220 & 0.362 & 0.715 & 0.830 & 0.872 \\
+                              & 8 & 0.053 & 0.112 & 0.157 & 0.273 & 0.532 & 0.852 & 0.925 & 0.950 \\
 \addlinespace
-Wald, label permutation       & 5 & 0.083 & 0.103 & 0.138 & 0.170 & 0.212 & 0.383 \\
-                              & 8 & 0.055 & 0.097 & 0.142 & 0.187 & 0.395 & 0.655 \\
+Wald, label permutation       & 5 & 0.083 & 0.103 & 0.138 & 0.170 & 0.212 & 0.383 & 0.452 & 0.383 \\
+                              & 8 & 0.055 & 0.097 & 0.142 & 0.187 & 0.395 & 0.655 & 0.733 & 0.722 \\
 \addlinespace
-Directed, label permutation   & 5 & 0.147 & 0.250 & 0.403 & 0.518 & 0.657 & 0.797 \\
-                              & 8 & 0.175 & 0.370 & 0.535 & 0.732 & 0.890 & 0.973 \\
+Directed, label permutation   & 5 & 0.147 & 0.250 & 0.403 & 0.518 & 0.657 & 0.797 & 0.815 & 0.772 \\
+                              & 8 & 0.175 & 0.370 & 0.535 & 0.732 & 0.890 & 0.973 & 0.978 & 0.970 \\
 \addlinespace
-Directed, cluster sign-change & 5 & 0.143 & 0.320 & 0.527 & 0.688 & 0.895 & 0.983 \\
-                              & 8 & 0.155 & 0.403 & 0.613 & 0.842 & 0.968 & 0.997 \\
+Directed, cluster sign-change & 5 & 0.143 & 0.320 & 0.527 & 0.688 & 0.895 & 0.983 & 0.987 & 1.000 \\
+                              & 8 & 0.155 & 0.403 & 0.613 & 0.842 & 0.968 & 0.997 & 0.997 & 1.000 \\
 \bottomrule
 \end{tabular}
 
 \smallskip
 \begin{minipage}{0.95\textwidth}
 \footnotesize Note: size-adjusted rejection rates against the alternative
-$\gamma_\ell = \kappa k(\ell)$ with a linear response path, for the joint null
-$H_0: \gamma_P = 0$ of \eqref{eq:null}. Each entry uses the critical value that
-delivers rejection rate $0.05$ for that procedure under $\kappa = 0$ in the same
-design, so entries are comparable across rows. Design: $G = 51$ clusters,
-$m = 13$ post-treatment restrictions, $q = 18$ horizons, $T = 120$, three
-adoption cohorts, equally spaced exposure indices. Label permutation enumerates
-all $C!$ assignments; the cluster sign-change test uses $1{,}999$ draws. $600$
-replications per cell; Monte Carlo standard error at a rate of $0.5$ is $0.020$.
-Source: \texttt{results/theory/inference/power\_curves.csv}.
+$\gamma_\ell = \kappa k(\ell)$ with $k(\ell) = 1$ at every post-treatment
+horizon, for the joint null $H_0: \gamma_P = 0$ of \eqref{eq:null}. Each entry
+uses the critical value set at the empirical $5\%$ quantile of that
+procedure's $p$-value distribution under $\kappa = 0$ in the same design.
+Because the randomization $p$-values have atoms, that rule does not deliver a
+null rate of $0.05$ in every row. At $C = 5$ the achieved rates are $0.050$
+for the oracle Wald and the directed sign-change rows, $0.051$ for the
+bootstrap, $0.056$ for the directed permutation row and $0.060$ for the
+two-sided permutation row, so the two permutation rows at $C = 5$ run at a
+higher level than the rows beside them; at $C = 8$ every row is between
+$0.050$ and $0.051$. The first row is not a feasible test: the chi-square
+calibration has null rejection rate $0.389$ at $C = 5$, and its size-adjusted
+cut is a nominal $p$-value of $7.3 \times 10^{-5}$, which cannot be computed
+without the null simulation. It is reported as a power benchmark. For the
+other rows the adjustment moves the cut only to between $0.043$ and $0.067$ in
+$p$-value units. The directed rows use the contrast $w = \mathbf{1}_m$, which
+is the true response path in this block. The block also ran $C = 3$, where the
+only attainable two-sided permutation $p$-values are $1/3$, $2/3$ and $1$ and
+the adjusted rule reduces to rejecting at $\hat{p} = 1/3$, with an achieved
+null rate of $0.340$; those cells are omitted. Design: $G = 51$ clusters,
+$m = 13$ post-treatment restrictions, $q = 18$ horizons, $T = 120$, adoption at
+$t = 48$, $72$ and $96$, exposure indices equally spaced on $[0.1,1]$. Label
+permutation enumerates all $C!$ assignments at $C = 5$ and uses $998$ sampled
+assignments together with the identity at $C = 8$; the cluster sign-change
+test uses $999$ draws including the identity. $600$ replications per cell;
+Monte Carlo standard error at a rate of $0.5$ is $0.020$. Sources:
+\texttt{results/theory/inference/power\_curves.csv} and
+\texttt{size\_adjustment\_audit.csv}.
 \end{minipage}
+\end{spacing}
 \end{table}
 
 \section{Application}
@@ -680,64 +1376,277 @@ not vary with the exposure index, so \eqref{eq:null} holds. The application is
 illustrative of the inference problem rather than a contribution to either
 substantive literature.
 
-The first panel covers $51$ states from 1979 to 2024 with six offense categories
-graded by the share of victimizations reported to police, clustered on state, so
-$G = 51$, $C = 6$ and $m = 9$. The design has $G_{\mathrm{eff}} = 45.9$, which
-by the rule of Section \ref{sec:sim} supports $m = 3$ restrictions at size
-$0.075$; the specification tests $m = 9$, for which \eqref{eq:Fexact} predicts a
-chi-square size of $0.169$. The chi-square test of \eqref{eq:null} rejects, with
-a statistic of $19.91$ and $p = 0.018$. No correctly sized procedure rejects:
-the exact Hotelling calibration at $G_{\mathrm{eff}}$ returns $p = 0.097$, the
-label-permutation test over all $720$ assignments returns $p = 0.096$, the wild
-cluster bootstrap returns $p = 0.075$ and the cluster sign-change test returns
-$p = 0.083$. The reported finding is an artifact of the reference distribution.
+The first panel is a state-by-year-by-offense panel of recorded index crime
+covering $51$ states from 1979 to 2024, clustered on state. Recorded counts are
+the FBI's summary-based estimated state totals and the outcome is the log
+offense rate per $100{,}000$ residents. The treatment is a state's transition
+from summary reporting to the National Incident-Based Reporting System, dated
+as the first year in which at least half of the state's agencies on the FBI
+Crime Data Explorer roster carry a NIBRS start date; Florida, Hawaii, New York
+and Pennsylvania do not reach that share by 2024 and enter as never-treated.
+Six offense categories carry the gradient, in ascending order of exposure:
+motor-vehicle theft, aggravated assault, robbery, burglary, rape and larceny.
+Homicide is retained in the panel as a $d = 0$ series and is not used in the
+gradient. The exposure index is $d_c = 1 - r_c$, with $r_c$ the share of
+victimizations reported to police averaged over the 2018 and 2019 National
+Crime Victimization Survey (Bureau of Justice Statistics, \emph{Criminal
+Victimization 2019}, NCJ 255113, Table 6) and rescaled so the largest focal
+value is one, giving $d = (0.290, 0.604, 0.628, 0.699, 0.976, 1.000)$ in that
+order. The design has $G = 51$, $C = 6$, $m = 9$ and $\Sigma_\delta^2 = 0.349$,
+and the multiset $\{\delta_c\}$ is not symmetric about zero.
 
-A pre-period placebo in the same specification behaves differently. Its
-chi-square $p$-value is $9 \times 10^{-6}$ and its label-permutation $p$-value
-is $0.0167$, which is the smallest attainable value at $C = 6$ under
-Proposition \ref{prop:resolution}(ii). The placebo rejection survives correct
-calibration, so the pre-period contamination in that design is not an inference
-artifact.
+Each category array is divided by an estimated loading before the gradient is
+formed, because the categories respond by different amounts to the common
+latent component, and the choice of normalization determines whether Theorem
+\ref{thm:exact} applies. We report three. The naive normalization sets every
+loading to one. The triad normalization is the log-triad estimator
+\eqref{eq:triad} of Section \ref{sec:perm}, computed from the untreated
+cross-category covariance matrix and scaled to geometric mean one. Relabeling
+the categories relabels $\hat{\rho}$ identically, so by Lemma \ref{lem:equi}
+the normalized arrays are an $S_C$-equivariant function of the raw arrays, the
+Wald statistic is order-invariant, and Theorem \ref{thm:exact} applies. The third
+normalization is the one the specification was originally run with, which fixes
+its reference category at the position of the smallest $d_c$. That choice makes
+the statistic depend on the order in which the pairs $(\delta_c,\mathcal{Y}_c)$
+are listed, so Theorem \ref{thm:exact} does not cover it, and we report it for
+comparison only.
 
-The second panel covers $51$ states from 2011 to 2024 with health conditions
-graded by whether a clinical encounter is required for the respondent to report
-them. Two conditions are surveyed only in odd years, so Assumption \ref{as:B}
-fails on the full category set and the exact procedures of Sections
-\ref{sec:perm} and \ref{sec:cluster} do not apply to the specification as
-originally run. We report two balanced sub-designs instead: five annually
-surveyed categories, and all seven categories on odd years only. Neither rejects
-\eqref{eq:null} under any calibration. Both have $G_{\mathrm{eff}}$ near $33$
-and support $m = 2$ restrictions against the $m = 7$ tested.
+Under the triad normalization the chi-square test of \eqref{eq:null} rejects and
+none of the three randomization calibrations does. The design has
+$G_{\mathrm{eff}} = 45.9$, which by the rule of Section \ref{sec:sim} supports
+$m = 3$ restrictions at size $0.075$; the specification tests $m = 9$, for which
+\eqref{eq:Fexact} predicts a chi-square size of $0.169$. The chi-square
+statistic is $19.00$ with $p = 0.025$. The label-permutation test of Definition
+\ref{def:perm} over all $720$ assignments of $\delta$ returns $p = 0.115$, the
+restricted wild cluster bootstrap returns $p = 0.092$ and the cluster
+sign-change test returns $p = 0.104$. Referring $W$ to \eqref{eq:Fexact} with
+$G_{\mathrm{eff}}$ in place of $G$ returns $p = 0.115$; that substitution is the
+approximation of Definition \ref{def:geff} and not a calibration Proposition
+\ref{prop:anatomy} licenses, and Section \ref{sec:sim} prices its null rejection
+rate at $0.000$ at $G = 20$ rising to $0.061$ at $G = 100$, so it is reported
+here as a diagnostic. The realized resolution floor of the permutation test here is $1/720 =
+0.0014$, so rejection at the $5\%$ level was attainable and the non-rejection is
+not a consequence of Proposition \ref{prop:resolution}.
 
-Neither non-rejection is evidence that measurement invariance holds. The
-minimum detectable response from \eqref{eq:mde} exceeds the magnitude implied by
-the substantive mechanism in both panels, and we report that comparison rather
-than describing the tests as passed.
+The chi-square rejection is joint with the normalization. Under the naive
+normalization the chi-square test does not reject at all, at $p = 0.141$, and
+the label permutation returns $p = 0.396$; under the reference-category
+normalization the chi-square test gives $p = 0.018$ and the label permutation
+$p = 0.096$. Table \ref{tab:appdesigns} reports all three normalizations for
+each of the nine crime designs, of which the design described above is one. The
+artifact that correct calibration overturns is therefore an artifact of the
+chi-square reference distribution applied to a normalized outcome; under the
+naive normalization there is nothing to overturn.
+
+A pre-period placebo in the same design behaves differently. Under the triad
+normalization its chi-square $p$-value is $6 \times 10^{-6}$ and its
+label-permutation $p$-value over the same $720$ assignments is $0.0167$, the
+twelfth largest of the $720$ orbit values. The exposure indices are not
+symmetric about zero and the realized orbit multiplicity is one, so
+Proposition \ref{prop:resolution}(ii) does not apply and the floor is $1/720$
+rather than $2/720$. Under the naive normalization the same permutation test
+returns $p = 0.153$, so the pre-period evidence, like the post-period evidence,
+is conditional on the normalization.
+
+The second panel is a state-by-year-by-condition panel of BRFSS crude
+prevalence covering $51$ jurisdictions from 2011 to 2024, clustered on state.
+The treatment is a state's adoption of the ACA Medicaid expansion, with the
+cohort set to the calendar year of the coverage effective date when coverage
+began on or before July 1 and to the following year otherwise; ten states do
+not expand through 2024. Seven conditions carry the gradient, and the exposure
+index grades them by whether a clinical encounter is required for the
+respondent to report the condition: diagnosed diabetes $1.00$, diagnosed high
+cholesterol $1.00$, diagnosed hypertension $0.90$, diagnosed depression $0.80$,
+self-reported obesity $0.05$, current smoking $0.00$ and no exercise in the past
+month $0.00$. Three further series in the panel, diabetes mortality, insurance
+coverage and a past-year checkup, are not used in the gradient.
+
+Hypertension and high cholesterol are asked only in odd years, so Assumption
+\ref{as:B} fails on the seven-category stack. That failure costs the closed form
+of Lemma \ref{lem:sep} and not the conclusion of Theorem \ref{thm:exact}, which
+needs Assumption \ref{as:CE} in its place. What blocks exactness on the full set
+is that the cell pattern is a function of the category label, so Assumption
+\ref{as:CE} fails as well. The cluster-level procedures of Section
+\ref{sec:cluster} use neither assumption and could be run on the unbalanced full
+set; we do not report that specification. We report two balanced sub-designs:
+the five annually asked categories on all $709$ state-year cells, and all seven
+categories on the $353$ odd-year cells. Under either equivariant normalization
+no category is dropped, so $C = 5$ and $C = 7$, with $G_{\mathrm{eff}} = 36.0$
+and $32.8$, $\Sigma_\delta^2 = 0.958$ and $1.444$, and support for $m = 2$
+restrictions against the $m = 7$ tested. Neither sub-design rejects
+\eqref{eq:null} under the triad normalization, at chi-square $p = 0.730$ and
+$0.391$ and label-permutation $p = 0.850$ and $0.854$ over all $C!$ assignments,
+nor under the naive normalization, at chi-square $0.295$ and $0.967$ and label
+permutation $0.867$ and $0.964$.
+
+The reference-category normalization gives a different answer, and it is the one
+Theorem \ref{thm:exact} does not cover. Its loading guard drops any category
+whose estimated loading is below $0.1$ in absolute value: diagnosed diabetes,
+the $d = 1$ series the design is built around, in the annual sub-design, leaving
+$C = 4$; high cholesterol and no exercise in the odd-year sub-design, leaving
+$C = 5$. In the annual sub-design the chi-square test returns $p = 0.100$, the
+Hotelling calibration at $G_{\mathrm{eff}}$ returns $0.230$, the label
+permutation $0.333$ and the wild cluster bootstrap $0.261$, while the directed
+cluster sign-change test rejects at $p = 0.042$. At $C = 4$ the realized
+resolution floor of the two-sided label-permutation test is $2/24 = 0.083$, so
+by Proposition \ref{prop:resolution} its non-rejection carries no information at
+the $5\%$ level and only the cluster-level procedures of Section
+\ref{sec:cluster} are usable there. In the odd-year sub-design the chi-square
+test returns $p = 0.443$ while the two-sided label permutation rejects at
+$p = 0.033$, the reverse of the crime pattern.
+
+Where the guard fires, permuting only the surviving labels conditions on a
+multiset that is not ancillary. Under Assumption \ref{as:CE} the reference set
+for the $C$ surviving arrays is the set of $C_0!/(C_0-C)!$ ordered injections of
+those arrays into the full $C_0$-vector of labels, not the $C!$ permutations of
+the survivors. Recomputing against the injection set moves the annual
+sub-design from $0.333$ to $0.317$ over $120$ injections, with realized floor
+$2/120 = 0.017$, and the odd-year sub-design from $0.033$ to $0.062$ over
+$2{,}520$ injections. The odd-year rejection is an artifact of the reference
+set, and neither number is exact for \eqref{eq:null} in the sense of Theorem
+\ref{thm:exact}, because the normalization that made the guard fire is not
+$S_C$-equivariant.
+
+Under the log outcome the odd-year sub-design rejects under every calibration
+when the reference-category normalization is used: chi-square $3 \times
+10^{-6}$, Hotelling at $G_{\mathrm{eff}}$ $0.0024$, label permutation $0.017$,
+restricted wild cluster bootstrap $0.021$ and cluster sign-change $0.022$. The
+guard does not fire there, so the injection and label reference sets coincide.
+Under the triad and naive normalizations of the same log outcome nothing
+rejects, at chi-square $0.213$ and $0.960$ and label permutation $0.485$ and
+$0.965$.
+
+Neither non-rejection is evidence that measurement invariance holds, because in
+both panels the minimum detectable response from \eqref{eq:mde} exceeds the
+magnitude the substantive mechanism implies, by a factor of $3.4$ in the crime
+panel and $17$ in the health panel. Evaluating \eqref{eq:mde} at $\alpha =
+0.05$, $\beta = 0.20$ and each design's own $\Sigma_\delta^2$ and $I_k$, with
+$\sigma^2$ set to the median category residual variance, gives
+$\kappa^{\mathrm{Wald}}_{\mathrm{MDE}} = 0.255$ log points per unit $d$ for the
+crime design at $m = 9$, $\Sigma_\delta^2 = 0.349$ and $I_k = 40.5$ under the
+naive normalization, and $0.326$ under the reference-category normalization.
+The recording wedges that the companion project's own bounds identify as the
+magnitudes that would matter run from $0.008$ to $0.074$ log points per unit
+$d$. For the health sub-designs the same expression gives $0.863$ and $0.930$
+percentage points of prevalence per unit $d$ at $m = 7$, $\Sigma_\delta^2 =
+0.958$ and $1.444$ and $I_k = 22.4$ and $13.6$, against a mechanism-implied
+response of $0.052$ percentage points for diagnosed diabetes at the estimated
+$1.98$ percentage point coverage gain and an undiagnosed share of $0.213$.
+These values are stated against the chi-square critical value, which Section
+\ref{sec:power} shows understates the detectable response of a correctly
+calibrated test.
+
+\paragraph{Data availability.} The recorded-crime series are the FBI's
+summary-based estimated state totals; the NIBRS adoption dates come from the FBI
+Crime Data Explorer agency API; the reporting rates defining $d_c$ come from
+Bureau of Justice Statistics, \emph{Criminal Victimization 2019}, NCJ 255113,
+Table 6. The health series are BRFSS crude prevalence from the CDC Socrata
+dataset \texttt{dttw-5yxu}, and the expansion effective dates come from the
+Kaiser Family Foundation table of state Medicaid expansion decisions. All are
+public. The two constructed panels and the code that builds them are in the
+replication archive named in the title footnote. Every $p$-value,
+$G_{\mathrm{eff}}$ and predicted size reported in this section is read from
+\texttt{results/fixes/empirics/inference\_gradient.csv}, and every realized
+resolution floor from
+\texttt{results/fixes/empirics/app\_floors\_injection.csv}.
+
+\begin{table}[htbp]
+\centering
+\caption{Crime application: $p$-values for $H_0: \gamma_P = 0$ across nine
+designs and three loading normalizations}
+\label{tab:appdesigns}
+\footnotesize
+\begin{tabular}{llrrrrrrr}
+\toprule
+Design & Normalization & $C$ & $G_{\mathrm{eff}}$ & $\chi^2$ & Hotelling
+ & Perm. & Bootstrap & Sign \\
+\midrule
+Baseline & adjusted & 6 & 45.9 & $0.018$ & $0.097$ & $0.096$ & $0.075$ & $0.083$ \\
+ & naive &  &  & $0.141$ & $0.304$ & $0.396$ & $0.277$ & $0.311$ \\
+ & triad &  &  & $0.025$ & $0.115$ & $0.115$ & $0.092$ & $0.104$ \\
+\addlinespace
+Pre-2020 & adjusted & 6 & 33.2 & $0.367$ & $0.604$ & $0.782$ & $0.630$ & $0.593$ \\
+ & naive &  &  & $0.596$ & $0.769$ & $0.911$ & $0.773$ & $0.766$ \\
+ & triad &  &  & $0.422$ & $0.647$ & $0.813$ & $0.670$ & $0.639$ \\
+\addlinespace
+Drop rape & adjusted & 5 & 45.9 & $0.016$ & $0.089$ & $0.075$ & $0.063$ & $0.048$ \\
+ & naive &  &  & $0.008$ & $0.062$ & $0.067$ & $0.040$ & $0.052$ \\
+ & triad &  &  & $0.018$ & $0.096$ & $0.083$ & $0.066$ & $0.051$ \\
+\addlinespace
+Drop rape, larceny & adjusted & 4 & 45.9 & $0.107$ & $0.258$ & $0.667$ & $0.218$ & $0.209$ \\
+ & naive &  &  & $0.139$ & $0.300$ & $0.667$ & $0.254$ & $0.303$ \\
+ & triad &  &  & $0.106$ & $0.257$ & $0.667$ & $0.220$ & $0.203$ \\
+\addlinespace
+Cohort $+1$ & adjusted & 6 & 45.7 & $0.017$ & $0.094$ & $0.117$ & $0.079$ & $0.078$ \\
+ & naive &  &  & $0.120$ & $0.277$ & $0.371$ & $0.258$ & $0.299$ \\
+ & triad &  &  & $0.023$ & $0.110$ & $0.122$ & $0.097$ & $0.099$ \\
+\addlinespace
+Threshold $0.8$ & adjusted & 6 & 38.0 & $0.182$ & $0.394$ & $0.243$ & $0.411$ & $0.367$ \\
+ & naive &  &  & $0.000$ & $0.007$ & $0.011$ & $0.002$ & $0.003$ \\
+ & triad &  &  & $0.204$ & $0.419$ & $0.268$ & $0.431$ & $0.399$ \\
+\addlinespace
+Core agency types & adjusted & 6 & 46.9 & $0.012$ & $0.074$ & $0.032$ & $0.062$ & $0.062$ \\
+ & naive &  &  & $0.164$ & $0.328$ & $0.389$ & $0.306$ & $0.359$ \\
+ & triad &  &  & $0.018$ & $0.093$ & $0.051$ & $0.083$ & $0.091$ \\
+\addlinespace
+Drop never-treated & adjusted & 6 & 45.3 & $0.017$ & $0.094$ & $0.172$ & $0.093$ & $0.094$ \\
+ & naive &  &  & $0.079$ & $0.220$ & $0.338$ & $0.216$ & $0.245$ \\
+ & triad &  &  & $0.026$ & $0.119$ & $0.207$ & $0.121$ & $0.131$ \\
+\addlinespace
+Core types, pre-2020 & adjusted & 6 & 35.8 & $0.320$ & $0.547$ & $0.793$ & $0.566$ & $0.554$ \\
+ & naive &  &  & $0.537$ & $0.717$ & $0.926$ & $0.728$ & $0.717$ \\
+ & triad &  &  & $0.367$ & $0.587$ & $0.819$ & $0.601$ & $0.602$ \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\begin{minipage}{0.95\textwidth}
+\footnotesize Note: $p$-values for the joint null $H_0: \gamma_P = 0$ of
+\eqref{eq:null} in the pooled gradient regression \eqref{eq:pooled}, estimated
+by OLS with the CR1 covariance clustered on state. Every design has $G = 51$
+state clusters except drop never-treated, which has $G = 47$, and every design
+tests $m = 9$ post-treatment restrictions. $\chi^2$ is the $\chi^2_9$
+calibration; Hotelling is \eqref{eq:Fexact} evaluated at $G_{\mathrm{eff}}$;
+Perm.\ is the label-permutation test of Definition \ref{def:perm} enumerating
+all $C!$ assignments of $\delta$, whose realized resolution floor is $1/720$ at
+$C = 6$, $1/120$ at $C = 5$ and $1/24$ at $C = 4$; Bootstrap is the restricted
+wild cluster bootstrap and Sign the cluster sign-change test, each with
+$1{,}999$ draws. Naive sets every loading to one; triad is the
+$S_C$-equivariant estimator \eqref{eq:triad}; adjusted fixes the reference
+category at the smallest $d_c$ and is not covered by Theorem \ref{thm:exact}.
+The entry shown as $0.000$ is $2.1 \times 10^{-5}$. Sources:
+\texttt{results/fixes/empirics/inference\_gradient.csv} for the $p$-values and
+\texttt{results/fixes/empirics/app\_floors\_injection.csv} for the realized
+floors.
+\end{minipage}
+\end{table}
 
 \section{Conclusion}
 
 The cluster-robust Wald statistic for a cross-outcome falsification test is a
-scaled Hotelling $T^2$, so its chi-square calibration is valid only when the
-number of restrictions grows more slowly than the two-thirds power of the number
-of clusters. At $51$ clusters and $13$ restrictions the nominal $5\%$ test
-rejects a true null $38.9\%$ of the time. Three procedures restore size: an
-exact label-permutation test valid in finite samples under category
-exchangeability, a cluster sign-change test, and the restricted wild cluster
-bootstrap. In a crime-reporting design the chi-square test rejects at $p = 0.018$
-and none of the three does.
+scaled Hotelling $T^2$, so its chi-square calibration is valid only when $m$
+grows more slowly than $G^{2/3}$. At $G = 51$ and $m = 13$ a nominal $5\%$ test
+has size $0.389$. The label-permutation test of Definition \ref{def:perm} over
+the $C!$ label assignments is exact in finite samples for \eqref{eq:null} under
+Assumption \ref{as:CE}; the cluster sign-change test is exact for
+\eqref{eq:null} under sign symmetry of the cluster contributions, which the
+feasible statistic attains at every $G$ under Assumption \ref{as:I}(ii);
+the restricted wild cluster bootstrap carries no exactness claim here. Their
+simulated sizes in Table \ref{tab:size} are $0.043$--$0.059$, $0.022$--$0.066$
+and $0.051$--$0.067$ at $C \in \{5,8\}$. At $G = 51$ and $C = 6$ in the crime
+design the chi-square test rejects at $p = 0.025$ and none of the three does.
 
-The main limitation is Assumption \ref{as:CE}. Exactness of the
-label-permutation test requires the category data arrays to be exchangeable
-given the design, which fails when categories have different error variances,
-and our simulations put the size at $0.090$ when the largest category variance
-is nine times the smallest. The cluster-level procedures do not require it, and
-they are the default when the exchangeability condition is doubtful or when
-$C \le 4$ makes permutation unusable.
+The main limitation is Assumption \ref{as:CE}: it fails when categories have
+different error variances. At $C = 5$ the simulated size of the
+label-permutation test is $0.090$ at a variance ratio of nine and $0.102$ at a
+ratio of $25$, rising to $0.125$ at $C = 8$. The cluster-level procedures do not use
+it and are the default when $C \le 4$ makes permutation unusable.
 
-One extension is immediate. Theorem \ref{thm:exact} requires a
-category-balanced design, and the health application shows that requirement
-binding in practice. Extending the exact reduction to panels unbalanced across
-categories would recover the procedure for designs where categories are
+Lemma \ref{lem:sep} requires a category-balanced design, which the health panel
+shows binding. What blocks Theorem
+\ref{thm:exact} there is Assumption \ref{as:CE}, because the cell pattern
+depends on the category label. Extending the exact reduction to
+category-unbalanced panels would recover the procedure where categories are
 surveyed on different schedules.
 
 \appendix
@@ -758,12 +1667,15 @@ S^{-1}\tilde{X}'\tilde{y}_c$ gives the stated expressions.
 \end{proof}
 
 \begin{proof}[Proof of Proposition \ref{prop:anatomy}]
-Write the CR1 covariance estimator as $\hat{V} = \omega_2^{-1}\,
-\frac{G}{G-1}\, A \big(\sum_g a_g a_g'\big) A'$ with $A$ the relevant rows of
-$S^{-1}$ and $a_g$ the cluster score. Under Assumption \ref{as:I}(ii) each
-cluster carries design weight $S_g = S/G$, so $A a_g = G^{-1}\eta_g$ up to the
-common factor absorbed in $A$, and the gradient estimator satisfies
-$\hat{\gamma}_P = \bar{\eta}_P$ in the same normalization. Substituting,
+By \eqref{eq:eta} the CR1 covariance of $\hat{\gamma}$ on the post block is
+$\hat{V}_{PP} = \omega \sum_g \eta^f_{gP}\eta^{f\prime}_{gP}$ with $\omega =
+\omega_2^{-1}G/(G-1)$. The within-category residual is $e_{gc} = u_{gc} -
+\tilde{X}_g S^{-1}\tilde{X}'u_c$ by Lemma \ref{lem:sep}, so $a^f_g = a_g -
+S_gS^{-1}\sum_h a_h$ and $\eta^f_g = \eta_g - S^{-1}S_g\sum_h \eta_h$. Under
+Assumption \ref{as:I}(ii), $S^{-1}S_g = I_q/G$, so $\eta^f_g = \eta_g -
+\bar{\eta}$, the restriction to $P$ commutes with the correction, and
+$\sum_g \eta^f_{gP}\eta^{f\prime}_{gP} = (G-1)\hat{S}_P$ while
+$\hat{\gamma}_P - \gamma_P = G\bar{\eta}_P$. Substituting,
 $$
 W = \hat{\gamma}_P' \hat{V}_{PP}^{-1} \hat{\gamma}_P
   = \omega_2\, \bar{\eta}_P' \Big[\tfrac{1}{G-1}\textstyle\sum_g
@@ -771,17 +1683,29 @@ W = \hat{\gamma}_P' \hat{V}_{PP}^{-1} \hat{\gamma}_P
     \bar{\eta}_P \, G
   = \omega_2 T^2 ,
 $$
-where the centering appears because the null \eqref{eq:null} is imposed on the
-residuals. This is an algebraic identity and does not use Assumption
-\ref{as:I}(i).
+where the centering is the within-category fitting correction and not a
+consequence of imposing \eqref{eq:null}. This is an algebraic identity and does
+not use Assumption \ref{as:I}(i).
 
-For the distribution, Assumption \ref{as:I}(i) gives $\sqrt{G}\,\bar{\eta}_P
-\sim N(0,\Sigma_{PP})$ and $(G-1)\hat{S}_P \sim W_m(\Sigma_{PP}, G-1)$
+For the distribution, Assumption \ref{as:I}(i) gives
+\[
+\sqrt{G}\,\bar{\eta}_P \sim N(0,\Sigma_{PP}),
+\qquad
+(G-1)\hat{S}_P \sim W_m(\Sigma_{PP}, G-1),
+\]
 independently, by Cochran's theorem applied to the i.i.d.\ Gaussian sample
 $\eta_{1P},\dots,\eta_{GP}$. Hence $T^2$ is Hotelling's $T^2$ with dimension $m$
 and $G-1$ degrees of freedom \citep{hotelling1931}, and the standard
 transformation $\frac{G-m}{(G-1)m}T^2 \sim F(m,G-m)$ holds for $G-m\ge1$.
 Substituting $T^2 = W/\omega_2$ gives \eqref{eq:Fexact}.
+
+For the last claim, write $\sum_g \eta^f_{gP}\eta^{f\prime}_{gP} = E'E$ with $E$
+the $G \times m$ matrix whose $g$th row is $\eta^{f\prime}_{gP}$. Summing
+$\eta^f_g = \eta_g - S^{-1}S_g\sum_h\eta_h$ over $g$ and using $\sum_g S_g = S$
+gives $\sum_g \eta^f_g = 0$, so the columns of $E$ are orthogonal to
+$\mathbf{1}_G$ and $\operatorname{rank}E \le \min(m, G-1)$. If $G - 1 < m$ the
+meat is singular, $\hat{S}_P$ is not invertible, and the Hotelling
+representation is unavailable.
 \end{proof}
 
 \begin{proof}[Proof of Corollary \ref{cor:asym}]
@@ -791,11 +1715,41 @@ $\Pr\{F(m,G-m) > (G-m)c_m / (\omega_2(G-1)m)\}$ with $c_m =
 (\chi^2_{G-m}/(G-m))$ with the two chi-squares independent, so the size equals
 $\Pr\{\chi^2_m > c_m \,\omega_2^{-1}(G-1)^{-1}\chi^2_{G-m}\}$.
 
-For (i), fix $m$ and expand $\chi^2_{G-m}/(G-1) = 1 + O_p(G^{-1/2})$ with mean
-$1 - (m-1)/(G-1)$. A second-order Taylor expansion of $u \mapsto
-\Pr\{\chi^2_m > c_m u\}$ around $u = 1$, together with $\sqrt{m}|\log\omega_2|
-\to 0$, gives the stated expansion, in which the $O(G^{-1})$ term carries
-coefficient $c_m f_m(c_m)(m+c_m)/2 > 0$.
+For (i), write $W \overset{d}{=} R\,\chi^2_m$ with $R = \omega_2 (G-1)/
+\chi^2_{G-m}$ independent of $\chi^2_m$, so the size is $\mathbb{E}[h(R)]$ with
+$h(x) = \Pr\{\chi^2_m > c_m/x\}$ and $h(1) = \alpha$. Put $\nu = G-1$ and
+$d = G-m$. At fixed $m$, $\mathbb{E}[R-1] = (m+1)/\nu - (1-\omega_2) +
+O(\nu^{-2})$ and $\mathbb{E}[(R-1)^2] = 2/\nu + O(\nu^{-2})$, using
+$\mathbb{E}[\chi_d^{-2k}] = \prod_{j=1}^{k}(d-2j)^{-1}$ for $d > 2k$ and
+$G(1-\omega_2) = O(1)$. The same formula gives the third central moment of
+$1/\chi^2_d$ as $16/\{(d-2)^3(d-4)(d-6)\}$ for $d > 6$, whence the signed third
+moment $\mathbb{E}[(R-1)^3] = O(\nu^{-2})$.
+
+A second-order expansion does not deliver the remainder. Bounding it by
+$\sup|h'''|\,\mathbb{E}|R-1|^3$ gives $O(\nu^{-3/2})$, because the absolute
+third moment, unlike the signed one, gains nothing from cancellation. Expand
+instead to third order with a fourth-order Lagrange remainder. Outside
+$|R-1| \le 1/2$ the contribution to $\mathbb{E}[h(R)]$ is exponentially small in
+$\nu$, since $h$ is bounded by one and the chi-square Chernoff bound gives
+$\Pr(|R-1| > 1/2) \le e^{-c\nu}$ for some $c>0$. Inside,
+$\sup_{|x-1| \le 1/2}|h''''(x)|$ is finite and $\mathbb{E}[(R-1)^4] =
+3\{\mathbb{E}[(R-1)^2]\}^2 + O(\nu^{-3}) = 12/\nu^2 + O(\nu^{-3})$, so the
+third-order term and the remainder are both $O(\nu^{-2})$.
+
+Substituting the moments with $h'(1) = c_m f_m(c_m)$ and $h''(1) =
+-c_m^2 f_m'(c_m) - 2 c_m f_m(c_m)$, and using $f_m'(x) = f_m(x)
+\{(m/2-1)/x - 1/2\}$ so that $c_m^2 f_m'(c_m) = c_m f_m(c_m)
+\{(m/2-1) - c_m/2\}$, the bracket collapses to
+$$
+h'(1)\,\mathbb{E}[R-1] + \tfrac{1}{2}h''(1)\,\mathbb{E}[(R-1)^2]
+= c_m f_m(c_m)\Big[\frac{m+c_m}{2\nu} - (1-\omega_2)\Big],
+$$
+which is the stated expansion. At the design of Section \ref{sec:sim} with
+$G = 51$ and $C = 3$, where $\omega_2 = 0.9981$, the two terms in that bracket
+are $0.354$ and $1.9 \times 10^{-3}$ at $m = 13$ and $\alpha = 0.05$, and
+$G(1-\omega_2)$ is at most $0.098$ over the twelve designs of Table
+\ref{tab:size}
+(\texttt{results/theory/inference/anatomy\_table.csv}).
 
 For (ii), take logarithms. The event is $\log \chi^2_m - \log \chi^2_{G-m} >
 \log c_m - \log(\omega_2(G-1))$. With $m \to \infty$, $\log\chi^2_m$ is
@@ -807,6 +1761,22 @@ Expanding $\log\{(G-1)/(G-m)\} = (m-1)/(G-1) + O((m/G)^2)$ gives $\chi_{m,G} =
 m^{3/2}/(\sqrt{2}G) + o(1)$ when $m^{5/2}/G^2 \to 0$. If $m/G \to r \in (0,1)$
 then $\log\{(G-1)/(G-m)\} \to -\log(1-r) > 0$ and $\chi_{m,G} \to \infty$, so
 the size tends to one.
+\end{proof}
+
+\begin{proof}[Proof of Lemma \ref{lem:equi}]
+Under Assumption \ref{as:B} the two-way within transformation is the same
+operator for every category, so relabelling the arrays gives
+$\hat{\Sigma}(\mathcal{D}_\sigma)_{ck} = \hat{\Sigma}_{\sigma(c)\sigma(k)}$ and
+hence $L(\mathcal{D}_\sigma)_{ck} = L_{\sigma(c)\sigma(k)}$. Substituting
+$j = \sigma(k)$ maps $\{k \ne c\}$ bijectively onto $\{j \ne \sigma(c)\}$, and
+substituting $(j,l) = (\sigma(k),\sigma(l))$ maps $\{k \ne l,\; k,l \ne c\}$
+bijectively onto $\{j \ne l,\; j,l \ne \sigma(c)\}$, so both averages in
+\eqref{eq:triad} are evaluated at the relabelled index and
+$\hat{a}_c(\mathcal{D}_\sigma) = \hat{a}_{\sigma(c)}(\mathcal{D})$. The
+geometric-mean scaling divides by $\exp\{C^{-1}\sum_j \hat{a}_j\}$, which is
+$\sigma$-invariant, so $\hat{\rho}_c(\mathcal{D}_\sigma) =
+\hat{\rho}_{\sigma(c)}(\mathcal{D})$. The retained set and the normalized arrays
+are therefore relabelled with the loadings.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{thm:exact}]
@@ -823,30 +1793,78 @@ Under Assumption \ref{as:CE}, $\mathcal{D}_{\pi^{-1}} \overset{d}{=}
 \mathcal{D}$ conditional on $\mathcal{Z}$ for each fixed $\pi$. Since $S_C$ is a
 finite group acting on the index set, the vector $(T(\pi))_{\pi \in S_C}$ is
 exchangeable conditional on $\mathcal{Z}$: for any $\sigma \in S_C$,
-$(T(\sigma\pi))_{\pi} \overset{d}{=} (T(\pi))_{\pi}$. Exchangeability of the $M$
-values implies that the rank of $T(\mathrm{id})$ among them is uniform on
-$\{1,\dots,M\}$ when ties have probability zero, and stochastically no larger
-than uniform otherwise. Rejecting when $T(\mathrm{id})$ exceeds the
-$k$th order statistic with $k = \lceil (1-\alpha)M\rceil$ therefore has
-conditional probability $(M-k)/M \le \alpha$, and $\lfloor \alpha M\rfloor/M$
-under distinctness. Averaging over $\mathcal{Z}$ preserves the bound. The
-randomized version distributes the residual mass $\alpha - \lfloor \alpha
-M\rfloor/M$ over the ties and attains $\alpha$ exactly.
+$(T(\sigma\pi))_{\pi} \overset{d}{=} (T(\pi))_{\pi}$.
+
+We bound $\Pr(\hat{p} \le \alpha)$ for the $\hat{p}$ of Definition
+\ref{def:perm} directly, which covers ties. For $\sigma \in S_C$ put
+$N(\sigma) = \#\{\pi' \in S_C : T(\pi') \ge T(\sigma)\}$ and $\mathcal{A} =
+\{\sigma : N(\sigma) \le \alpha M\}$, so the test rejects exactly on the event
+$\mathrm{id} \in \mathcal{A}$. If $\mathcal{A}$ is not empty, let $\sigma^*$
+attain the smallest value of $T$ on it. Every $\sigma \in \mathcal{A}$ has
+$T(\sigma) \ge T(\sigma^*)$, so $\mathcal{A} \subseteq \{\pi' : T(\pi') \ge
+T(\sigma^*)\}$ and $|\mathcal{A}| \le N(\sigma^*) \le \alpha M$, hence
+$|\mathcal{A}| \le \lfloor \alpha M \rfloor$ because $|\mathcal{A}|$ is an
+integer. Write $\phi(t) = \mathbf{1}\{\#\{\pi : t_\pi \ge t_{\mathrm{id}}\}
+\le \alpha M\}$ for a vector $t$ indexed by $S_C$, so that the rejection
+indicator is $\phi\big((T(\pi))_\pi\big)$. Because $\pi \mapsto \sigma\pi$ is
+a bijection, $\phi\big((T(\sigma\pi))_\pi\big) = \mathbf{1}\{N(\sigma) \le
+\alpha M\}$, and summing over $\sigma$ gives $\sum_{\sigma \in S_C}
+\phi\big((T(\sigma\pi))_\pi\big) = |\mathcal{A}|$. Taking expectations
+conditional on $\mathcal{Z}$ and applying exchangeability to each term,
+$$
+M \Pr(\hat{p} \le \alpha \mid \mathcal{Z})
+= \mathbb{E}\big[\,|\mathcal{A}| \,\big|\, \mathcal{Z}\big]
+\le \lfloor \alpha M \rfloor ,
+$$
+so $\Pr(\hat{p} \le \alpha \mid \mathcal{Z}) \le \lfloor \alpha M\rfloor/M
+\le \alpha$. Averaging over $\mathcal{Z}$ preserves the bound.
+
+Two cases sharpen it. When the $M$ values are almost surely distinct, $N$ takes
+each of $1,\dots,M$ exactly once, so $|\mathcal{A}| = \lfloor \alpha M \rfloor$
+and the bound holds with equality. When they fall into $M/\varkappa$ groups of
+exactly $\varkappa$ equal values, distinct across groups, which is what
+Proposition \ref{prop:resolution}(ii) gives with $\varkappa = 2$ for the
+two-sided Wald statistic, $N$ takes each of $\varkappa, 2\varkappa,\dots,M$ with
+multiplicity $\varkappa$, so $|\mathcal{A}| = \varkappa\lfloor \alpha
+M/\varkappa \rfloor$ and $\Pr(\hat{p} \le \alpha) = \varkappa\lfloor \alpha
+M/\varkappa\rfloor/M$. In either case the randomized version rejects with
+probability one on
+$\{\hat{p} \le \alpha_-\}$, whose probability is $\alpha_-$, and with
+probability $(\alpha-\alpha_-)/(\alpha_+-\alpha_-)$ on $\{\hat{p} = \alpha_+\}$,
+whose probability is $\alpha_+-\alpha_-$, so its size is $\alpha$.
+
+For the Monte Carlo reference set of Definition \ref{def:perm}, replace $S_C$ by
+$\mathcal{R} = \{\mathrm{id},\pi_2,\dots,\pi_B\}$. Because $\pi_2,\dots,\pi_B$
+are i.i.d.\ uniform on $S_C$ and drawn independently of the data, the vector
+$(T(\pi))_{\pi \in \mathcal{R}}$ is exchangeable conditional on $\mathcal{Z}$
+under Assumption \ref{as:CE}, and the rank argument above gives
+$\Pr(\text{reject}) \le \alpha$ with equality at
+$\varkappa\lfloor \alpha B/\varkappa\rfloor/B$.
 \end{proof}
 
 \begin{proof}[Proof of Proposition \ref{prop:resolution}]
-(i) The identity permutation contributes one count to the numerator of
-$\hat{p}$, so $\hat{p} \ge 1/M$ with $M = C!$.
+(i) Every $\pi \in \mathrm{Stab}(\delta)$ satisfies $\delta_\pi = \delta$ and
+hence $T(\pi) = T(\mathrm{id})$, so the numerator of $\hat{p}$ is at least
+$|\mathrm{Stab}(\delta)|$ on the exhaustive reference set, and
+$\mathrm{Stab}(\delta)$ is the direct product of the symmetric groups on the
+tied groups of $d$, of order the product of their factorials. On the Monte Carlo
+reference set the identity alone gives $\hat{p} \ge 1/B$.
 
-(ii) With equally spaced $d$ we may write $\delta_c = s\,(c - \frac{C+1}{2})$ for
-a scale $s>0$, so the order-reversing permutation $r(c) = C+1-c$ satisfies
-$\delta_{r(c)} = -\delta_c$. Pre-composition negates the label vector:
+(ii) Because the multiset $\{\delta_c\}$ is symmetric about zero, pick an
+involution $r \in S_C$ matching each $c$ with $\delta_c = v > 0$ to some $c'$
+with $\delta_{c'} = -v$ and fixing every $c$ with $\delta_c = 0$; then
+$\delta_{r(c)} = -\delta_c$ for all $c$, and $r \ne \mathrm{id}$ because
+$\delta$ is not identically zero. With equally spaced $d$ we may write
+$\delta_c = s\,(c - \frac{C+1}{2})$ for a scale $s>0$ and take $r(c) = C+1-c$.
+Pre-composition negates the label vector:
 $(\delta_{r \circ \pi})_c = \delta_{r(\pi(c))} = -\delta_{\pi(c)}$, so
 $\delta_{r\circ\pi} = -\delta_\pi$. Evenness of $\mathcal{T}$ then gives
 $T(r\circ\pi) = T(\pi)$ for every $\pi$. The map $\pi \mapsto r\circ\pi$ is left
-translation by an involution without fixed points, hence a fixed-point-free
-involution on $S_C$, so the $M$ values fall into $M/2$ equal pairs and every
-attainable $\hat{p}$ is a multiple of $2/M$.
+translation by an involution other than the identity, hence a fixed-point-free
+involution on $S_C$, so the $M$ values fall into $M/2$ equal pairs, and
+$r\circ\mathrm{Stab}(\delta)$ is disjoint from $\mathrm{Stab}(\delta)$ because
+$r \notin \mathrm{Stab}(\delta)$. The numerator of $\hat{p}$ is therefore at
+least $2|\mathrm{Stab}(\delta)|$.
 
 For the Wald statistic, $\hat{\gamma}(-\delta) = -\hat{\gamma}(\delta)$ by
 Lemma \ref{lem:sep}, each cluster score is odd in $\delta$, and the CR1
@@ -854,7 +1872,9 @@ covariance is quadratic in the cluster scores, so $\hat{V}_\gamma(-\delta) =
 \hat{V}_\gamma(\delta)$ and the quadratic form is unchanged.
 
 (iii) Rejection at level $\alpha$ requires some attainable $\hat p \le \alpha$,
-hence $2/C! \le \alpha$ in the even case and $1/C! \le \alpha$ otherwise.
+hence $2|\mathrm{Stab}(\delta)|/C! \le \alpha$ in the even case and
+$|\mathrm{Stab}(\delta)|/C! \le \alpha$ otherwise, which reduce to $2/C! \le
+\alpha$ and $1/C! \le \alpha$ when $d$ has no ties.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{thm:signflip}]
@@ -863,60 +1883,146 @@ the finite group $\mathcal{E} = \{-1,+1\}^G$ acting by coordinatewise sign
 change. That proof uses only finiteness of the group and invariance of the data
 law under it, both of which the sign-symmetry hypothesis supplies.
 
-For the second claim, let $u^0$ denote the true errors under \eqref{eq:null}.
-The infeasible contribution $\zeta^0_g$ is a fixed linear functional of cluster
-$g$'s errors alone, so independence across $g$ together with symmetry of each
-summand about zero gives $(\epsilon_g \zeta^0_g)_g \overset{d}{=} (\zeta^0_g)_g$
-for every $\epsilon \in \mathcal{E}$.
+For the second claim, let $u_{gc}$ denote the cluster-$g$ category-$c$ errors
+under \eqref{eq:null}, taken before the two-way within transformation, and build
+the infeasible contribution from them,
+$$
+\zeta^0_g = \frac{\big(S^{-1}\sum_c \delta_c \tilde{X}_g' u_{gc}\big)_P}
+{\sum_c \delta_c^2} .
+$$
+Using the raw rather than the within-transformed errors matters here and costs
+nothing. It matters because the two-way within projection subtracts period
+means, which pool across clusters, so contributions formed from the
+within-transformed errors are dependent across $g$. It costs
+nothing because $\tilde{X}'\Pi = \tilde{X}'$, so the aggregate is unchanged and
+$\sum_g \zeta^0_g = \hat{\gamma}_P - \gamma_P$ still holds. Each $\zeta^0_g$ is
+then a fixed linear functional of cluster $g$'s errors alone, so independence
+across $g$ together with symmetry of each summand about zero gives
+$(\epsilon_g \zeta^0_g)_g \overset{d}{=} (\zeta^0_g)_g$ for every
+$\epsilon \in \mathcal{E}$.
 
-For the third claim, the feasible contribution replaces $u^0$ by the restricted
-residual, which subtracts a term $S^{-1}S_g[\sum_h(\cdot)_h]$. The factor
-$\|S_g\|/\|S\|$ is $O(G^{-1})$ and it multiplies a sum of $G$ cluster
+For the third claim, write $z^r_g$ for the cluster-$g$ score of the $\gamma$
+block from the fit with \eqref{eq:null} imposed, so the feasible contribution is
+$\zeta_g = (S^{-1}z^r_g)_P/\sum_c \delta_c^2$. It replaces the errors by the
+restricted residuals, which subtracts a term $S^{-1}S_g[\sum_h(\cdot)_h]$. The
+factor $\|S_g\|/\|S\|$ is $O(G^{-1})$ and it multiplies a sum of $G$ cluster
 contributions, which is $O_p(G^{1/2})$ times a single one; relative to $\zeta_g$
-itself the discrepancy is therefore $O_p(G^{-1/2})$. Asymptotic level $\alpha$
-follows from the approximate-symmetry theorem of
-\citet{canay2017randomization}, whose conditions require the randomization
-distribution to converge to one that is invariant under $\mathcal{E}$, which the
-$O_p(G^{-1/2})$ bound delivers.
+itself the discrepancy is therefore $O_p(G^{-1/2})$.
+
+Asymptotic level $\alpha$ does not follow from an approximate-symmetry argument
+over $\mathcal{E}$. The results of \citet{canay2017randomization} hold for a
+randomization group whose cardinality is fixed in the sample size, and
+$|\mathcal{E}| = 2^G$ grows with $G$. We argue it instead as a statement about
+the conditional law of the randomization distribution. Assume (W1) the cluster
+blocks $(\tilde{X}_g, \{u_{gc}\}_c)$ are independent across $g$ with
+$\mathbb{E}[z^0_g] = 0$ under \eqref{eq:null} and uniformly bounded moments of
+order strictly greater than four, where $z^0_g = \sum_c \delta_c
+\tilde{X}_g'u_{gc}$; (W2) $\max_g \|S_g\|/\|S\| \to 0$ and $G^{-1}S \to
+\bar{S} \succ 0$; and (W3) $G^{-1}\sum_g \mathbb{E}[z^0_g z^{0\prime}_g] \to
+\Sigma_z \succ 0$ on the block $P$. The sign-change distribution is the
+null-imposed Rademacher wild cluster bootstrap of \citet{cameron2008bootstrap}
+in score form. Conditional on the data, $G^{-1/2}\sum_g \epsilon_g z^r_g$ is a
+sum of $G$ independent mean-zero terms with conditional variance $G^{-1}\sum_g
+z^r_g z_g^{r\prime}$, which converges in probability to $\Sigma_z$ under (W1) to
+(W3), and (W1) with (W2) gives the conditional Lyapunov condition. The
+conditional bootstrap central limit theorem of \citet{djogbenou2019asymptotic}
+then gives the randomization distribution of the statistic the same $\chi^2_m$
+limit, conditionally in probability, that the statistic itself has under
+\eqref{eq:null}. The randomization $p$-value is therefore asymptotically
+uniform.
 \end{proof}
 
 \begin{proof}[Proof of Corollary \ref{cor:mde}]
-Under the stated alternative and homoskedasticity, $\hat{\gamma}_P$ is
-asymptotically normal with mean $\kappa k_P$ and covariance $V =
-\sigma^2 (\Sigma_\delta^2 I_k)^{-1} \Omega_P$ for a design matrix $\Omega_P$
-normalized so that the linear wedge gives $k_P'\Omega_P^{-1}k_P = 1$. The Wald
-statistic is then noncentral chi-square with $m$ degrees of freedom and
-noncentrality $\lambda = \kappa^2 \Sigma_\delta^2 I_k/\sigma^2$. Setting
-$\lambda = \lambda^*(\alpha,\beta,m)$ and solving for $\kappa$ gives the first
-expression in \eqref{eq:mde}. For the directed statistic, $t$ is standard normal
-under \eqref{eq:null} and normal with mean $\kappa \sqrt{\Sigma_\delta^2
-I_k}/\sigma$ under the alternative, so power $1-\beta$ at level $\alpha$
-requires that mean to equal $z_{1-\alpha}+z_\beta$, which gives the second
-expression.
+Under the alternative $\gamma = \kappa k$, Lemma \ref{lem:sep} gives
+$\hat{\gamma} = \sum_c \delta_c b_c/\Sigma_\delta^2$ with $\mathbb{E}[b_c] =
+(\beta_\ell)_{\ell \in L} + \delta_c \kappa k$, and with homoskedastic
+categories independent across
+$c$, $\operatorname{Var}(b_c) = \sigma^2 S^{-1}$. Since $\sum_c \delta_c = 0$,
+$\hat{\gamma}$ has mean $\kappa k$ and covariance $(\sigma^2/\Sigma_\delta^2)
+S^{-1}$, so on the post-treatment block $V = \operatorname{Var}(\hat{\gamma}_P)
+= (\sigma^2/\Sigma_\delta^2)[S^{-1}]_{PP}$ and, by the definition of $I_k$ in
+Section \ref{sec:power}, $\kappa^2 k_P'V^{-1}k_P = \kappa^2 \Sigma_\delta^2
+I_k/\sigma^2$.
+
+The first expression in \eqref{eq:mde} is the minimum detectable response of the
+infeasible Wald statistic that uses $V$ in place of an estimate. That statistic
+is noncentral chi-square with $m$ degrees of freedom and noncentrality
+$\lambda = \kappa^2 \Sigma_\delta^2 I_k/\sigma^2$; setting $\lambda =
+\lambda^*(\alpha,\beta,m)$ and solving for $\kappa$ gives it. The feasible CR1
+Wald statistic does not have that law. The identity in the proof of Proposition
+\ref{prop:anatomy} uses no distributional assumption and holds under the
+alternative with $\bar{\eta}_P$ replaced by $\hat{\gamma}_P/G$, so under
+Assumptions \ref{as:B} and \ref{as:I} the feasible statistic is $\omega_2$ times
+a noncentral Hotelling $T^2$ with dimension $m$ and $G-1$ degrees of freedom.
+Equation \eqref{eq:mde} therefore understates the minimum detectable response of
+the feasible test twice, through the critical value, as Section \ref{sec:power}
+records, and through the distribution under the alternative.
+
+For the directed statistic, $t$ is standard normal under \eqref{eq:null} and
+normal with unit variance and mean $\kappa \sqrt{\Sigma_\delta^2 I_k}/\sigma$
+under the alternative, so power $1-\beta$ at level $\alpha$ requires that mean
+to equal $z_{1-\alpha}+z_\beta$, which gives the second expression.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{thm:umpi}]
-Invariance under shifts of the common event-study component reduces the data to
-the maximal invariant $\hat{\gamma}_P$, which is $N(\kappa k_P, V)$ with $V$ and
-$k_P$ known. The family in $\kappa$ has density proportional to
+Two configurations $(b_c)_c$ with the same contrast vector $(b_c - \bar{b})_c$
+differ by a shift common to all categories, so the $C-1$ contrasts are a maximal
+invariant and an invariant test is a function of them. The maximal invariant is
+the full contrast vector, of dimension $(C-1)q$, and not $\hat{\gamma}_P$.
+Decompose the contrast space orthogonally in the category index into the
+direction $\delta$ and its complement. The $\delta$-component is
+$\hat{\gamma} = \sum_c \delta_c b_c/\sum_c \delta_c^2$, with mean $\kappa k$.
+The remaining $C-2$ contrasts have mean zero for every $\kappa$, so they are
+ancillary for $\kappa$, and because $\Sigma$ does not vary with $c$ they are
+uncorrelated with $\hat{\gamma}$ and, being jointly Gaussian with it,
+independent of it. Write $A$ for that block.
+
+Conditional on $A = a$, the law of $\hat{\gamma}_P$ is $N(\kappa k_P, V)$ and
+does not depend on $a$. Its density in $\kappa$ is proportional to
 $\exp\{\kappa k_P'V^{-1}\hat{\gamma}_P - \tfrac{1}{2}\kappa^2 k_P'V^{-1}k_P\}$
 relative to the $\kappa = 0$ density, a one-parameter exponential family with
-natural sufficient statistic $k_P'V^{-1}\hat{\gamma}_P$ and natural parameter
-$\kappa$. By the Neyman-Pearson lemma the most powerful test against any fixed
-$\kappa > 0$ rejects for large values of that statistic, and the rejection
-region does not depend on which $\kappa > 0$ is chosen, so the test is uniformly
-most powerful among invariant tests. Standardizing by
-$\sqrt{k_P'V^{-1}k_P}$ gives $t \sim N(\kappa\sqrt{k_P'V^{-1}k_P},1)$, from
-which the size and the stated power function follow.
+natural parameter $\kappa$ and natural sufficient statistic $U =
+k_P'V^{-1}\hat{\gamma}_P$, which has monotone likelihood ratio in $\kappa$. By
+the Karlin-Rubin theorem \citep{lehmann2005testing} the conditional test
+rejecting for large $U$ is uniformly most powerful at every conditional level,
+and at conditional level $u$ its power is $\Psi(u) = \Phi(\mu + \Phi^{-1}(u))$
+with $\mu = \kappa\sqrt{k_P'V^{-1}k_P} > 0$.
+
+An invariant test may still randomize its level over the ancillary block, taking
+conditional level $\alpha(A)$ with $\mathbb{E}[\alpha(A)] = \alpha$, and ruling
+that out is the remaining step. Differentiating, $\Psi'(u) =
+\exp\{-\mu^2/2 - \mu\Phi^{-1}(u)\}$, which is strictly decreasing in $u$, so
+$\Psi$ is strictly concave on $(0,1)$ and Jensen's inequality gives
+$\mathbb{E}[\Psi(\alpha(A))] \le \Psi(\alpha)$, with equality if and only if
+$\alpha(\cdot)$ is almost surely constant. The unconditional power of an
+invariant level-$\alpha$ test is therefore at most $\Psi(\alpha)$, attained by
+$\alpha(\cdot) \equiv \alpha$. Standardizing $U$ by $\sqrt{k_P'V^{-1}k_P}$ gives
+$t \sim N(\kappa\sqrt{k_P'V^{-1}k_P},1)$, from which the critical value and the
+stated power function follow.
 \end{proof}
 
 \begin{thebibliography}{99}
 \itemsep 3pt
 
+\bibitem[Baicker et al.(2013)]{baicker2013oregon}
+Baicker, K., S.~L. Taubman, H.~L. Allen, M.~Bernstein, J.~H. Gruber, J.~P.
+Newhouse, E.~C. Schneider, B.~J. Wright, A.~M. Zaslavsky, and A.~N. Finkelstein
+(2013). The Oregon experiment: Effects of Medicaid on clinical outcomes.
+\emph{New England Journal of Medicine} 368(18), 1713--1722.
+
+\bibitem[Bell and McCaffrey(2002)]{bell2002bias}
+Bell, R.~M. and D.~F. McCaffrey (2002). Bias reduction in standard errors for
+linear regression with multi-stage samples. \emph{Survey Methodology} 28(2),
+169--181.
+
 \bibitem[Borusyak et al.(2024)]{borusyak2024revisiting}
 Borusyak, K., X.~Jaravel, and J.~Spiess (2024). Revisiting event-study designs:
 Robust and efficient estimation. \emph{Review of Economic Studies} 91(6),
 3253--3285.
+
+\bibitem[Callaway and Sant'Anna(2021)]{callaway2021did}
+Callaway, B. and P.~H.~C. Sant'Anna (2021). Difference-in-differences with
+multiple time periods. \emph{Journal of Econometrics} 225(2), 200--230.
 
 \bibitem[Cameron et al.(2008)]{cameron2008bootstrap}
 Cameron, A.~C., J.~B. Gelbach, and D.~L. Miller (2008). Bootstrap-based
@@ -932,10 +2038,6 @@ Carter, A.~V., K.~T. Schnepel, and D.~G. Steigerwald (2017). Asymptotic
 behavior of a $t$-test robust to cluster heterogeneity. \emph{Review of
 Economics and Statistics} 99(4), 698--709.
 
-\bibitem[Callaway and Sant'Anna(2021)]{callaway2021did}
-Callaway, B. and P.~H.~C. Sant'Anna (2021). Difference-in-differences with
-multiple time periods. \emph{Journal of Econometrics} 225(2), 200--230.
-
 \bibitem[de Chaisemartin and D'Haultf\oe uille(2020)]{dechaisemartin2020twoway}
 de Chaisemartin, C. and X.~D'Haultf\oe uille (2020). Two-way fixed effects
 estimators with heterogeneous treatment effects. \emph{American Economic
@@ -944,6 +2046,11 @@ Review} 110(9), 2964--2996.
 \bibitem[Denteh and K\'edagni(2022)]{denteh2026misclassdid}
 Denteh, A. and D.~K\'edagni (2022). Misclassification in
 difference-in-differences models. arXiv:2207.11890.
+
+\bibitem[Djogbenou et al.(2019)]{djogbenou2019asymptotic}
+Djogbenou, A.~A., J.~G. MacKinnon, and M.~{\O}. Nielsen (2019). Asymptotic
+theory and wild bootstrap inference with clustered errors. \emph{Journal of
+Econometrics} 212(2), 393--412.
 
 \bibitem[Freyaldenhoven et al.(2019)]{fhs2019pretrends}
 Freyaldenhoven, S., C.~Hansen, and J.~M. Shapiro (2019). Pre-event trends in
@@ -963,6 +2070,21 @@ Econometrics} 87(2), 239--269.
 Hotelling, H. (1931). The generalization of Student's ratio. \emph{Annals of
 Mathematical Statistics} 2(3), 360--378.
 
+\bibitem[Ibragimov and M\"uller(2010)]{ibragimov2010tstat}
+Ibragimov, R. and U.~K. M\"uller (2010). $t$-statistic based correlation and
+heterogeneity robust inference. \emph{Journal of Business \& Economic
+Statistics} 28(4), 453--468.
+
+\bibitem[Imbens and Koles\'ar(2016)]{imbens2016robust}
+Imbens, G.~W. and M.~Koles\'ar (2016). Robust standard errors in small samples:
+Some practical advice. \emph{Review of Economics and Statistics} 98(4),
+701--712.
+
+\bibitem[Iyer et al.(2012)]{iyer2012political}
+Iyer, L., A.~Mani, P.~Mishra, and P.~Topalova (2012). The power of political
+voice: Women's political representation and crime in India. \emph{American
+Economic Journal: Applied Economics} 4(4), 165--193.
+
 \bibitem[Kud\^o(1963)]{kudo1963}
 Kud\^o, A. (1963). A multivariate analogue of the one-sided test.
 \emph{Biometrika} 50(3--4), 403--418.
@@ -971,23 +2093,48 @@ Kud\^o, A. (1963). A multivariate analogue of the one-sided test.
 Lehmann, E.~L. and J.~P. Romano (2005). \emph{Testing Statistical Hypotheses}
 (3rd ed.). New York: Springer.
 
+\bibitem[Lipsitch et al.(2010)]{lipsitch2010negative}
+Lipsitch, M., E.~Tchetgen Tchetgen, and T.~Cohen (2010). Negative controls: A
+tool for detecting confounding and bias in observational studies.
+\emph{Epidemiology} 21(3), 383--388.
+
 \bibitem[MacKinnon and Webb(2017)]{mackinnon2017wild}
 MacKinnon, J.~G. and M.~D. Webb (2017). Wild bootstrap inference for wildly
 different cluster sizes. \emph{Journal of Applied Econometrics} 32(2),
 233--254.
 
+\bibitem[MacKinnon et al.(2023)]{mackinnon2023guide}
+MacKinnon, J.~G., M.~{\O}. Nielsen, and M.~D. Webb (2023). Cluster-robust
+inference: A guide to empirical practice. \emph{Journal of Econometrics}
+232(2), 272--299.
+
+\bibitem[Miller and Segal(2019)]{miller2019female}
+Miller, A.~R. and C.~Segal (2019). Do female officers improve law enforcement
+quality? Effects on crime reporting and domestic violence. \emph{Review of
+Economic Studies} 86(5), 2220--2247.
+
+\bibitem[Pan and Wall(2002)]{panwall2002}
+Pan, W. and M.~M. Wall (2002). Small-sample adjustments in using the sandwich
+variance estimator in generalized estimating equations. \emph{Statistics in
+Medicine} 21, 1429--1441.
+
+\bibitem[Pustejovsky and Tipton(2018)]{pustejovsky2018small}
+Pustejovsky, J.~E. and E.~Tipton (2018). Small-sample methods for
+cluster-robust variance estimation and hypothesis testing in fixed effects
+models. \emph{Journal of Business \& Economic Statistics} 36(4), 672--683.
+
 \bibitem[Rambachan and Roth(2023)]{rambachan2023credible}
 Rambachan, A. and J.~Roth (2023). A more credible approach to parallel trends.
 \emph{Review of Economic Studies} 90(5), 2555--2591.
-
-\bibitem[Roth(2022)]{roth2022pretest}
-Roth, J. (2022). Pretest with caution: Event-study estimates after testing for
-parallel trends. \emph{American Economic Review: Insights} 4(3), 305--322.
 
 \bibitem[Roth et al.(2023)]{roth2023trending}
 Roth, J., P.~H.~C. Sant'Anna, A.~Bilinski, and J.~Poe (2023). What's trending
 in difference-in-differences? A synthesis of the recent econometrics
 literature. \emph{Journal of Econometrics} 235(2), 2218--2244.
+
+\bibitem[Roth(2022)]{roth2022pretest}
+Roth, J. (2022). Pretest with caution: Event-study estimates after testing for
+parallel trends. \emph{American Economic Review: Insights} 4(3), 305--322.
 
 \bibitem[Shapiro(1988)]{shapiro1988}
 Shapiro, A. (1988). Towards a unified theory of inequality constrained testing
@@ -999,11 +2146,21 @@ Sun, L. and S.~Abraham (2021). Estimating dynamic treatment effects in event
 studies with heterogeneous treatment effects. \emph{Journal of Econometrics}
 225(2), 175--199.
 
+\bibitem[Tipton and Pustejovsky(2015)]{tipton2015small}
+Tipton, E. and J.~E. Pustejovsky (2015). Small-sample adjustments for tests of
+moderators and model fit using robust variance estimation in meta-regression.
+\emph{Journal of Educational and Behavioral Statistics} 40(6), 604--634.
+
 \bibitem[Weisburd et al.(2024)]{weisburd2024crs}
 Weisburd, D., D.~B. Wilson, C.~Gill, K.~Kuen, and T.~Zastrow (2024). Are we
 underestimating the crime prevention outcomes of community policing? The
 importance of crime reporting sensitivity bias. \emph{Journal of Law and
 Empirical Analysis} 1(1), 1--17.
+
+\bibitem[Young(2019)]{young2019fisher}
+Young, A. (2019). Channeling Fisher: Randomization tests and the statistical
+insignificance of seemingly significant experimental results. \emph{Quarterly
+Journal of Economics} 134(2), 557--598.
 
 \end{thebibliography}
 

@@ -1,0 +1,25 @@
+{
+ "X4_prop1_CEB_no_normalisation": {
+  "size": 0.04733333333333333,
+  "R": 3000,
+  "mcse": 0.003979112128771107,
+  "target": 0.05,
+  "C": 5,
+  "G": 6,
+  "note": "lognormal exchangeable loadings, t4 factor, t3 errors plus cluster shocks, 6 clusters, NO loading normalisation: Prop 1 CE-B predicts EXACT validity",
+  "verdict": "PASS"
+ },
+ "X5_cor2_scale_invariance": {
+  "max_rel_orbit_err": 4.0083066885769555e-13,
+  "note": "whole permutation orbit of W after y -> 3.7 y",
+  "verdict": "PASS"
+ },
+ "X6_assumptionB_attack": {
+  "size_d_tied_missingness": 0.04666666666666667,
+  "size_iid_missingness": 0.049166666666666664,
+  "R": 1200,
+  "mcse": 0.006291528696058958,
+  "target": 0.05,
+  "note": "Assumption B fails in both, but only the d-TIED pattern breaks category exchangeability; i.i.d. missingness leaves CE (hence Theorem 1) intact."
+ }
+}

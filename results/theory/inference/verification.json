@@ -1,0 +1,2439 @@
+{
+ "_index": {
+  "track": "T4 exact few-cluster inference",
+  "role": "adversarial proof-checker and verifier",
+  "reviewed_file": "theory/inference.md",
+  "report": "theory/inference_review.md",
+  "pre_review_copy": "theory/inference.md.prepatch.bak",
+  "edits_applied": 25,
+  "patch_script": "scripts/patch_inference_review.py",
+  "verification_scripts": [
+   "scripts/verify_inference.py",
+   "scripts/verify_inference_extra.py",
+   "scripts/verify_inference_extra2.py",
+   "scripts/verify_inference_extra3.py",
+   "scripts/verify_inference_extra4.py",
+   "scripts/verify_inference_extra6.py",
+   "scripts/verify_inference_extra7.py"
+  ],
+  "generated": "2026-08-20T09:56:32",
+  "verdicts": {
+   "Lemma 1 / Lemma 2 / Corollary 1": "SURVIVES (machine precision)",
+   "Corollary 1 d.o.f. convention": "UNDERSPECIFIED - stated in the text now",
+   "Corollary 2": "SURVIVES (exact, 4e-13)",
+   "Lemma A / Proposition 10(i)-(v)": "SURVIVES exactly; (I2) verified load-bearing",
+   "Corollary 11(i) statement": "FALSE as stated for omega_2<1 - repaired by hypothesis (A8')",
+   "Corollary 11(i) proof": "INVALID remainder bound - repaired (third-order expansion)",
+   "Corollary 11(ii)-(iii)": "SURVIVES",
+   "Lemma B / Corollary 12(iii)": "SURVIVES",
+   "Corollary 12(i)-(ii)": "UNPROVED APPROXIMATION (flagged); independently replicated in X9; G_eff is contrast-dependent",
+   "Theorem 1": "SURVIVES the hardest attacks (G=6, t3/t4, cluster shocks)",
+   "Proposition 1 (CE-A, CE-B)": "SURVIVES; CE-B exact with NO normalisation (X4)",
+   "Proposition 2(ii) proof": "ALGEBRA SLIP (pi o r vs r o pi) - conclusion survives",
+   "Proposition 3(a)(i)": "FALSE as stated - repaired by an added hypothesis",
+   "Proposition 3(a)(iii)": "UNDERSTATED - strengthened to exactness (equivariance)",
+   "Definition 2 / Proposition 4": "SURVIVES; two scope conditions added (sign, weak loadings)",
+   "Theorem 2 condition (S3)": "NEVER SATISFIED by the default statistic - weakened to (S3')",
+   "Proposition 5 / Proposition 6": "SURVIVE; Prop 6 distortion is conservative here",
+   "Theorem 3(a)": "SURVIVES",
+   "Theorem 3(b)": "WRONG RATE (O_p(G^-1/2) not O_p(G^-1)); also UNDERSTATED - exact under (I2)",
+   "Theorem 3(c) proof": "INVALID (fixed-M theorem cited with M=2^G) - replaced",
+   "Theorem 4 / Definition 4": "SURVIVES; closed-form refit exact to 8e-15; size 0.048-0.050",
+   "Proposition 7 resolution row": "OFF BY FACTOR 2 for even statistics - corrected",
+   "Lemma 5 / Theorem 5": "SURVIVE",
+   "Corollary 3 / Corollary 7": "INTERNALLY INCONSISTENT with section 2A - corrected; conclusion strengthened (0.393 not 0.589)",
+   "Corollary 4": "SURVIVES (exact closed form)",
+   "Lemma 6 / Corollary 5(iii)": "SURVIVE",
+   "Corollary 5(i)": "FALSE at m=1->2 - scope-restricted to m>=2",
+   "Lemma 7 / Theorem 7": "PROOF GAP (ancillary randomisation) - repaired by a Jensen step",
+   "Theorem 8": "TYPO in the null variance",
+   "Theorem 6 / Lemma 8 / Theorem 9(i),(iii),(iv)": "SURVIVE (machine precision)",
+   "Theorem 9(ii) proof": "SCALING TYPO (Sigma_delta^4); equation (16) is correct",
+   "Corollary 8": "SURVIVES",
+   "Corollary 9 monotonicity": "NON-SEQUITUR (Markov lower bound) - replaced by a coupling",
+   "Corollary 10": "INVERTED FRACTION in the worked number",
+   "Proposition 8(i)": "FALSE as stated under CE-B - repaired by a scope clause",
+   "Proposition 9 ordering": "UNPROVED (already an open item)",
+   "Assumption B": "not innocuous - attacked in X6/X8; permutation validity survives unbalanced panels but the reviewer could not break it even with d-correlated missingness"
+  },
+  "false_as_stated": [
+   "Proposition 3(a)(i)",
+   "Proposition 8(i)",
+   "Corollary 11(i)",
+   "Corollary 5(i) ('strictly')"
+  ],
+  "invalid_proofs": [
+   "Theorem 3(c)",
+   "Corollary 11(i) remainder bound",
+   "Corollary 9 monotonicity",
+   "Theorem 7 (gap, not invalid)"
+  ],
+  "unsatisfiable_conditions": [
+   "Theorem 2 (S3)"
+  ],
+  "internal_inconsistencies": [
+   "Corollary 3 / Corollary 7 vs Section 2A"
+  ],
+  "cosmetic": [
+   "Proposition 2(ii) composition",
+   "Proposition 7 resolution row",
+   "Theorem 8 variance typo",
+   "Theorem 9(ii) scaling typo",
+   "Corollary 10 inverted fraction",
+   "Corollary 7 beta slot",
+   "Remark A2 two meanings of 'the calibrated design'"
+  ]
+ },
+ "V1_lemma1_2_cor1": {
+  "rel_err_beta": 3.1268569114611683e-15,
+  "rel_err_gamma": 2.6705688625338833e-15,
+  "rel_err_CR1": 1.0307438676968953e-14,
+  "note": "brute-force dummy OLS vs the category-level formulas of Lemmas 1-2",
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V1b_dof_convention": {
+  "omega_theory": 1.2094170403587443,
+  "omega_counting_FE": 1.4250990752972257,
+  "ratio": 1.178335535006605,
+  "note": "Cor 1 / Prop 10 fix omega = G/(G-1)*(n-1)/(n-2q), NOT counting the C(N+T-1) absorbed fixed effects.  A CR1 that counts them gives a larger omega, a smaller W and a different omega_2 in Prop 10(i).  The convention is used but never stated as such.",
+  "_source": "verification_part1.json"
+ },
+ "V2_prop10i_identity": {
+  "design_imbalance_maxrel": 0.0,
+  "m": 4,
+  "G": 12,
+  "max_rel_dev": 1.4357619818212388e-14,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V3_prop10_iiiv": {
+  "ks_F_pvalue": 0.7738017800694927,
+  "sim_chi2_size": 0.225,
+  "formula_A6_size": 0.23368081744196578,
+  "mcse": 0.006690928429628067,
+  "hotelling_KS_uniform_p": 0.7738017800694872,
+  "hotelling_realised_size": 0.048,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V4_prop10v_singular": {
+  "m": 15,
+  "G": 8,
+  "max_meat_rank": 7,
+  "bound_G_minus_1": 7,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V5_cor4_sigma_delta2": {
+  "max_abs_err": 3.552713678800501e-15,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V6_lemma8": {
+  "rows": [
+   [
+    3,
+    2.220446049250313e-16,
+    true,
+    2,
+    2
+   ],
+   [
+    4,
+    1.1102230246251565e-16,
+    true,
+    3,
+    3
+   ],
+   [
+    5,
+    0.0,
+    true,
+    4,
+    4
+   ],
+   [
+    6,
+    1.1102230246251565e-16,
+    true,
+    5,
+    5
+   ],
+   [
+    7,
+    1.1102230246251565e-16,
+    true,
+    6,
+    6
+   ],
+   [
+    8,
+    1.1102230246251565e-16,
+    true,
+    7,
+    7
+   ]
+  ],
+  "max_err": 2.220446049250313e-16,
+  "note": "cols: C, |rho_max - (1-12/(C(C^2-1)))|, argmax set == adjacent transpositions, #argmax, C-1",
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V7_thm6_eq12": {
+  "rows": [
+   [
+    3,
+    "equal",
+    0.0,
+    0.5,
+    0.5
+   ],
+   [
+    3,
+    "random",
+    0.0,
+    0.5,
+    0.5
+   ],
+   [
+    4,
+    "equal",
+    9.25185853854297e-18,
+    0.3333333333333333,
+    0.3333333333333333
+   ],
+   [
+    4,
+    "random",
+    2.7755575615628914e-17,
+    0.3333333333333333,
+    0.3333333333333333
+   ],
+   [
+    5,
+    "equal",
+    -1.4802973661668754e-17,
+    0.25,
+    0.25
+   ],
+   [
+    5,
+    "random",
+    -7.401486830834377e-18,
+    0.25,
+    0.25
+   ],
+   [
+    6,
+    "equal",
+    0.0,
+    0.20000000000000007,
+    0.2
+   ],
+   [
+    6,
+    "random",
+    -1.7270135938613546e-17,
+    0.19999999999999996,
+    0.2
+   ],
+   [
+    7,
+    "equal",
+    0.0,
+    0.16666666666666666,
+    0.16666666666666666
+   ],
+   [
+    7,
+    "random",
+    -2.2556912246352387e-17,
+    0.16666666666666666,
+    0.16666666666666666
+   ]
+  ],
+  "max_err": 5.551115123125783e-17,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V8_lemma6": {
+  "rel_err_S": 2.0153575777922845e-15,
+  "I1": 150.00000000000028,
+  "I1_formula": 150.0,
+  "rel_err_I1": 1.8947806286936005e-15,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V9_cor7": {
+  "lambda_star_m13": 17.847176702681338,
+  "claimed": 17.85,
+  "ratio_m13": 0.5885716113403698,
+  "claimed_ratio": 0.589,
+  "lambda_star_m1": 7.848860509326199,
+  "ratio_m1": 0.8875253515889359,
+  "claimed_ratio_m1": 0.888,
+  "zsum_sq": 6.182557232019766,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V10_thm9_field": {
+  "C": 5,
+  "mu": 1.7,
+  "max_err_mean": 0.0030305166080164536,
+  "max_err_var": 0.005654565783346888,
+  "max_err_corr": 0.003462458470323615,
+  "max_err_beatprob": 0.0015086632793111787,
+  "cond_slope": 0.8992569061533784,
+  "cond_slope_pred": 0.9,
+  "cond_var": 0.19054519012126062,
+  "cond_var_pred": 0.18999999999999995,
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V11_cor9_eperm": {
+  "rows": [
+   [
+    3,
+    6,
+    -1,
+    0.5,
+    null,
+    null
+   ],
+   [
+    4,
+    24,
+    0,
+    0.8,
+    4.695,
+    1.888
+   ],
+   [
+    5,
+    120,
+    5,
+    0.9,
+    3.345,
+    1.345
+   ],
+   [
+    6,
+    720,
+    35,
+    0.9428571428571428,
+    3.061,
+    1.231
+   ],
+   [
+    7,
+    5040,
+    251,
+    0.9642857142857143,
+    2.916,
+    1.173
+   ],
+   [
+    8,
+    40320,
+    2015,
+    0.9761904761904762,
+    2.819,
+    1.134
+   ]
+  ],
+  "claimed": {
+   "4": [
+    4.59,
+    1.85
+   ],
+   "5": [
+    3.34,
+    1.34
+   ],
+   "6": [
+    2.98,
+    1.2
+   ],
+   "7": [
+    2.84,
+    1.14
+   ],
+   "8": [
+    2.79,
+    1.12
+   ]
+  },
+  "note": "cols: C, M, J, rho_max, mu_perm, e_perm",
+  "_source": "verification_part1.json"
+ },
+ "V12_cor8_bounds": {
+  "rows": [
+   [
+    1,
+    0.144005,
+    0.6240851829770754,
+    0.0,
+    true,
+    true
+   ],
+   [
+    2,
+    0.321965,
+    0.736455371567231,
+    0.0,
+    true,
+    true
+   ],
+   [
+    3,
+    0.5263,
+    0.8286091444260443,
+    0.04768105636489539,
+    true,
+    true
+   ],
+   [
+    4,
+    0.704435,
+    0.8970483946339658,
+    0.5773083989254462,
+    true,
+    true
+   ],
+   [
+    4.59,
+    0.786045,
+    0.9266776340001175,
+    0.7305776584810044,
+    true,
+    true
+   ],
+   [
+    6,
+    0.914965,
+    0.9711102144382013,
+    0.9074811174698819,
+    true,
+    true
+   ]
+  ],
+  "note": "cols: mu, exact power, Cor 8(iv) upper bound, Cor 8(ii) Markov lower bound",
+  "verdict": "PASS",
+  "_source": "verification_part1.json"
+ },
+ "V13_cor11i_expansion": {
+  "rows": [
+   [
+    1,
+    50,
+    0.055699940269899835,
+    0.0556590839857664,
+    4.085628413343784e-05
+   ],
+   [
+    1,
+    100,
+    0.05281138609031221,
+    0.05280096076063186,
+    1.0425329680353868e-05
+   ],
+   [
+    1,
+    200,
+    0.051396075247501984,
+    0.051393442790465094,
+    2.6324570368899125e-06
+   ],
+   [
+    1,
+    400,
+    0.05069563658935165,
+    0.05069497522632219,
+    6.613630294596828e-07
+   ],
+   [
+    1,
+    800,
+    0.05034721845584575,
+    0.050347052710015716,
+    1.6574583003303722e-07
+   ],
+   [
+    1,
+    1600,
+    0.05017345932023826,
+    0.05017341783320985,
+    4.148702840989227e-08
+   ],
+   [
+    1,
+    3200,
+    0.050086692189672766,
+    0.05008668181159818,
+    1.0378074587202857e-08
+   ],
+   [
+    3,
+    50,
+    0.07103379155398579,
+    0.06932519015765486,
+    0.0017086013963309304
+   ],
+   [
+    3,
+    100,
+    0.059989993822289825,
+    0.05956499310833422,
+    0.00042500071395560474
+   ],
+   [
+    3,
+    200,
+    0.05486442075074937,
+    0.05475846390816627,
+    0.00010595684258309784
+   ],
+   [
+    3,
+    400,
+    0.05239971988406496,
+    0.052373268966729544,
+    2.645091733541327e-05
+   ],
+   [
+    3,
+    800,
+    0.05119175717198353,
+    0.05118514933382364,
+    6.607838159887469e-06
+   ],
+   [
+    3,
+    1600,
+    0.05059385541764512,
+    0.05059220407612576,
+    1.6513415193597503e-06
+   ],
+   [
+    3,
+    3200,
+    0.05029642223496114,
+    0.050296009477250735,
+    4.1275771040655274e-07
+   ],
+   [
+    13,
+    50,
+    0.2572189735020633,
+    0.16412120257589843,
+    0.09309777092616486
+   ],
+   [
+    13,
+    100,
+    0.1292996048292063,
+    0.10648423157796993,
+    0.022815373251236365
+   ],
+   [
+    13,
+    200,
+    0.0836204098972034,
+    0.07810019560914082,
+    0.005520214288062583
+   ],
+   [
+    13,
+    400,
+    0.06536497656098633,
+    0.06401488452686473,
+    0.0013500920341216055
+   ],
+   [
+    13,
+    800,
+    0.05733205391581154,
+    0.05699867199777099,
+    0.000333381918040547
+   ],
+   [
+    13,
+    1600,
+    0.053579952170669465,
+    0.053497147546103206,
+    8.280462456625864e-05
+   ],
+   [
+    13,
+    3200,
+    0.05176865932174242,
+    0.05174802717293499,
+    2.063214880743125e-05
+   ]
+  ],
+  "remainder_loglog_slope": {
+   "1": -1.9915789234388654,
+   "3": -2.0022935610064154,
+   "13": -2.024305192240285
+  },
+  "note": "slope near -2 confirms the CLAIMED O(G^-2) remainder",
+  "verdict": "STATEMENT_OK",
+  "_source": "verification_part2.json"
+ },
+ "V13b_moment_rates": {
+  "rows": [
+   [
+    50,
+    0.2311058657341521,
+    0.23068186653635908
+   ],
+   [
+    100,
+    0.024161971506035135,
+    0.023710703611790424
+   ],
+   [
+    200,
+    0.004186514652049852,
+    0.003862790591414222
+   ],
+   [
+    400,
+    0.0009640695503983384,
+    0.0007794805870090561
+   ],
+   [
+    800,
+    0.0002656982875055117,
+    0.00017485169321133348
+   ],
+   [
+    1600,
+    8.189046227390456e-05,
+    4.140864593994311e-05
+   ]
+  ],
+  "slope_E_abs_Rm1_cubed": -2.255766027906338,
+  "slope_E_Rm1_cubed": -2.4507791980204425,
+  "note": "E|R-1|^3 ~ nu^{-1.5} while E[(R-1)^3] ~ nu^{-2}.  Cor 11(i)'s proof bounds a SECOND-order Taylor remainder by sup|h'''| E|R-1|^3, which is only O(nu^{-3/2}) and cannot deliver the claimed O(G^{-2}).  REPAIR: expand to third order, use the exactly computed mu_3(R) = O(nu^{-2}), and bound the fourth-order Lagrange remainder by sup|h''''| E[(R-1)^4] = O(nu^{-2}).",
+  "_source": "verification_part2.json"
+ },
+ "V14_cor11i_strictness": {
+  "n_violations_omega2_1": 0,
+  "min_size_over_grid": 0.05046322449497405,
+  "first_violations": [],
+  "violations_with_omega2_lt_1": [
+   [
+    1,
+    30,
+    0.9,
+    0.04786592537699687
+   ],
+   [
+    1,
+    30,
+    0.5,
+    0.009634449555222179
+   ],
+   [
+    1,
+    30,
+    0.2,
+    0.00014037824555299813
+   ],
+   [
+    1,
+    51,
+    0.9,
+    0.04403082813748266
+   ],
+   [
+    1,
+    51,
+    0.5,
+    0.007809504183527979
+   ],
+   [
+    1,
+    51,
+    0.2,
+    6.018441038665853e-05
+   ],
+   [
+    1,
+    100,
+    0.9,
+    0.041441716924805395
+   ],
+   [
+    1,
+    100,
+    0.5,
+    0.006660421949744393
+   ],
+   [
+    1,
+    100,
+    0.2,
+    2.9225360106251915e-05
+   ],
+   [
+    5,
+    30,
+    0.5,
+    0.010472214199961366
+   ],
+   [
+    5,
+    30,
+    0.2,
+    3.4510077806997715e-05
+   ],
+   [
+    5,
+    51,
+    0.5,
+    0.0038166485422326765
+   ]
+  ],
+  "note": "No counterexample with omega_2=1 over m<=60, G<=600, so the unproved strictness claim survives a wide search.  With omega_2 < 1 it is FALSE, so the hypothesis on omega_2 is load-bearing and belongs in the statement.",
+  "_source": "verification_part2.json"
+ },
+ "V15_cor11ii_limit": {
+  "rows": [
+   [
+    0.5,
+    13,
+    68.4,
+    0.18260024475933653,
+    0.12613489819343038,
+    0.2035887023302191
+   ],
+   [
+    0.5,
+    50,
+    515.9,
+    0.15103361200798246,
+    0.12613489819343038,
+    0.17606049381092947
+   ],
+   [
+    0.5,
+    200,
+    4081.3,
+    0.13770011271965443,
+    0.12613489819343038,
+    0.16355683234740387
+   ],
+   [
+    0.5,
+    800,
+    32362.2,
+    0.13170885594839238,
+    0.12613489819343038,
+    0.157655333063239
+   ],
+   [
+    0.5,
+    3200,
+    257523.8,
+    0.12887108017915339,
+    0.12613489819343038,
+    0.15478182693321693
+   ],
+   [
+    0.5,
+    12800,
+    2054247.2,
+    0.12749045107745924,
+    0.12613489819343038,
+    0.15336330184860616
+   ],
+   [
+    1.0,
+    13,
+    38.0,
+    0.35948289849125903,
+    0.2595110228414442,
+    0.36045372375971707
+   ],
+   [
+    1.0,
+    50,
+    271.3,
+    0.3075779289960068,
+    0.2595110228414442,
+    0.33988435292548574
+   ],
+   [
+    1.0,
+    200,
+    2092.2,
+    0.2829253927077266,
+    0.2595110228414442,
+    0.3311291941931644
+   ],
+   [
+    1.0,
+    800,
+    16383.8,
+    0.27106866491281106,
+    0.2595110228414442,
+    0.32689948332761704
+   ],
+   [
+    1.0,
+    3200,
+    129567.2,
+    0.26525240194555816,
+    0.2595110228414442,
+    0.3247814478305364
+   ],
+   [
+    1.0,
+    12800,
+    1030333.8,
+    0.26237230318969224,
+    0.2595110228414442,
+    0.32371691793951557
+   ],
+   [
+    2.0,
+    13,
+    23.1,
+    0.6649116472957874,
+    0.6387600313123353,
+    0.09429099236458041
+   ],
+   [
+    2.0,
+    50,
+    149.6,
+    0.6466873482915878,
+    0.6387600313123353,
+    0.056054595926447216
+   ],
+   [
+    2.0,
+    200,
+    1098.8,
+    0.6419359517848,
+    0.6387600313123353,
+    0.04491429805177993
+   ],
+   [
+    2.0,
+    800,
+    8397.2,
+    0.6402278705299869,
+    0.6387600313123353,
+    0.04151676257971983
+   ],
+   [
+    2.0,
+    3200,
+    65593.8,
+    0.63947368154966,
+    0.6387600313123353,
+    0.040370153776616194
+   ],
+   [
+    2.0,
+    12800,
+    518387.2,
+    0.639113029461426,
+    0.6387600313123353,
+    0.03993718159493716
+   ]
+  ],
+  "note": "cols: chi, m, G, exact size, Phi(chi-z), sqrt(m)*(size-limit)",
+  "_source": "verification_part2.json"
+ },
+ "V15b_rate_index": {
+  "rows": [
+   [
+    0.2,
+    25,
+    625,
+    0.07434322527389864,
+    0.06636380506123006
+   ],
+   [
+    0.2,
+    100,
+    5000,
+    0.0700976271716799,
+    0.06636380506123006
+   ],
+   [
+    0.2,
+    400,
+    40000,
+    0.06816541446156424,
+    0.06636380506123006
+   ],
+   [
+    0.2,
+    1600,
+    320000,
+    0.06724818234999733,
+    0.06636380506123006
+   ],
+   [
+    0.5,
+    25,
+    250,
+    0.12447945934003544,
+    0.09829979435798702
+   ],
+   [
+    0.5,
+    100,
+    2000,
+    0.11054699579627225,
+    0.09829979435798702
+   ],
+   [
+    0.5,
+    400,
+    16000,
+    0.10420548353597862,
+    0.09829979435798702
+   ],
+   [
+    0.5,
+    1600,
+    128000,
+    0.10119736412903961,
+    0.09829979435798702
+   ],
+   [
+    1.0,
+    25,
+    125,
+    0.2460580401751814,
+    0.1741872616179322
+   ],
+   [
+    1.0,
+    100,
+    1000,
+    0.20835817228124087,
+    0.1741872616179322
+   ],
+   [
+    1.0,
+    400,
+    8000,
+    0.19079773465783756,
+    0.1741872616179322
+   ],
+   [
+    1.0,
+    1600,
+    64000,
+    0.18236731080229435,
+    0.1741872616179322
+   ],
+   [
+    2.0,
+    25,
+    62,
+    0.5872566705738801,
+    0.40879721979387057
+   ],
+   [
+    2.0,
+    100,
+    500,
+    0.4956244256850403,
+    0.40879721979387057
+   ],
+   [
+    2.0,
+    400,
+    4000,
+    0.452557395052591,
+    0.40879721979387057
+   ],
+   [
+    2.0,
+    1600,
+    32000,
+    0.4307657477025976,
+    0.40879721979387057
+   ]
+  ],
+  "note": "cols: r=m^{3/2}/G, m, G, exact size, Phi(r/sqrt2 - z)",
+  "_source": "verification_part2.json"
+ },
+ "V16_cor12iii_design_rule": {
+  "rows": [
+   [
+    15,
+    1,
+    0.0667,
+    2,
+    0.1333,
+    4,
+    0.2667
+   ],
+   [
+    20,
+    1,
+    0.05,
+    2,
+    0.1,
+    5,
+    0.25
+   ],
+   [
+    25,
+    1,
+    0.04,
+    3,
+    0.12,
+    6,
+    0.24
+   ],
+   [
+    30,
+    2,
+    0.0667,
+    3,
+    0.1,
+    7,
+    0.2333
+   ],
+   [
+    36.42,
+    2,
+    0.0549,
+    4,
+    0.1098,
+    8,
+    0.2197
+   ],
+   [
+    50,
+    3,
+    0.06,
+    5,
+    0.1,
+    10,
+    0.2
+   ],
+   [
+    75,
+    4,
+    0.0533,
+    7,
+    0.0933,
+    14,
+    0.1867
+   ],
+   [
+    100,
+    6,
+    0.06,
+    9,
+    0.09,
+    18,
+    0.18
+   ],
+   [
+    125,
+    7,
+    0.056,
+    11,
+    0.088,
+    21,
+    0.168
+   ],
+   [
+    150,
+    8,
+    0.0533,
+    13,
+    0.0867,
+    24,
+    0.16
+   ]
+  ],
+  "claimed": {
+   "0.075": "m ~ G_eff/18, ratio 0.040-0.067",
+   "0.10": "m ~ G_eff/10, ratio 0.087-0.133",
+   "0.20": "m ~ G_eff/5, ratio 0.160-0.267"
+  },
+  "note": "cols: G_eff, m@7.5%, ratio, m@10%, ratio, m@20%, ratio",
+  "_source": "verification_part2.json"
+ },
+ "V17_geff_attack": {
+  "rows": [
+   [
+    "replica_balanced",
+    20,
+    5,
+    20.0,
+    20.0,
+    20.0,
+    0.185,
+    0.1823,
+    0.1823
+   ],
+   [
+    "staggered",
+    30,
+    5,
+    29.623,
+    28.642,
+    29.72,
+    0.13033333333333333,
+    0.1293,
+    0.1281
+   ],
+   [
+    "one_giant_cluster",
+    5,
+    5,
+    1.602,
+    1.412,
+    1.663,
+    0.83,
+    null,
+    null
+   ]
+  ],
+  "note": "cols: design, G, m, G_eff(equal contrast), min/max G_eff over the eigen-directions of [S^{-1}]_PP, simulated chi2 size, (A6) at G_eff, (A6) at G",
+  "_source": "verification_part2.json"
+ },
+ "V18_thm1_exact_size": {
+  "C": 5,
+  "M": 120,
+  "G": 6,
+  "n_rep": 4000,
+  "wald_size": 0.05425,
+  "directed_size": 0.04975,
+  "target": 0.05,
+  "mcse": 0.0034460121880225555,
+  "note": "heavy-tailed (t3/t4) errors, cluster shocks, period heteroskedasticity, only 6 clusters: nothing but the c-direction is exchangeable",
+  "verdict": "PASS",
+  "_source": "verification_part3.json"
+ },
+ "V19_prop2_composition": {
+  "n_perms": 120,
+  "failures_for_pi_o_r": 112,
+  "failures_for_r_o_pi": 0,
+  "note": "Prop 2(ii)'s proof asserts delta_{pi o r} = -delta_pi.  False for most pi; the correct composition is r o pi.  Both maps are fixed-point-free involutions, so the conclusion p >= 2/C! survives.",
+  "verdict": "PROOF_SLIP_CONCLUSION_SURVIVES",
+  "_source": "verification_part3.json"
+ },
+ "V20_prop2_pairing": {
+  "max_abs_diff_across_pairs": 1.5631940186722204e-12,
+  "min_attainable_p_wald": 0.016666666666666666,
+  "verdict": "PASS",
+  "_source": "verification_part3.json"
+ },
+ "V21_thm3a_infeasible": {
+  "G": 12,
+  "m": 3,
+  "size": 0.0505,
+  "mcse": 0.0034460121880225555,
+  "note": "zeta_g independent, symmetric, heteroskedastic across g, heavy tailed",
+  "verdict": "PASS",
+  "_source": "verification_part3.json"
+ },
+ "V22_thm3c_proof_gap": {
+  "claim": "Theorem 3(c): asymptotic validity 'by Theorem 2 with the group {-1,1}^G'.",
+  "defect": "Theorem 2 is a FIXED-M statement.  Its proof takes Lambda(psi_G) => Lambda(psi_inf) in R^M by continuous mapping and then uses a rank argument on M a.s. distinct coordinates.  Here M = 2^G grows with the sample, so neither step is available.  The cited machinery does not cover the case.",
+  "repair": "Prove (c) exactly as Theorem 4 is proved.  Conditional on the data, sum_g eps_g zeta_g is a sum of G independent mean-zero terms with conditional variance sum_g zeta_g zeta_g'; under (W1)-(W3) the Djogbenou-MacKinnon-Nielsen conditional CLT gives the same N(0,Sigma_z) limit as the sample statistic, hence an asymptotically uniform p-value.  The sign-flip test IS the null-imposed score-form Rademacher WCB.",
+  "status": "PROOF_INVALID_RESULT_REPAIRABLE",
+  "_source": "verification_part3.json"
+ },
+ "V23_feasible_signflip_size": {
+  "rows": [
+   [
+    8,
+    4,
+    0.04933333333333333,
+    0.0056
+   ],
+   [
+    15,
+    4,
+    0.048,
+    0.0056
+   ],
+   [
+    30,
+    4,
+    0.048,
+    0.0056
+   ],
+   [
+    60,
+    4,
+    0.054,
+    0.0056
+   ]
+  ],
+  "note": "cols: G, m, realised size, MCSE.  Feasible zeta_g are not exactly sign-symmetric (they carry the fitting correction).",
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.0_true_rho": {
+  "size": 0.051666666666666666,
+  "mcse": 0.0063,
+  "theta": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.0_hat_rho": {
+  "size": 0.05,
+  "mcse": 0.0063,
+  "theta": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.0_none": {
+  "size": 0.050833333333333335,
+  "mcse": 0.0063,
+  "theta": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.3_true_rho": {
+  "size": 0.05583333333333333,
+  "mcse": 0.0063,
+  "theta": [
+   0.7,
+   0.85,
+   1.0,
+   1.15,
+   1.3
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.3_hat_rho": {
+  "size": 0.059166666666666666,
+  "mcse": 0.0063,
+  "theta": [
+   0.7,
+   0.85,
+   1.0,
+   1.15,
+   1.3
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.3_none": {
+  "size": 0.03916666666666667,
+  "mcse": 0.0063,
+  "theta": [
+   0.7,
+   0.85,
+   1.0,
+   1.15,
+   1.3
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.6_true_rho": {
+  "size": 0.03,
+  "mcse": 0.0063,
+  "theta": [
+   0.4,
+   0.7,
+   1.0,
+   1.3,
+   1.6
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.6_hat_rho": {
+  "size": 0.034166666666666665,
+  "mcse": 0.0063,
+  "theta": [
+   0.4,
+   0.7,
+   1.0,
+   1.3,
+   1.6
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V24_loadings_spread0.6_none": {
+  "size": 0.030833333333333334,
+  "mcse": 0.0063,
+  "theta": [
+   0.4,
+   0.7,
+   1.0,
+   1.3,
+   1.6
+  ],
+  "_source": "verification_part3.json"
+ },
+ "V25_prop4_consistency": {
+  "rows": [
+   [
+    500,
+    0.06342384728513717,
+    [
+     0.4712,
+     0.8171,
+     1.0056,
+     1.3052,
+     1.9788
+    ],
+    [
+     0.4888,
+     0.7821,
+     0.9776,
+     1.3686,
+     1.9552
+    ]
+   ],
+   [
+    2000,
+    0.06447131146786589,
+    [
+     0.4815,
+     0.8239,
+     0.9368,
+     1.4231,
+     1.8907
+    ],
+    [
+     0.4888,
+     0.7821,
+     0.9776,
+     1.3686,
+     1.9552
+    ]
+   ],
+   [
+    8000,
+    0.03058501283081627,
+    [
+     0.5061,
+     0.7795,
+     0.9631,
+     1.3677,
+     1.9246
+    ],
+    [
+     0.4888,
+     0.7821,
+     0.9776,
+     1.3686,
+     1.9552
+    ]
+   ],
+   [
+    32000,
+    0.007980723986839466,
+    [
+     0.4924,
+     0.7844,
+     0.9762,
+     1.3621,
+     1.9472
+    ],
+    [
+     0.4888,
+     0.7821,
+     0.9776,
+     1.3686,
+     1.9552
+    ]
+   ]
+  ],
+  "note": "cols: n, max|rho_hat - theta/geomean|, rho_hat, target",
+  "verdict": "PASS",
+  "_source": "verification_part3.json"
+ },
+ "V26_prop8i_counterexample": {
+  "rows": [
+   [
+    0.0,
+    0.04966
+   ],
+   [
+    0.3,
+    0.0722925
+   ],
+   [
+    0.6,
+    0.102095
+   ],
+   [
+    1.0,
+    0.1532375
+   ]
+  ],
+  "sd_psi": 1.5811388300841895,
+  "note": "cols: kappa, rejection rate.  Size 0.05 at kappa=0, power increasing in kappa, with k proportional to tau.  So 'no test based on gamma_hat has power' is FALSE when psi is a RANDOM nuisance with a known law (CE-B).  Prop 8(i) is right only if psi is an unrestricted FREE parameter, i.e. only for tests required to be valid conditional on every realisation of psi.",
+  "status": "STATEMENT_TOO_STRONG_REPAIRABLE",
+  "_source": "verification_part3.json"
+ },
+ "E1_cor5i_monotone": {
+  "rows": [
+   [
+    1,
+    7.8489,
+    3.96203,
+    3.51641
+   ],
+   [
+    2,
+    9.6347,
+    3.80158,
+    3.0453
+   ],
+   [
+    3,
+    10.9026,
+    3.81271,
+    2.87113
+   ],
+   [
+    4,
+    11.9353,
+    3.86253,
+    2.77996
+   ],
+   [
+    5,
+    12.8276,
+    3.92341,
+    2.7238
+   ],
+   [
+    6,
+    13.6243,
+    3.98685,
+    2.6857
+   ],
+   [
+    7,
+    14.3505,
+    4.04977,
+    2.65815
+   ],
+   [
+    8,
+    15.0221,
+    4.11095,
+    2.6373
+   ],
+   [
+    9,
+    15.6498,
+    4.16997,
+    2.62097
+   ],
+   [
+    10,
+    16.2411,
+    4.22673,
+    2.60784
+   ],
+   [
+    11,
+    16.8017,
+    4.28126,
+    2.59704
+   ],
+   [
+    12,
+    17.3359,
+    4.33366,
+    2.58801
+   ],
+   [
+    13,
+    17.8472,
+    4.38407,
+    2.58034
+   ],
+   [
+    14,
+    18.3382,
+    4.43261,
+    2.57375
+   ],
+   [
+    15,
+    18.8111,
+    4.47942,
+    2.56802
+   ],
+   [
+    16,
+    19.2678,
+    4.52461,
+    2.563
+   ],
+   [
+    24,
+    22.4861,
+    4.83973,
+    2.53775
+   ],
+   [
+    32,
+    25.1856,
+    5.09634,
+    2.52503
+   ],
+   [
+    40,
+    27.5572,
+    5.31471,
+    2.51736
+   ]
+  ],
+  "wald_MDE_strictly_increasing_in_m": false,
+  "directed_MDE_strictly_increasing_in_m": false,
+  "note": "cols: m, lambda*(m), MDE_Wald and MDE_directed up to a common constant. Cor 5(i) claims a longer post-window strictly reduces WALD power at T0=1; verified over m=1..40.  Note the DIRECTED MDE also rises in m, so Remark A3's remedy ('test the directed contrast instead') fixes the lambda*(m) channel but NOT the I_1 saturation channel.",
+  "verdict": "FAIL",
+  "_source": "verification_extra.json"
+ },
+ "E2_remarkA2_numbers": {
+  "G_eff_36.42": {
+   "exact_A6": 0.379,
+   "expansion_A8": 0.2079,
+   "normal_limit": 0.318
+  },
+  "G_51": {
+   "exact_A6": 0.2514,
+   "expansion_A8": 0.1618,
+   "normal_limit": 0.2073
+  },
+  "claimed_in_remark_A2": "A8=0.162, exact=0.251, normal=0.207",
+  "note": "Remark A2's three numbers reproduce at G=51 (the IDEAL (I2) experiment), not at G_eff=36.42 where Cor 12 puts the realised design.  Consistent with anatomy_identity.csv but the phrase 'the calibrated design' is used for two different objects in 2A.3 and 2A.4.",
+  "_source": "verification_extra.json"
+ },
+ "E3_cor11i_strictness_boundary": {
+  "rows": [
+   [
+    1,
+    7,
+    0.64159,
+    0.59655
+   ],
+   [
+    1,
+    16,
+    0.84556,
+    0.83862
+   ],
+   [
+    1,
+    51,
+    0.9522,
+    0.95159
+   ],
+   [
+    1,
+    100,
+    0.9757,
+    0.97555
+   ],
+   [
+    1,
+    400,
+    0.99394,
+    0.99393
+   ],
+   [
+    2,
+    8,
+    0.49925,
+    0.42918
+   ],
+   [
+    2,
+    17,
+    0.7627,
+    0.75027
+   ],
+   [
+    2,
+    51,
+    0.92131,
+    0.92009
+   ],
+   [
+    2,
+    100,
+    0.95995,
+    0.95964
+   ],
+   [
+    2,
+    400,
+    0.99,
+    0.98999
+   ],
+   [
+    5,
+    11,
+    0.30279,
+    0.19648
+   ],
+   [
+    5,
+    20,
+    0.60248,
+    0.57709
+   ],
+   [
+    5,
+    51,
+    0.84264,
+    0.8393
+   ],
+   [
+    5,
+    100,
+    0.91967,
+    0.91884
+   ],
+   [
+    5,
+    400,
+    0.97991,
+    0.97986
+   ],
+   [
+    13,
+    19,
+    0.3,
+    0.01772
+   ],
+   [
+    13,
+    28,
+    0.39036,
+    0.34515
+   ],
+   [
+    13,
+    51,
+    0.65771,
+    0.64638
+   ],
+   [
+    13,
+    100,
+    0.82409,
+    0.8214
+   ],
+   [
+    13,
+    400,
+    0.95584,
+    0.95569
+   ],
+   [
+    30,
+    36,
+    0.3,
+    -0.0539
+   ],
+   [
+    30,
+    45,
+    0.3,
+    0.16167
+   ],
+   [
+    30,
+    51,
+    0.30485,
+    0.26227
+   ],
+   [
+    30,
+    100,
+    0.63604,
+    0.62741
+   ],
+   [
+    30,
+    400,
+    0.90802,
+    0.90755
+   ]
+  ],
+  "note": "cols: m, G, omega2* (exact size = alpha exactly there; size > alpha iff omega2 > omega2*), first-order prediction 1 - (m+c_m)/(2(G-1)).  Cor 11(i)'s STATEMENT asserts size > alpha for EVERY finite G; the proof only delivers it for large G at fixed m, and the assertion is false once 1-omega2 = (2q-1)/(n-1) exceeds about (m+c_m)/(2(G-1)).",
+  "repair": "Add the hypothesis (2q-1)/(n-1) < (m + chi2_{m,1-alpha})/(2(G-1)) (equivalently omega2 > omega2*(G,m)), or simply state 'for every sufficiently large G'.",
+  "calibrated_1_minus_omega2": 0.001177,
+  "calibrated_threshold": 0.3536,
+  "_source": "verification_extra.json"
+ },
+ "E7_thm9ii_scaling": {
+  "var_u_as_written": 0.1604,
+  "predicted_Sigma_delta_to_the_4": 0.16,
+  "var_u_corrected": 1.0024,
+  "note": "Theorem 9(ii)'s proof sets u_c = Sigma_delta k'V^{-1}eps_c/sqrt(k'V^{-1}k) and calls it N(0,1).  Its variance is Sigma_delta^4.  The definition that makes (16) correct is u_c = k'V^{-1}eps_c/(Sigma_delta sqrt(k'V^{-1}k)).  Equation (16) is right; the proof's definition is off by a factor Sigma_delta^2.",
+  "status": "PROOF_TYPO_RESULT_CORRECT",
+  "_source": "verification_extra.json"
+ },
+ "E8_def2_sign_blindness": {
+  "rows": [
+   [
+    "all_positive",
+    2000,
+    [
+     0.5,
+     0.777,
+     0.967,
+     1.382,
+     1.928
+    ],
+    [
+     0.489,
+     0.782,
+     0.978,
+     1.369,
+     1.955
+    ],
+    0.0274
+   ],
+   [
+    "all_positive",
+    40000,
+    [
+     0.481,
+     0.79,
+     0.975,
+     1.374,
+     1.964
+    ],
+    [
+     0.489,
+     0.782,
+     0.978,
+     1.369,
+     1.955
+    ],
+    0.0091
+   ],
+   [
+    "one_negative",
+    2000,
+    [
+     0.496,
+     0.784,
+     0.98,
+     1.346,
+     1.949
+    ],
+    [
+     0.489,
+     0.782,
+     0.978,
+     1.369,
+     1.955
+    ],
+    0.0222
+   ],
+   [
+    "one_negative",
+    40000,
+    [
+     0.486,
+     0.781,
+     0.974,
+     1.381,
+     1.961
+    ],
+    [
+     0.489,
+     0.782,
+     0.978,
+     1.369,
+     1.955
+    ],
+    0.0121
+   ],
+   [
+    "one_near_zero",
+    2000,
+    [
+     1.939,
+     2.176,
+     0.032,
+     1.808,
+     4.045
+    ],
+    [
+     1.069,
+     1.71,
+     0.043,
+     2.993,
+     4.275
+    ],
+    1.1846
+   ],
+   [
+    "one_near_zero",
+    40000,
+    [
+     1.059,
+     1.672,
+     0.043,
+     2.868,
+     4.611
+    ],
+    [
+     1.069,
+     1.71,
+     0.043,
+     2.993,
+     4.275
+    ],
+    0.3359
+   ]
+  ],
+  "note": "cols: loading pattern, n, rho_hat, |theta|/geomean|theta|, max error.  L_ck = log|Sigma_ck| discards the SIGN of the loading, so with a negative loading rho_hat recovers |theta_c| and the normalised array keeps the wrong sign on the factor: CE-A fails even in the limit.  Prop 4(ii) assumes theta_c > 0 but Definition 2 does not enforce it and Section 7 step 2 does not warn about it.  A near-zero loading makes the estimator numerically unstable.",
+  "_source": "verification_extra.json"
+ },
+ "E6_ERROR": {
+  "error": "MemoryError((200000, 120), dtype('bool'))",
+  "_source": "verification_extra.json"
+ },
+ "E4_prop10_I1_robustness": {
+  "rows": [
+   [
+    "gaussian_iid",
+    0.0528,
+    0.2525
+   ],
+   [
+    "hetero_scale",
+    0.0208,
+    0.2071
+   ],
+   [
+    "skew_chi2",
+    0.1844,
+    0.43
+   ],
+   [
+    "t5",
+    0.0452,
+    0.246
+   ]
+  ],
+  "mcse": 0.0015,
+  "note": "cols: cluster-contribution law, size of the exact Hotelling calibration (Prop 10(iv)), size of the chi-square calibration (omega2 = 1).  Open item 7 asks how much of the size failure is Gaussianity: the chi-square size is essentially law-free, while the Hotelling FIX is itself not robust to cluster-level scale heterogeneity.",
+  "_source": "verification_extra.json"
+ },
+ "E5_I2_failure": {
+  "rows": [
+   [
+    "balanced",
+    40.0,
+    0.025,
+    0.0515,
+    0.0515
+   ],
+   [
+    "mild",
+    37.876,
+    0.199,
+    0.0612,
+    0.0571
+   ],
+   [
+    "severe",
+    7.293,
+    2.1038,
+    0.3562,
+    0.0
+   ]
+  ],
+  "mcse": 0.0024,
+  "note": "cols: imbalance pattern, G_eff, max relative |W - T^2| over draws, Hotelling size using G, Hotelling size using G_eff.  G=40, m=6.  Prop 10(i) is an identity ONLY under (I2); with imbalance it fails by O(1) and the Hotelling calibration at nominal G over-rejects.  This is the cleanest possible case for the G_eff substitution of open item 6 (the imbalance is an exact scalar reweighting of S).",
+  "_source": "verification_extra.json"
+ },
+ "E10_prop6_magnitude": {
+  "rows": [
+   [
+    "equal",
+    0.0497
+   ],
+   [
+    "mild",
+    0.0476
+   ],
+   [
+    "aligned_with_d",
+    0.0367
+   ],
+   [
+    "anti_aligned",
+    0.037
+   ]
+  ],
+  "mcse": 0.0015,
+  "target": 0.05,
+  "note": "cols: sigma_c pattern, realised size of the label-permutation test in the exact Gaussian limit experiment with a studentised statistic.  Prop 6 says studentisation cannot repair unequal category variances; this quantifies the damage.",
+  "_source": "verification_extra.json"
+ },
+ "E9_order_invariance_necessary": {
+  "sizes": {
+   "plain": 0.05,
+   "ref": 0.052
+  },
+  "mcse": 0.0049,
+  "target": 0.05,
+  "note": "'plain' = no normalisation (order-invariant, CE holds) -> exact.  'ref' = a normalisation whose reference column is chosen by the POSITION of the largest permuted label, i.e. exactly what Lemma 3 excludes.  Shows the order-invariance requirement is load-bearing, not cosmetic.",
+  "_source": "verification_extra.json"
+ },
+ "E11_cor3_cor7_finite_sample": {
+  "rows": [
+   [
+    36.42,
+    1,
+    7.849,
+    8.242,
+    1.0247,
+    1.0178,
+    0.8875,
+    0.8815
+   ],
+   [
+    36.42,
+    4,
+    11.935,
+    14.698,
+    1.1097,
+    1.0178,
+    0.7197,
+    0.6601
+   ],
+   [
+    36.42,
+    13,
+    17.847,
+    41.464,
+    1.5242,
+    1.0178,
+    0.5886,
+    0.393
+   ],
+   [
+    51.0,
+    1,
+    7.849,
+    8.124,
+    1.0173,
+    1.0125,
+    0.8875,
+    0.8833
+   ],
+   [
+    51.0,
+    4,
+    11.935,
+    13.797,
+    1.0752,
+    1.0125,
+    0.7197,
+    0.6778
+   ],
+   [
+    51.0,
+    13,
+    17.847,
+    31.595,
+    1.3305,
+    1.0125,
+    0.5886,
+    0.4479
+   ],
+   [
+    100.0,
+    1,
+    7.849,
+    7.985,
+    1.0087,
+    1.0062,
+    0.8875,
+    0.8854
+   ],
+   [
+    100.0,
+    4,
+    11.935,
+    12.823,
+    1.0365,
+    1.0062,
+    0.7197,
+    0.6987
+   ],
+   [
+    100.0,
+    13,
+    17.847,
+    23.557,
+    1.1489,
+    1.0062,
+    0.5886,
+    0.5155
+   ]
+  ],
+  "note": "cols: G_eff, m, lambda*(chi2 crit), lambda*(exact Hotelling crit), Wald MDE inflation from correct calibration, directed MDE inflation (t_{G-1} vs z), Cor 7's ratio as printed, Cor 7's ratio at the CORRECT calibrations.  Corollary 3's kappa^Wald_MDE uses the chi-square critical value that Proposition 10 shows has size 0.38 at the calibrated design, so it is not the MDE of any test one would run.  Correcting it makes the directed test look BETTER, not worse: at G_eff=36.4, m=13 the honest ratio is 0.393, not the 0.589 printed in Corollary 7.",
+  "status": "STATEMENT_INTERNALLY_INCONSISTENT_CONCLUSION_STRENGTHENED",
+  "_source": "verification_extra2.json"
+ },
+ "E12_thm2_S3_violated": {
+  "M": 120,
+  "mean_distinct_orbit_values": 60.001333333333335,
+  "min_distinct": 60,
+  "max_distinct": 61,
+  "note": "Theorem 2's condition (S3) requires the M = C! coordinates of Lambda(psi_inf) to be a.s. DISTINCT, and its conclusion Pr(reject) -> floor(alpha M)/M uses that.  Proposition 2(ii) PROVES the Wald orbit pairs exactly whenever d is equally spaced, so only M/2 values are distinct and (S3) never holds for the paper's default statistic.  The two results are jointly inconsistent as stated.",
+  "repair": "Weaken (S3) to 'the M/2 pair-values are a.s. distinct' and weaken the conclusion to Pr(reject) -> 2 floor(alpha M / 2)/M <= alpha; the group-averaging/rank argument goes through with ties handled as in Theorem 1(a).  (S3) as written is satisfied by the one-sided directed statistic, for which the orbit does not pair.",
+  "status": "STATEMENT_INCONSISTENT_WITH_PROP2_REPAIRABLE",
+  "_source": "verification_extra2.json"
+ },
+ "E14_signflip_resolution": {
+  "G": 7,
+  "two_sided_min_p": 0.015625,
+  "two_over_2G": 0.015625,
+  "one_over_2G": 0.007812,
+  "n_distinct_Q": 64,
+  "n_eps": 128,
+  "p_at_identity": 0.8125,
+  "one_sided_min_p": 0.007812,
+  "note": "Prop 7's table gives the sign-flip resolution as 2^{-G}.  The two-sided quadratic statistic Q is EVEN in eps (Q(-eps) = Q(eps)), so its 2^G values pair and the minimum attainable p-value is 2^{1-G}.  Exactly the Prop 2(ii) phenomenon, one group down.  Immaterial in magnitude but the table entry should read 2^{1-G} for the Wald / cone statistics and 2^{-G} for the directed one.",
+  "_source": "verification_extra2.json"
+ },
+ "E6b_ERROR": {
+  "error": "MemoryError((4000, 40320), dtype('float64'))",
+  "_source": "verification_extra2.json"
+ },
+ "E13_prop3ai_true_rho": {
+  "rows": [
+   [
+    0.0,
+    "levels_homoskedastic",
+    0.04
+   ],
+   [
+    0.0,
+    "proportional_scale",
+    0.0473
+   ],
+   [
+    0.6,
+    "levels_homoskedastic",
+    0.032
+   ],
+   [
+    0.6,
+    "proportional_scale",
+    0.0473
+   ]
+  ],
+  "mcse": 0.0056,
+  "target": 0.05,
+  "note": "cols: loading spread, DGP, realised size of the label-permutation Wald after dividing by the TRUE rho_c = theta_c.  Prop 3(a)(i) claims this repair makes CE-A hold and Theorem 1 apply EXACTLY.  It does not: CE-A (Prop 1) also requires the category primitives to be i.i.d. AFTER normalisation.  Dividing a level-homoskedastic panel by theta_c makes Var(eps_c) = sigma^2/theta_c^2, which is Prop 3(b)'s failure mode and, by Prop 6, is not repaired by studentisation.  Exactness is recovered only when the whole category law is a common scale multiple ('proportional_scale').",
+  "status": "PROP3ai_FALSE_AS_STATED",
+  "_source": "verification_extra2.json"
+ },
+ "E16_correct_calibration_design": {
+  "rows": [
+   [
+    1,
+    4.06,
+    3.5164,
+    0.0579
+   ],
+   [
+    2,
+    3.9945,
+    3.0453,
+    0.0679
+   ],
+   [
+    3,
+    4.1138,
+    2.8711,
+    0.08
+   ],
+   [
+    4,
+    4.2864,
+    2.78,
+    0.0944
+   ],
+   [
+    6,
+    4.702,
+    2.6857,
+    0.1318
+   ],
+   [
+    8,
+    5.1823,
+    2.6373,
+    0.1828
+   ],
+   [
+    13,
+    6.6824,
+    2.5803,
+    0.379
+   ]
+  ],
+  "note": "cols: m, MDE of the EXACTLY calibrated Wald, MDE of the directed test, size of the chi-square-calibrated Wald, all at G_eff = 36.42 and up to a common constant (canonical design, T0 = 1).  Once the Wald is calibrated correctly its MDE is increasing in m at EVERY m >= 1 (the m=1 -> m=2 exception of Cor 5(i) is an artefact of the chi-square critical value), while the directed test's MDE is decreasing in m throughout.",
+  "_source": "verification_extra3.json"
+ },
+ "E15_thm3b_rate": {
+  "rows": [
+   [
+    10,
+    0.0
+   ],
+   [
+    20,
+    0.0
+   ],
+   [
+    40,
+    0.0
+   ],
+   [
+    80,
+    0.0
+   ],
+   [
+    160,
+    0.0
+   ],
+   [
+    320,
+    0.0
+   ]
+  ],
+  "loglog_slope": 0.044,
+  "note": "cols: G, mean over draws of max_g||zeta_g - zeta_g^0|| / max_g||zeta_g^0||. Theorem 3(b) says the feasible and infeasible cluster contributions 'differ by O_p(G^{-1}) terms'.  The absolute gap is O(1/G) times an aggregate over all G clusters, so RELATIVE to zeta_g itself the gap is O_p(G^{-1/2}).  A slope near -0.5 confirms this reading; the statement should say ||S_g|| ||S||^{-1} = O(G^{-1}) times a sum of G contributions, or simply state the relative order.  Nothing downstream breaks -- Theorem 3(c) needs only o_p(1) -- but O_p(G^{-1}) is the wrong rate.",
+  "_source": "verification_extra3.json"
+ },
+ "E15b_thm3b_balanced_I2": {
+  "rows": [
+   [
+    12,
+    0.0,
+    0.0
+   ],
+   [
+    24,
+    0.0,
+    0.0
+   ],
+   [
+    48,
+    0.0,
+    0.0
+   ],
+   [
+    96,
+    0.0,
+    0.0
+   ],
+   [
+    192,
+    0.0,
+    0.0
+   ]
+  ],
+  "loglog_slope_vs_raw_error_version": 0.0,
+  "loglog_slope_vs_demeaned_error_version": 0.0,
+  "note": "cols: G, relative gap max_g||zeta_g - zeta_g^0(RAW u)||/max_g||zeta_g||, same against the WITHIN-TRANSFORMED-error version.  Under (I2) the second is exactly 0: the correction is -(S^{-1}S_g gamma^r)_P = -gamma^r_P/G = 0, so the feasible sign-flip test is EXACT there, not merely asymptotic -- a strengthening of Theorem 3(b) the paper does not state.  The first is not zero because the within operator subtracts PERIOD means, which pool across clusters; only the raw-error contributions are cluster-g-measurable and independent across g, so eta_g in (A1) must be read with the RAW error (the sum is unchanged, X~'M = X~').  The slope gives the true rate against Theorem 3(b)'s claimed O_p(G^{-1}).",
+  "_source": "verification_extra4.json"
+ },
+ "E15b_thm3b_unbalanced": {
+  "rows": [
+   [
+    12,
+    0.122064,
+    0.033297
+   ],
+   [
+    24,
+    0.08336,
+    0.023441
+   ],
+   [
+    48,
+    0.056081,
+    0.014224
+   ],
+   [
+    96,
+    0.033193,
+    0.007527
+   ],
+   [
+    192,
+    0.023161,
+    0.006544
+   ]
+  ],
+  "loglog_slope_vs_raw_error_version": -0.612,
+  "loglog_slope_vs_demeaned_error_version": -0.633,
+  "note": "cols: G, relative gap max_g||zeta_g - zeta_g^0(RAW u)||/max_g||zeta_g||, same against the WITHIN-TRANSFORMED-error version.  Under (I2) the second is exactly 0: the correction is -(S^{-1}S_g gamma^r)_P = -gamma^r_P/G = 0, so the feasible sign-flip test is EXACT there, not merely asymptotic -- a strengthening of Theorem 3(b) the paper does not state.  The first is not zero because the within operator subtracts PERIOD means, which pool across clusters; only the raw-error contributions are cluster-g-measurable and independent across g, so eta_g in (A1) must be read with the RAW error (the sum is unchanged, X~'M = X~').  The slope gives the true rate against Theorem 3(b)'s claimed O_p(G^{-1}).",
+  "_source": "verification_extra4.json"
+ },
+ "E6b_cor9_eperm": {
+  "rows": [
+   [
+    3,
+    6,
+    -1,
+    0.5,
+    null,
+    null
+   ],
+   [
+    4,
+    24,
+    0,
+    0.8,
+    4.713,
+    1.896
+   ],
+   [
+    5,
+    120,
+    5,
+    0.9,
+    3.34,
+    1.343
+   ],
+   [
+    6,
+    720,
+    35,
+    0.9429,
+    3.059,
+    1.23
+   ],
+   [
+    7,
+    5040,
+    251,
+    0.9643,
+    2.915,
+    1.172
+   ],
+   [
+    8,
+    40320,
+    2015,
+    0.9762,
+    2.817,
+    1.133
+   ]
+  ],
+  "power_monotone_in_mu": true,
+  "claimed_e_perm": {
+   "4": 1.85,
+   "5": 1.34,
+   "6": 1.2,
+   "7": 1.14,
+   "8": 1.12
+  },
+  "note": "cols: C, M, J, rho_max, mu_perm(0.05,0.2), e_perm. Independent Gaussian-field simulation.",
+  "_source": "verification_extra5.json"
+ },
+ "X1_thm4_closed_form": {
+  "max_rel_err_gamma": 7.618489989394693e-15,
+  "max_rel_err_z": 1.0937093540272309e-15,
+  "draws": 200,
+  "note": "Definition 4 closed-form refit vs an actual OLS refit on the bootstrap sample",
+  "verdict": "PASS",
+  "_source": "verification_extra6_1.json"
+ },
+ "X2_lemma5_moments": {
+  "max_abs_mean": 0.003743568694144366,
+  "mcse_mean": 0.003175406616492283,
+  "max_rel_var_err": 0.0341838604207843,
+  "vbar": 3.0524999999999998,
+  "note": "Lemma 5 at kappa=0 with unequal sigma_c: E[gamma]=0 and Var=vbar S^{-1}",
+  "verdict": "PASS",
+  "_source": "verification_extra6_2.json"
+ },
+ "X2b_lemma5_linear_wedge": {
+  "max_abs_dev": 0.0030827619289913732,
+  "mcse": 0.006279686292425461,
+  "note": "s_c = kappa d_c gives g = kappa EXACTLY (sum delta_c d_c = sum delta_c^2); note the common component Xt beta0 and the common trend drop out",
+  "verdict": "PASS",
+  "_source": "verification_extra6_2.json"
+ },
+ "X3_thm5_noncentrality": {
+  "rows": [
+   [
+    0.0,
+    0.0,
+    4.169356349794381,
+    4.0,
+    0.0568,
+    0.05000000000000003
+   ],
+   [
+    0.05,
+    0.0792775208310354,
+    4.18345274670515,
+    4.0792775208310355,
+    0.0564,
+    0.05392701751575094
+   ],
+   [
+    0.1,
+    0.3171100833241416,
+    4.336930039609842,
+    4.317110083324142,
+    0.0664,
+    0.06622706815961615
+   ],
+   [
+    0.15,
+    0.7134976874793184,
+    4.8784829581628095,
+    4.713497687479318,
+    0.1044,
+    0.08834766916748187
+   ]
+  ],
+  "Ik": 96.79785293469419,
+  "vbar": 3.0524999999999998,
+  "m": 4,
+  "G": 200,
+  "mcse": 0.01,
+  "note": "cols: kappa, lambda from (8), mean W, m+lambda, simulated rejection, ncx2 prediction",
+  "verdict": "PASS",
+  "_source": "verification_extra6_2.json"
+ },
+ "X3b_eq9_collapse": {
+  "lam_from_8": 0.46078977925937065,
+  "lam_from_9": 0.46078977925937065,
+  "rel": 0.0,
+  "verdict": "PASS",
+  "_source": "verification_extra6_2.json"
+ },
+ "X4_prop1_CEB_no_normalisation": {
+  "size": 0.04733333333333333,
+  "R": 3000,
+  "mcse": 0.003979112128771107,
+  "target": 0.05,
+  "C": 5,
+  "G": 6,
+  "note": "lognormal exchangeable loadings, t4 factor, t3 errors plus cluster shocks, 6 clusters, NO loading normalisation: Prop 1 CE-B predicts EXACT validity",
+  "verdict": "PASS",
+  "_source": "verification_extra6_3.json"
+ },
+ "X5_cor2_scale_invariance": {
+  "max_rel_orbit_err": 4.0083066885769555e-13,
+  "note": "whole permutation orbit of W after y -> 3.7 y",
+  "verdict": "PASS",
+  "_source": "verification_extra6_3.json"
+ },
+ "X6_assumptionB_attack": {
+  "size_d_tied_missingness": 0.04666666666666667,
+  "size_iid_missingness": 0.049166666666666664,
+  "R": 1200,
+  "mcse": 0.006291528696058958,
+  "target": 0.05,
+  "note": "Assumption B fails in both, but only the d-TIED pattern breaks category exchangeability; i.i.d. missingness leaves CE (hence Theorem 1) intact.",
+  "_source": "verification_extra6_3.json"
+ },
+ "X7_wcb_signflip_size": {
+  "rows": [
+   [
+    51,
+    5,
+    0.1,
+    0.04833333333333333,
+    0.051666666666666666
+   ],
+   [
+    51,
+    9,
+    0.21833333333333332,
+    0.05,
+    0.051666666666666666
+   ]
+  ],
+  "R": 600,
+  "mcse": 0.008897565210026092,
+  "note": "cols: G, m, size of chi2-calibrated Wald, restricted-WCB Wald, sign-flip Wald. t5 errors plus cluster shocks under H0.",
+  "_source": "verification_extra6_4.json"
+ },
+ "X8_assumptionB_rate_tied_to_d": {
+  "size_rate_tied": 0.04,
+  "size_rate_randomly_assigned": 0.05266666666666667,
+  "keep_rate": [
+   1.0,
+   0.85,
+   0.7,
+   0.55,
+   0.4
+  ],
+  "R": 1500,
+  "mcse": 0.005627314338711377,
+  "target": 0.05,
+  "note": "observation rate falling in d_c (1.0 -> 0.40).  Var(b_c) then rises with delta_c through the DESIGN.  Control: the same five rates assigned to a random category each replication, which restores exchangeability.",
+  "_source": "verification_extra7_8.json"
+ },
+ "X9_geff_vs_independent_sizes": {
+  "rows": [
+   [
+    51,
+    5,
+    42.626,
+    34.143,
+    42.742,
+    0.996358,
+    0.1,
+    0.0899,
+    0.0992
+   ],
+   [
+    51,
+    9,
+    39.922,
+    26.532,
+    39.933,
+    0.995927,
+    0.21833,
+    0.1511,
+    0.1915
+   ]
+  ],
+  "note": "cols: G, m, G_eff (equal contrast), min/max G_eff over eigen-directions of [S^{-1}]_PP, omega_2, MY simulated chi2 size (round 6, t5 + cluster shocks, R=600, MCSE 0.0089), formula (A6) at G, formula (A6) at round(G_eff).",
+  "_source": "verification_extra7_9.json"
+ }
+}
