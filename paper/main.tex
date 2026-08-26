@@ -269,9 +269,11 @@ detect a treatment-induced change in how outcomes are recorded.
 \citet{weisburd2024crs} run this contrast across crime categories.
 \citet{hausman1998misclassification} formalize outcome misclassification that
 depends on treatment status in a cross-sectional discrete-response setting, and
-\citet{denteh2026misclassdid} and \citet{gutknecht2026cic} study misclassified
-outcomes in difference-in-differences and changes-in-changes designs
-respectively. \citet{fhs2019pretrends} use an auxiliary series that loads
+\citet{gutknecht2026cic} study misclassified outcomes in a changes-in-changes
+design, and \citet{denteh2026misclassdid} study a misclassified treatment
+indicator in difference-in-differences, a distinct channel: their designs
+maintain parallel trends and ask what misclassification does to the estimand,
+whereas an outcome-recording response is itself a parallel-trends violation. \citet{fhs2019pretrends} use an auxiliary series that loads
 on the same latent confound as the outcome and use it to purge event-study
 coefficients of that confound. The device is close to the normalization that
 Assumption \ref{as:CE} calls for here, and it is put to a different use:
@@ -334,7 +336,22 @@ parallel trends holds, and separately concede that their estimated increase in
 reported intimate partner violence may reflect disclosure rather than incidence,
 without connecting the two. \citet{baum2026syphilis} evaluate prenatal screening
 mandates, a treatment whose direct effect is on detection, and validate the design
-with a flat pre-period and a placebo-in-time test.
+with a flat pre-period and a placebo-in-time test. \citet{callaway2023pandemic}
+report that they cannot detect violations of parallel trends in pre-treatment
+periods even though those violations are probably present, and attribute the
+failure to pre-tests being underpowered. Corollary \ref{cor:blind} says that
+where the contamination is a recording response the failure is not a matter of
+power.
+
+The sharpest illustration is a design that works. Studying upcoding in Medicare
+Advantage, \citet{geruso2020upcoding} observe that ``because MA risk scores are
+calculated using diagnosis data from the prior plan year, changes in MA
+enrollment can plausibly affect reported risk scores via differential coding only
+with a lag. Thus, contemporaneous penetration acts as a placebo test.'' Their
+placebo has power because an institutional accident supplies a window in which
+the coding response cannot yet have operated, and the identifying content is that
+window rather than the pre-period as such. Corollary \ref{cor:blind} is the
+statement of what is left when no such window exists.
 
 \subsection{A recording response}
 \label{sec:recording}
@@ -554,6 +571,17 @@ what pre-treatment data can reveal; it says nothing against sensitivity analysis
 whose bound comes from outside the event-study coefficients, which is the
 practice the last row of Table \ref{tab:cov} supports and which
 \citet{armstrong2020simple} already recommend.
+
+The last limit is where the result stops rather than where it fails, and it is
+the one most likely to be mistaken for a refutation. Corollary \ref{cor:blind}
+concerns diagnostics computed from the outcome panel and the cohort labels. It
+says nothing about identifying a recording response from data on the recording
+process itself, and applied work already does this successfully:
+\citet{ody2019readmissions} separate the Hospital Readmissions Reduction Program
+from a coincident change in electronic transaction standards using the
+distribution of diagnosis counts per claim rather than the readmission series.
+Auxiliary information about the record is not a counterexample to the corollary.
+It is what the corollary says is required.
 
 What survives is a design problem. If the contamination is a recording response,
 the pre-period is silent, and information has to come from somewhere else. The
@@ -2375,6 +2403,10 @@ confidence intervals. \emph{The Annals of Statistics} 32(5), 1805--1840.
 Calhoun, G. (2011). Hypothesis testing in linear regression when $k/n$ is
 large. \emph{Journal of Econometrics} 165(2), 163--174.
 
+\bibitem[Callaway and Li(2023)]{callaway2023pandemic}
+Callaway, B. and T.~Li (2023). Policy evaluation during a pandemic.
+\emph{Journal of Econometrics} 236(1), 105454.
+
 \bibitem[Callaway and Sant'Anna(2021)]{callaway2021did}
 Callaway, B. and P.~H.~C. Sant'Anna (2021). Difference-in-differences with
 multiple time periods. \emph{Journal of Econometrics} 225(2), 200--230.
@@ -2432,6 +2464,10 @@ arXiv:2607.10558.
 Freyaldenhoven, S., C.~Hansen, and J.~M. Shapiro (2019). Pre-event trends in
 the panel event-study design. \emph{American Economic Review} 109(9),
 3307--3338.
+
+\bibitem[Geruso and Layton(2020)]{geruso2020upcoding}
+Geruso, M. and T.~Layton (2020). Upcoding: Evidence from Medicare on squishy
+risk adjustment. \emph{Journal of Political Economy} 128(3), 984--1026.
 
 \bibitem[Ghanem et al.(2026)]{ghanem2026when}
 Ghanem, D., P.~H.~C. Sant'Anna, and K.~W\"uthrich (2026). When should
@@ -2525,6 +2561,11 @@ of parallel trends for difference-in-differences. arXiv:2510.26470.
 Miller, A.~R. and C.~Segal (2019). Do female officers improve law enforcement
 quality? Effects on crime reporting and domestic violence. \emph{Review of
 Economic Studies} 86(5), 2220--2247.
+
+\bibitem[Ody et al.(2019)]{ody2019readmissions}
+Ody, C., L.~Msall, L.~S. Dafny, D.~C. Grabowski, and D.~M. Cutler (2019). Have
+hospital readmissions declined in the wake of the Hospital Readmissions
+Reduction Program? \emph{Health Affairs} 38(1), 36--43.
 
 \bibitem[Pan and Wall(2002)]{panwall2002}
 Pan, W. and M.~M. Wall (2002). Small-sample adjustments in using the sandwich
