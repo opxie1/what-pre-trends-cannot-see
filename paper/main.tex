@@ -270,6 +270,275 @@ the calibration of a cross-outcome test rather than the consequences of
 conditioning on its outcome, and the two problems compound: a test with size
 $0.39$ conditions on an event that is mostly noise.
 
+\section{What the falsification test is for}
+\label{sec:why}
+
+That a policy can change how an outcome is recorded rather than the outcome
+itself is not a new observation. It is \citet{campbell1963experimental}'s
+\emph{instrumentation} threat to internal validity, and their illustration is
+almost exactly the design studied below: ``the experimental change of putting
+into office a new principal may produce a change in the recording of discipline
+infractions rather than in the infraction rate itself.''
+\citet{campbell1969reforms} makes the same point for policing, where a change in
+administration reforms the bookkeeping alongside the policy. Nothing in this
+section claims that observation.
+
+What is claimed is a correction to what the classical tradition concluded about
+it. For the single-series design, \citet{campbell1963experimental} mark
+instrumentation as the one threat the pre-period cannot dispel, while maturation,
+testing and regression are ruled out precisely because a pre-series is available.
+Then, for the multiple time-series design, which adds a control series and is the
+ancestor of the design used here, they write that ``the difference in the
+selection of the groups operating in conjunction with maturation, instrumentation,
+or regression, can hardly account for an apparent effect.'' The reasoning is about
+instrument differences that arise from how the groups were selected. A recording
+response caused by the treatment is not such a difference. The control series
+cannot absorb it, because the control units do not receive the treatment that
+induces it. Sixty years of practice inherited a clean bill of health that was
+issued on the wrong grounds.
+
+The consequence is sharper than the classical warning. When the contamination is
+a recording response, a pre-trend test and a sensitivity analysis calibrated from
+pre-trends are not merely low-powered against it. Neither carries any information
+about it at all. This section states that precisely, prices it, and marks the
+boundary of what it covers.
+
+The gap is live. Reviewing difference-in-differences designs for pandemic policy,
+\citet{goodmanbacon2020covid} warn that estimates ``will be biased if testing
+improves differently in the treatment and control groups,'' then recommend
+event-study estimates, which ``can reveal many of the biases outlined above.''
+Corollary \ref{cor:blind} says that when the policy is what changed the
+recording, that remedy rejects with probability equal to its size.
+\citet{richardson2025ipv} report a formal pre-trend test as evidence that
+parallel trends holds, and separately concede that their estimated increase in
+reported intimate partner violence may reflect disclosure rather than incidence,
+without connecting the two. \citet{baum2026syphilis} evaluate prenatal screening
+mandates, a treatment whose direct effect is on detection, and validate the design
+with a flat pre-period and a placebo-in-time test.
+
+\subsection{A recording response}
+\label{sec:recording}
+
+Index units by $i$, periods by $t$, outcome categories by $c$, and adoption
+cohorts by $g$, with $\ell_{it} = t - G_i$ the event time and $D_{it} =
+\mathbf 1\{t \ge G_i\}$. Write $Y^{*}_{itc}$ for the latent outcome and
+$Y_{itc}$ for what the recording system reports.
+
+\begin{assumption}[Separable recording response]
+\label{as:rec}
+There exist $\mu_{ic}$, depending arbitrarily on $G_i$ and on the latent
+outcomes, deterministic $\phi_{tc}$, and deterministic paths $m_c(\ell)$ with
+$m_c(\ell) = 0$ for $\ell < 0$, such that
+\begin{equation}
+\label{eq:recmap}
+Y_{itc} = Y^{*}_{itc} + \mu_{ic} + \phi_{tc} + m_c(\ell_{it})D_{it} + u_{itc},
+\qquad E[u_{itc} \mid G_i] = 0 .
+\end{equation}
+\end{assumption}
+
+Two features of Assumption \ref{as:rec} carry the results below and both are
+restrictions. The distortion enters additively and separably, so a recording
+map whose response depends on the level of the latent outcome is outside it.
+And $m_c(\ell) = 0$ for $\ell < 0$ is no anticipation in the recording layer:
+the recording system changes when treatment arrives, not before. Unit-by-category
+terms $\mu_{ic}$ are unrestricted, so any time-invariant difference in recording
+practice across units is absorbed and only the treatment-induced change matters.
+
+\subsection{Pre-trend tests have power equal to size}
+
+Let $\Delta_c(g,t)$ denote the deviation from parallel trends in the latent
+layer. The following is a coupling argument: it exhibits, for any recording
+response, a structure with no recording response whatever that generates the
+same observed data.
+
+\begin{lemma}[Observational equivalence]
+\label{lem:oe}
+Fix a structure satisfying Assumption \ref{as:rec} with latent parallel trends
+and recording paths $m_c$. The structure with no recording response and latent
+deviation
+\begin{equation}
+\label{eq:equivdev}
+\Delta_c(g,t) = m_c(t-g)\,\mathbf 1\{t \ge g\}
+\end{equation}
+generates the same law of the observed panel, cell by cell. Its pre-treatment
+deviations are exactly zero.
+\end{lemma}
+
+\begin{corollary}[No pre-treatment diagnostic separates the two]
+\label{cor:blind}
+Let $\varphi$ be any test that is a measurable function of the observed panel
+and the cohort labels. Its rejection probability is the same under both
+structures. In particular a pre-trend test, a placebo-in-time test, and a
+leads-and-lags plot have rejection probability equal to size against a recording
+response.
+\end{corollary}
+
+That pre-treatment parallelism fails to guarantee post-treatment parallelism is
+long established \citep{kahnlang2020promise,roth2023trending}, and
+\citet{ghanem2026when} show pre-trend tests are uninformative in the presence of
+unrestricted structural breaks. Corollary \ref{cor:blind} is the version of that
+statement for one named mechanism, and the mechanism supplies what the general
+statement cannot: the deviation in \eqref{eq:equivdev} is not merely unbounded
+by pre-period behaviour, it is identically zero there, by construction rather
+than by coincidence. A recording response is a structural break located exactly
+at the treatment date, which is the form \citet{campbell1963experimental}
+anticipated in words and which the results below put in a form that can be
+checked.
+
+The construction resembles a familiar one and the resemblance is worth being
+precise about. \citet{malani2015interpreting} observe that anticipation effects
+and parallel-trends violations are observationally equivalent, and
+\citet{fenaroli2026joint} works out the consequences for sensitivity analysis.
+The direction is what differs. An anticipation effect moves the pre-period,
+which is why a pre-trend test can see it, and why the equivalence there is a
+problem about how to interpret a rejection. A recording response leaves the
+pre-period exactly as it was. There is nothing to interpret, because there is
+nothing to reject.
+
+\subsection{Sensitivity analysis calibrated from pre-trends}
+\label{sec:sensitivity}
+
+The standard response to Corollary \ref{cor:blind} is to abandon testing and
+report a confidence set that is honest over a class of deviations
+\citep{rambachan2023credible}. Two classes are in common use. The smoothness
+class $\Delta^{\mathrm{SD}}(M)$ bounds second differences of the deviation path
+by $M$. The relative-magnitudes class bounds post-treatment first differences by
+a multiple of the largest pre-treatment first difference,
+\begin{equation}
+\label{eq:drm}
+\Delta^{\mathrm{RM}}(\bar M) = \Big\{\delta : |\delta_{\ell+1} - \delta_\ell|
+\le \bar M \max_{s<0} |\delta_{s+1} - \delta_s| \ \ \forall \ell \ge 0 \Big\}.
+\end{equation}
+
+Substituting \eqref{eq:equivdev} into \eqref{eq:drm} gives the difficulty at
+once. The equivalent deviation is zero throughout the pre-period, so the
+quantity the class scales is zero, and $\Delta^{\mathrm{RM}}(\bar M) = \{0\}$
+for every $\bar M \ge 0$. The family is not a nested sequence of relaxations
+indexed by $\bar M$; it is the point null repeated. There is no breakdown value,
+because no member of the family admits any deviation at all.
+
+\begin{proposition}[The relative-magnitudes family is empty against a recording response]
+\label{prop:rm}
+Under Assumption \ref{as:rec} with $m_c \not\equiv 0$, the population identified
+set for the latent effect under $\Delta^{\mathrm{RM}}(\bar M)$ is the singleton
+$\{\vartheta_c(\ell) + m_c(\ell)\}$ for every $\bar M \ge 0$, and it excludes the
+latent effect by exactly the recording wedge.
+\end{proposition}
+
+Proposition \ref{prop:rm} is a population statement and the finite-sample
+version is what a researcher meets. The honest set conditions on the estimated
+pre-period coefficients rather than on the true deviation, so the estimated
+bound is $\bar M \max_s |\widehat\beta_{s+1} - \widehat\beta_s|$, which is
+positive in every realized sample. Under a recording response that bound is pure
+sampling noise of order $n^{-1/2}$ while the wedge it is meant to cover is of
+order one. The interval therefore shrinks around the contaminated estimand at
+the sampling rate, and coverage of the latent effect falls to zero.
+
+\citet{arora2026trading} note the mechanism in prose, cautioning that when
+pre-trends are uninformative $\Delta^{\mathrm{RM}}$ produces ``intervals whose
+width tends to zero even as the bias does not.'' Their remark is a paragraph in
+a paper about a different estimand, carries no formal statement, and treats flat
+pre-trends as a circumstance that may or may not obtain. Assumption
+\ref{as:rec} identifies a mechanism under which it obtains exactly, always, and
+undetectably.
+
+A second reading deserves an answer. \citet{mikhaeil2025valid} describe the same
+collapse and treat it as correct behaviour, on the ground that an explicit
+conditional-extrapolation assumption licenses inferring small post-treatment
+violations from small pre-treatment ones. That defence is sound where the
+assumption holds. A recording response is precisely a violation of it that
+passes every pre-test by construction, so the assumption cannot be checked in
+the direction that matters here.
+
+For the smoothness class the corresponding statement is weaker and older. That a
+researcher cannot calibrate $M$ from the data and retain honest coverage is the
+non-adaptivity result of \citet{low1997nonparametric} and
+\citet{cailow2004adaptation}, stated for econometric practice by
+\citet{armstrong2018optimal} and \citet{armstrong2020simple}, who write that ``to
+maintain honesty over the whole function class, a researcher must choose $M$ a
+priori, rather than attempting to use a data-driven method.''
+\citet{kolesar2018discrete} put the asymmetry sharply: the data can bound the
+smoothness constant from below but never from above, and an honest interval
+needs an upper bound. \citet{freeman2026local} restates the principle in a
+difference-in-differences framing. Nothing in this paper improves on any of
+that. What is new is the connection: $\Delta^{\mathrm{SD}}(M)$ is convex and
+centrosymmetric, so the non-adaptivity result applies to it directly, and the
+sensitivity literature in difference-in-differences does not cite it.
+
+\subsection{What coverage does}
+
+Table \ref{tab:cov} reports coverage of the latent effect in a single-cohort
+design with a latent effect of $1.0$ and a recording wedge of $0.6$ at the
+target horizon. Confidence sets are computed with a reference implementation of
+\citet{rambachan2023credible} rather than by hand. For the smoothness class it
+computes the optimal fixed-length interval of their Section 4.1. For the
+relative-magnitudes class it solves the identified set by their Lemma 2.2 and
+extends it by a normal sampling term, a construction its own documentation calls
+conservative relative to the conditional hybrid intervals the paper recommends;
+a coverage failure computed this way therefore bounds the failure of the
+recommended interval. The row labelled $\widehat M$ calibrates the smoothness
+bound as the reference software's exported routine does, as the maximum over
+one-sided upper confidence bounds for the second differences of the observed
+pre-period coefficients. The row labelled institutional instead sets the bound
+from the size of the recording change, which is the alternative this section
+recommends.
+
+\begin{table}[t]
+\centering
+\caption{Coverage of the latent effect by honest confidence sets under a
+recording response. Single cohort, latent effect $1.0$, recording wedge $0.6$ at
+the target horizon, nominal $95\%$. Sets computed with a reference
+implementation of \citet{rambachan2023credible}. $\widehat M$ calibrates the
+smoothness bound from the pre-period as the reference software's exported
+routine does; institutional sets it from the size of the recording change. The
+last column is coverage of the recorded effect, which is what the interval is
+built to cover.}
+\label{tab:cov}
+\begin{tabular}{rrrccccccc}
+\toprule
+& & & \multicolumn{3}{c}{$\Delta^{\mathrm{RM}}(\bar M)$}
+& \multicolumn{2}{c}{$\Delta^{\mathrm{SD}}(M)$} & \\
+\cmidrule(lr){4-6}\cmidrule(lr){7-8}
+$N$ & reps & $\widehat M$ & $\bar M = 0.5$ & $\bar M = 1$ & $\bar M = 2$
+& $M = \widehat M$ & institutional & recorded \\
+\midrule
+$400$ & $400$ & $0.7165$ & $0.680$ & $0.955$ & $0.998$ & $1.000$ & $1.000$ & $1.000$ \\
+$1{,}600$ & $400$ & $0.3615$ & $0.048$ & $0.427$ & $0.873$ & $1.000$ & $1.000$ & $1.000$ \\
+$6{,}400$ & $400$ & $0.1814$ & $0.000$ & $0.007$ & $0.287$ & $1.000$ & $1.000$ & $1.000$ \\
+$25{,}600$ & $200$ & $0.0890$ & $0.000$ & $0.000$ & $0.000$ & $1.000$ & $1.000$ & $1.000$ \\
+$102{,}400$ & $100$ & $0.0450$ & $0.000$ & $0.000$ & $0.000$ & $0.210$ & $1.000$ & $1.000$ \\
+$409{,}600$ & $20$ & $0.0226$ & $0.000$ & $0.000$ & $0.000$ & $0.000$ & $1.000$ & $1.000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The pattern in Table \ref{tab:cov} is not a small-sample artefact that more data
+repairs. More data is what causes it. The calibration input falls at the
+sampling rate while the wedge does not move, so every relative-magnitudes
+interval eventually excludes the latent effect, and larger $\bar M$ only delays
+the crossing. The institutional bound, which never consults the pre-period, is
+unaffected.
+
+\subsection{Scope}
+
+Three limits bound the claims above. Assumption \ref{as:rec} restricts the
+recording map to enter additively with a path indexed by event time; a map that
+responds to the level of the latent outcome is not covered. Lemma \ref{lem:oe}
+and Corollary \ref{cor:blind} do not require latent parallel trends, but
+Proposition \ref{prop:rm} is stated for a single adoption cohort, and the
+extension to staggered designs is not proved here. And the argument is about
+what pre-treatment data can reveal; it says nothing against sensitivity analysis
+whose bound comes from outside the event-study coefficients, which is the
+practice the last row of Table \ref{tab:cov} supports and which
+\citet{armstrong2020simple} already recommend.
+
+What survives is a design problem. If the contamination is a recording response,
+the pre-period is silent, and information has to come from somewhere else. The
+remainder of this paper takes it from the cross-section of outcome categories,
+which differ in how much discretion the recording system has over them, and
+addresses the inference problem that arises when the number of clusters is
+small.
+
 \section{Setup and the null}
 \label{sec:setup}
 
@@ -2036,11 +2305,29 @@ stated power function follow.
 \begin{thebibliography}{99}
 \itemsep 3pt
 
+\bibitem[Armstrong and Koles\'ar(2018)]{armstrong2018optimal}
+Armstrong, T.~B. and M.~Koles\'ar (2018). Optimal inference in a class of
+regression models. \emph{Econometrica} 86(2), 655--683.
+
+\bibitem[Armstrong and Koles\'ar(2020)]{armstrong2020simple}
+Armstrong, T.~B. and M.~Koles\'ar (2020). Simple and honest confidence
+intervals in nonparametric regression. \emph{Quantitative Economics} 11(1),
+1--39.
+
+\bibitem[Arora and Chand(2026)]{arora2026trading}
+Arora, P. and A.~Chand (2026). Trading scope for credibility in
+difference-in-differences. arXiv:2608.16867.
+
 \bibitem[Baicker et al.(2013)]{baicker2013oregon}
 Baicker, K., S.~L. Taubman, H.~L. Allen, M.~Bernstein, J.~H. Gruber, J.~P.
 Newhouse, E.~C. Schneider, B.~J. Wright, A.~M. Zaslavsky, and A.~N. Finkelstein
 (2013). The Oregon experiment: Effects of Medicaid on clinical outcomes.
 \emph{New England Journal of Medicine} 368(18), 1713--1722.
+
+\bibitem[Baum et al.(2026)]{baum2026syphilis}
+Baum, A., L.~Agha, N.~Menzies, and A.~Cohen (2026). Prenatal syphilis
+screening mandates and maternal syphilis case detection. \emph{JAMA Health
+Forum} 7(3), e260123.
 
 \bibitem[Bell and McCaffrey(2002)]{bell2002bias}
 Bell, R.~M. and D.~F. McCaffrey (2002). Bias reduction in standard errors for
@@ -2057,18 +2344,30 @@ Borusyak, K., X.~Jaravel, and J.~Spiess (2024). Revisiting event-study designs:
 Robust and efficient estimation. \emph{Review of Economic Studies} 91(6),
 3253--3285.
 
-\bibitem[Callaway and Sant'Anna(2021)]{callaway2021did}
-Callaway, B. and P.~H.~C. Sant'Anna (2021). Difference-in-differences with
-multiple time periods. \emph{Journal of Econometrics} 225(2), 200--230.
+\bibitem[Cai and Low(2004)]{cailow2004adaptation}
+Cai, T.~T. and M.~G. Low (2004). An adaptation theory for nonparametric
+confidence intervals. \emph{The Annals of Statistics} 32(5), 1805--1840.
 
 \bibitem[Calhoun(2011)]{calhoun2011testing}
 Calhoun, G. (2011). Hypothesis testing in linear regression when $k/n$ is
 large. \emph{Journal of Econometrics} 165(2), 163--174.
 
+\bibitem[Callaway and Sant'Anna(2021)]{callaway2021did}
+Callaway, B. and P.~H.~C. Sant'Anna (2021). Difference-in-differences with
+multiple time periods. \emph{Journal of Econometrics} 225(2), 200--230.
+
 \bibitem[Cameron et al.(2008)]{cameron2008bootstrap}
 Cameron, A.~C., J.~B. Gelbach, and D.~L. Miller (2008). Bootstrap-based
 improvements for inference with clustered errors. \emph{Review of Economics and
 Statistics} 90(3), 414--427.
+
+\bibitem[Campbell and Stanley(1963)]{campbell1963experimental}
+Campbell, D.~T. and J.~C. Stanley (1963). \emph{Experimental and
+Quasi-Experimental Designs for Research}. Chicago: Rand McNally.
+
+\bibitem[Campbell(1969)]{campbell1969reforms}
+Campbell, D.~T. (1969). Reforms as experiments. \emph{American Psychologist}
+24(4), 409--429.
 
 \bibitem[Canay et al.(2017)]{canay2017randomization}
 Canay, I.~A., J.~P. Romano, and A.~M. Shaikh (2017). Randomization tests under
@@ -2084,24 +2383,41 @@ de Chaisemartin, C. and X.~D'Haultf\oe uille (2020). Two-way fixed effects
 estimators with heterogeneous treatment effects. \emph{American Economic
 Review} 110(9), 2964--2996.
 
+\bibitem[Denteh and K\'edagni(2022)]{denteh2026misclassdid}
+Denteh, A. and D.~K\'edagni (2022). Misclassification in
+difference-in-differences models. arXiv:2207.11890.
+
 \bibitem[DiCiccio and Romano(2017)]{diciccio2017robust}
 DiCiccio, C.~J. and J.~P. Romano (2017). Robust permutation tests for
 correlation and regression coefficients. \emph{Journal of the American
 Statistical Association} 112(519), 1211--1220.
-
-\bibitem[Denteh and K\'edagni(2022)]{denteh2026misclassdid}
-Denteh, A. and D.~K\'edagni (2022). Misclassification in
-difference-in-differences models. arXiv:2207.11890.
 
 \bibitem[Djogbenou et al.(2019)]{djogbenou2019asymptotic}
 Djogbenou, A.~A., J.~G. MacKinnon, and M.~{\O}. Nielsen (2019). Asymptotic
 theory and wild bootstrap inference with clustered errors. \emph{Journal of
 Econometrics} 212(2), 393--412.
 
+\bibitem[Fenaroli(2026)]{fenaroli2026joint}
+Fenaroli, F. (2026). A joint analysis of sensitivity to anticipation and
+parallel trends violations. arXiv:2603.00868.
+
+\bibitem[Freeman(2026)]{freeman2026local}
+Freeman, H. (2026). Local asymptotic power of honest confidence intervals.
+arXiv:2607.10558.
+
 \bibitem[Freyaldenhoven et al.(2019)]{fhs2019pretrends}
 Freyaldenhoven, S., C.~Hansen, and J.~M. Shapiro (2019). Pre-event trends in
 the panel event-study design. \emph{American Economic Review} 109(9),
 3307--3338.
+
+\bibitem[Ghanem et al.(2026)]{ghanem2026when}
+Ghanem, D., P.~H.~C. Sant'Anna, and K.~W\"uthrich (2026). When should
+pre-trends be parallel? \emph{AEA Papers and Proceedings}.
+
+\bibitem[Goodman-Bacon and Marcus(2020)]{goodmanbacon2020covid}
+Goodman-Bacon, A. and J.~Marcus (2020). Using difference-in-differences to
+identify causal effects of COVID-19 policies. \emph{Survey Research Methods}
+14(2), 153--158.
 
 \bibitem[Gutknecht and Liu(2024)]{gutknecht2026cic}
 Gutknecht, D. and C.~Liu (2024). Changes-in-changes for ordered choice models
@@ -2131,6 +2447,17 @@ Iyer, L., A.~Mani, P.~Mishra, and P.~Topalova (2012). The power of political
 voice: Women's political representation and crime in India. \emph{American
 Economic Journal: Applied Economics} 4(4), 165--193.
 
+\bibitem[Kahn-Lang and Lang(2020)]{kahnlang2020promise}
+Kahn-Lang, A. and K.~Lang (2020). The promise and pitfalls of
+differences-in-differences: Reflections on 16 and Pregnant and other
+applications. \emph{Journal of Business \& Economic Statistics} 38(3),
+613--620.
+
+\bibitem[Koles\'ar and Rothe(2018)]{kolesar2018discrete}
+Koles\'ar, M. and C.~Rothe (2018). Inference in regression discontinuity
+designs with a discrete running variable. \emph{American Economic Review}
+108(8), 2277--2304.
+
 \bibitem[Kud\^o(1963)]{kudo1963}
 Kud\^o, A. (1963). A multivariate analogue of the one-sided test.
 \emph{Biometrika} 50(3--4), 403--418.
@@ -2144,6 +2471,10 @@ Lipsitch, M., E.~Tchetgen Tchetgen, and T.~Cohen (2010). Negative controls: A
 tool for detecting confounding and bias in observational studies.
 \emph{Epidemiology} 21(3), 383--388.
 
+\bibitem[Low(1997)]{low1997nonparametric}
+Low, M.~G. (1997). On nonparametric confidence intervals. \emph{The Annals of
+Statistics} 25(6), 2547--2554.
+
 \bibitem[MacKinnon and Webb(2017)]{mackinnon2017wild}
 MacKinnon, J.~G. and M.~D. Webb (2017). Wild bootstrap inference for wildly
 different cluster sizes. \emph{Journal of Applied Econometrics} 32(2),
@@ -2153,6 +2484,15 @@ different cluster sizes. \emph{Journal of Applied Econometrics} 32(2),
 MacKinnon, J.~G., M.~{\O}. Nielsen, and M.~D. Webb (2023). Cluster-robust
 inference: A guide to empirical practice. \emph{Journal of Econometrics}
 232(2), 272--299.
+
+\bibitem[Malani and Reif(2015)]{malani2015interpreting}
+Malani, A. and J.~Reif (2015). Interpreting pre-trends as anticipation: Impact
+on estimated treatment effects from tort reform. \emph{Journal of Public
+Economics} 124, 1--17.
+
+\bibitem[Mikhaeil and Harshaw(2025)]{mikhaeil2025valid}
+Mikhaeil, J.~M. and C.~Harshaw (2025). Valid inference when testing violations
+of parallel trends for difference-in-differences. arXiv:2510.26470.
 
 \bibitem[Miller and Segal(2019)]{miller2019female}
 Miller, A.~R. and C.~Segal (2019). Do female officers improve law enforcement
@@ -2172,6 +2512,12 @@ models. \emph{Journal of Business \& Economic Statistics} 36(4), 672--683.
 \bibitem[Rambachan and Roth(2023)]{rambachan2023credible}
 Rambachan, A. and J.~Roth (2023). A more credible approach to parallel trends.
 \emph{Review of Economic Studies} 90(5), 2555--2591.
+
+\bibitem[Richardson et al.(2025)]{richardson2025ipv}
+Richardson, R., A.~Raj, J.~Downs, N.~Bergenfeld, R.~Wiltshire, A.~Dimitrova,
+and T.~Benmarhnia (2025). Impact of domestic violence legislation on reported
+intimate partner violence: A difference-in-differences analysis across 16
+countries. \emph{SSM--Population Health} 43, 101837.
 
 \bibitem[Roth et al.(2023)]{roth2023trending}
 Roth, J., P.~H.~C. Sant'Anna, A.~Bilinski, and J.~Poe (2023). What's trending
