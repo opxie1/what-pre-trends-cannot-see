@@ -53,21 +53,20 @@ every output file cited here takes $61.2$ minutes in total
 
 \begin{abstract}
 \noindent
-Falsification tests compare estimated effects across outcome categories
-differing in exposure to a suspected violation. Run as one joint test of $m$
-restrictions with cluster-robust standard errors, chi-square calibration is
+A policy that changes how an outcome is recorded is invisible to every
+pre-treatment diagnostic: the parallel-trends deviation reproducing it is
+exactly zero before treatment, so pre-trend tests reject with probability equal
+to their size and sensitivity analysis calibrated from the pre-period loses
+coverage. Falsification tests across categories graded by recording discretion
+supply the missing information. Run as one joint test of
+$m$ restrictions with cluster-robust standard errors, chi-square calibration is
 oversized: at $G=51$ and $m=13$ its null rejection rate is $0.389$. We give
-three randomization calibrations and characterize each: label permutation,
-exact in finite samples under category exchangeability and needing no condition
-on $G$; cluster sign changes, exact under sign symmetry of the
-cluster contributions; and the restricted wild cluster bootstrap, simulated
-only.
-Permutation $p$-values floor at $2/C!$ for a two-sided statistic with exposure
-indices symmetric about their mean, so permutation needs $C\ge5$ at the $5\%$
-level; at $C=5$ its size-adjusted power is $0.383$ against $0.983$ for the
-directed cluster sign-change test. Under equal cluster design weights the Wald
-statistic is a scaled Hotelling $T^2$, which prices the distortion and bounds
-$m$; every design here violates that condition.
+three randomization calibrations: label permutation, exact under category
+exchangeability with no condition on $G$; cluster sign changes, exact under sign
+symmetry of the cluster contributions; and the restricted wild cluster
+bootstrap, simulated only. Permutation $p$-values floor at $2/C!$, so it needs
+$C\ge5$ at the $5\%$ level; at $C=5$ its size-adjusted power is $0.383$ against
+$0.983$ for the directed cluster sign-change test.
 \end{abstract}
 
 \smallskip
@@ -81,6 +80,24 @@ falsification tests; permutation tests; Hotelling's $T^2$; difference-in-differe
 \onehalfspacing
 
 \section{Introduction}
+
+When a policy changes how an outcome is recorded, the recorded effect confounds
+a change in the outcome with a change in the record.
+\citet{campbell1963experimental} named this the instrumentation threat and
+advised against shifting measuring instruments and policy at the same time.
+Section \ref{sec:why} prices what happens when that advice cannot be followed.
+The parallel-trends deviation that reproduces a recording response is exactly
+zero before treatment, so any diagnostic computed from the observed panel and
+the cohort labels rejects with probability equal to its size, and a sensitivity
+analysis whose bound is read off the pre-period inherits the same blindness. In
+the relative-magnitudes class of \citet{rambachan2023credible} the bound is a
+multiple of a pre-period quantity that is identically zero here, so no choice of
+$\bar M$ admits any deviation and the analysis reports no breakdown value;
+coverage of the latent effect falls from $0.955$ at $N = 400$ to $0.007$ at
+$N = 6{,}400$ and to $0.000$ thereafter. Information has to come from somewhere
+other than the pre-period, and this paper takes it from the cross-section of
+outcome categories, which differ in how much discretion the recording system has
+over them.
 
 Falsification tests built from several outcomes are standard in applied work.
 The design is familiar: a researcher suspects that an estimated effect is
@@ -163,6 +180,8 @@ label-permutation test fixes a reference distribution valid for every $G$ under
 Assumption \ref{as:CE}, and we use it as the finite-sample benchmark. The
 directed cluster sign-change test is the procedure we recommend running.
 
+Section \ref{sec:why} shows what a pre-trend test and a pre-trend-calibrated
+sensitivity analysis can and cannot reveal about a recording response.
 Section \ref{sec:setup} states the design and the null. Section \ref{sec:anatomy}
 derives the exact null law of the Wald statistic and the condition under which
 its chi-square calibration is valid. Section \ref{sec:perm} gives the
