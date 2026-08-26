@@ -54,20 +54,20 @@ every output file cited here takes $61.2$ minutes in total
 \begin{abstract}
 \noindent
 Falsification tests compare estimated effects across outcome categories
-differing in exposure to a suspected violation. The cluster-robust Wald
-statistic for the joint null of no cross-category gradient is exactly a scaled
-Hotelling $T^2$, so chi-square calibration errs by an amount set by $m/G$: with
-$G=51$ clusters and $m=13$ restrictions a nominal $5\%$ test has size $0.389$.
-We characterize the size of three alternatives: label permutation, exact in
-finite samples under category exchangeability; cluster sign changes, exact
-under sign symmetry of cluster contributions, asymptotically level $\alpha$
-otherwise; and the restricted wild cluster bootstrap, simulated only.
+differing in exposure to a suspected violation. Run as one joint test of $m$
+restrictions with cluster-robust standard errors, chi-square calibration is
+oversized: at $G=51$ and $m=13$ its null rejection rate is $0.389$. We give
+three randomization calibrations and characterize each: label permutation,
+exact in finite samples under category exchangeability and needing no condition
+on $G$; cluster sign changes, exact under sign symmetry of the
+cluster contributions; and the restricted wild cluster bootstrap, simulated
+only.
 Permutation $p$-values floor at $2/C!$ for a two-sided statistic with exposure
 indices symmetric about their mean, so permutation needs $C\ge5$ at the $5\%$
 level; at $C=5$ its size-adjusted power is $0.383$ against $0.983$ for the
-directed cluster sign-change test. In a six-category crime-reporting design
-under an equivariant loading normalization, chi-square gives $p=0.025$ and
-permutation $p=0.115$.
+directed cluster sign-change test. Under equal cluster design weights the Wald
+statistic is a scaled Hotelling $T^2$, which prices the distortion and bounds
+$m$; every design here violates that condition.
 \end{abstract}
 
 \smallskip
@@ -99,18 +99,28 @@ the contrast is a joint restriction on interaction coefficients, and the
 $p$-value comes from a chi-square reference distribution with cluster-robust
 standard errors.
 
-That calibration fails in the sample sizes where these tests are run. We derive
-the exact null distribution of the cluster-robust Wald statistic for this
-problem and show it is $\omega_2$ times a Hotelling $T^2$ with dimension $m$ and
-$G-1$ degrees of freedom, where $m$ is the number of restrictions, $G$ is the
-number of clusters, and $\omega_2$ is a fitting correction lying between
-$0.995$ and $0.9996$ across the designs of Section \ref{sec:sim}
-\citep{hotelling1931}. The chi-square reference ignores the
-estimation of the $m \times m$ meat matrix from $G$ cluster scores. At
+That calibration fails in the sample sizes where these tests are run. At
 $G = 51$ and $m = 13$ we measure a null rejection rate of $0.389$ against a
-nominal $0.05$, and at $G = 20$ the rate is $0.905$.
+nominal $0.05$, and at $G = 20$ the rate is $0.905$. Section
+\ref{sec:anatomy} prices the failure. When every cluster carries the same
+design weight, the cluster-robust Wald statistic is $\omega_2$ times a
+Hotelling $T^2$ with dimension $m$ and $G-1$ degrees of freedom
+\citep{hotelling1931}, where $m$ is the number of restrictions, $G$ is the
+number of clusters, and $\omega_2$ is a fitting correction lying between
+$0.995$ and $0.9996$ across the designs of Section \ref{sec:sim}; the
+chi-square reference ignores the estimation of the $m \times m$ meat matrix
+from $G$ cluster scores.
 
-The distortion is governed by $m$ and $G$ jointly, and the chi-square
+Equal design weights are what make that statement exact, and they are also what
+make the problem tractable. The condition fails in every design run below,
+including both applications, where $G_{\mathrm{eff}}$ of Definition
+\ref{def:geff} is $45.9$, $36.0$ and $32.8$ against $G = 51$. Proposition
+\ref{prop:anatomy} therefore enters as a diagnostic and as the source of a
+design rule, not as a calibration we recommend: its own reference distribution
+rejects at $0.082$ to $0.175$ in the twelve cells of Table \ref{tab:size}. The
+calibrations we recommend are the randomization procedures, which do not use
+equal design weights and, in the case of Theorem \ref{thm:exact}, use no
+condition on $G$ at all. The distortion is governed by $m$ and $G$ jointly, and the chi-square
 calibration is valid only when $m$ grows slower than $G^{2/3}$. Along sequences
 with $m^{3/2}/G$ converging to a positive constant the size converges to a limit
 strictly above the nominal level, and when $m/G$ converges to a positive
@@ -1644,31 +1654,32 @@ floors.
 
 \section{Conclusion}
 
-The cluster-robust Wald statistic for a cross-outcome falsification test is a
-scaled Hotelling $T^2$, so its chi-square calibration is valid only when $m$
-grows more slowly than $G^{2/3}$. At $G = 51$ and $m = 13$ a nominal $5\%$ test
-has size $0.389$. The label-permutation test of Definition \ref{def:perm} over
-the $C!$ label assignments is exact in finite samples for \eqref{eq:null} under
-Assumption \ref{as:CE}; the cluster sign-change test is exact for
-\eqref{eq:null} under sign symmetry of the cluster contributions, which the
-feasible statistic attains at every $G$ under Assumption \ref{as:I}(ii);
-the restricted wild cluster bootstrap carries no exactness claim here. Their
+The chi-square calibration of a cross-outcome falsification test is oversized
+at the cluster counts these tests are run on: at $G = 51$ and $m = 13$ its size
+is $0.389$ against a nominal $0.05$. Under equal cluster design weights the
+statistic is a scaled Hotelling $T^2$, giving the rate $m = o(G^{2/3})$ at
+which chi-square stays valid. The label-permutation test of Definition \ref{def:perm} is exact in finite
+samples for \eqref{eq:null} under Assumption \ref{as:CE}, with no condition on
+$G$; the cluster sign-change test is exact under sign symmetry of the
+cluster contributions, which the feasible statistic attains at every $G$ under
+Assumption \ref{as:I}(ii); the bootstrap carries no exactness claim. Their
 simulated sizes in Table \ref{tab:size} are $0.043$--$0.059$, $0.022$--$0.066$
-and $0.051$--$0.067$ at $C \in \{5,8\}$. At $G = 51$ and $C = 6$ in the crime
-design the chi-square test rejects at $p = 0.025$ and none of the three does.
+and $0.051$--$0.067$ at $C \in \{5,8\}$. In the crime design the chi-square
+test rejects at $p = 0.025$ and none of the three does.
 
-The main limitation is Assumption \ref{as:CE}: it fails when categories have
-different error variances. At $C = 5$ the simulated size of the
-label-permutation test is $0.090$ at a variance ratio of nine and $0.102$ at a
-ratio of $25$, rising to $0.125$ at $C = 8$. The cluster-level procedures do not use
-it and are the default when $C \le 4$ makes permutation unusable.
+Two limitations bound what is claimed. Proposition \ref{prop:anatomy} needs
+equal design weights across clusters, which no design here satisfies; where
+that fails its $F$ calibration is neither exact nor conservative, so the result
+explains the distortion rather than replacing it. The second is Assumption
+\ref{as:CE}, which fails when categories have different error variances. At a variance ratio of $25$ the simulated size of the
+label-permutation test is $0.102$ at $C = 5$ and $0.125$ at $C = 8$. The
+cluster-level procedures do not use it.
 
 Lemma \ref{lem:sep} requires a category-balanced design, which the health panel
-shows binding. What blocks Theorem
-\ref{thm:exact} there is Assumption \ref{as:CE}, because the cell pattern
-depends on the category label. Extending the exact reduction to
-category-unbalanced panels would recover the procedure where categories are
-surveyed on different schedules.
+shows binding, and what blocks Theorem \ref{thm:exact} there is Assumption
+\ref{as:CE}, because the cell pattern depends on the category label. Extending
+the reduction to unbalanced panels would recover the procedure where categories
+are surveyed on different schedules.
 
 \appendix
 \section{Proofs}
