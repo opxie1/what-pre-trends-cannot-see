@@ -353,6 +353,18 @@ the coding response cannot yet have operated, and the identifying content is tha
 window rather than the pre-period as such. Corollary \ref{cor:blind} is the
 statement of what is left when no such window exists.
 
+That observation generalises into the section's one constructive diagnostic. The
+equivalence in Lemma \ref{lem:oe} is exact because Assumption \ref{as:rec} places
+the recording change at the treatment date. Where the recording system responds to
+an announcement, a rule change or an administrative deadline that precedes
+implementation, the wedge is nonzero before treatment and a placebo-in-time test
+placed in that window does have power. The same is true of
+\citet{geruso2020upcoding}'s lag. A researcher who suspects a recording response
+should therefore look for a period in which the policy was known but the recording
+system had not yet moved, and test there. Where no such period exists, no test
+computed from the outcome panel can help, which is the case the rest of this paper
+addresses.
+
 \subsection{A recording response}
 \label{sec:recording}
 
@@ -410,10 +422,30 @@ leads-and-lags plot have rejection probability equal to size against a recording
 response.
 \end{corollary}
 
+A reader may object that this is a restatement of a familiar fact. Post-treatment
+deviations from parallel trends are unrestricted by the data, so any wedge that
+switches on at treatment is absorbable and the equality of power and size follows
+at once; \citet{rambachan2023credible} make the same observation about their own
+identified set, writing that at any point in it ``the null and alternative
+hypotheses are observationally equivalent, and so the most powerful test trivially
+has size $\alpha$.'' The objection is correct about the mathematics and misses what
+Assumption \ref{as:rec} supplies. An unrestricted deviation is a free parameter
+about which nothing further can be said. A recording response is a structural
+object: its sign is known from the direction of the recording change, its
+magnitude is bounded by institutional facts about the recording system, and it
+varies across outcome categories with how much discretion the system has over
+them. The equivalence is what makes the deviation invisible; the structure is what
+makes it recoverable from somewhere else. Neither half is useful without the
+other.
+
 That pre-treatment parallelism fails to guarantee post-treatment parallelism is
 long established \citep{kahnlang2020promise,roth2023trending}, and
-\citet{ghanem2026when} show pre-trend tests are uninformative in the presence of
-unrestricted structural breaks. Corollary \ref{cor:blind} is the version of that
+\citet{ghanem2026when} state that pre-trend tests are inherently uninformative
+where there are unrestricted structural breaks. A treatment-induced recording
+response is such a break. What is added here is the mechanism that produces one,
+the construction showing the induced deviation is exactly zero before treatment
+rather than merely unknown, and the resulting statement about rejection
+probabilities rather than about informativeness. Corollary \ref{cor:blind} is the version of that
 statement for one named mechanism, and the mechanism supplies what the general
 statement cannot: the deviation in \eqref{eq:equivdev} is not merely unbounded
 by pre-period behaviour, it is identically zero there, by construction rather
