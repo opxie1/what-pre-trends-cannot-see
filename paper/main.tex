@@ -30,7 +30,7 @@
 
 \numberwithin{equation}{section}
 
-\title{Cross-Outcome Falsification Tests with Few Clusters:\\ Size Distortion and Randomization Calibrations}
+\title{What Pre-Trends Cannot See:\\ Testing for Treatment-Induced Recording Change with Few Clusters}
 
 \author{Ethan Xie\thanks{Charter School of Wilmington, Wilmington, DE.
 Email: \texttt{ethanxie@udel.edu}. Replication code, the simulation scripts and
@@ -342,6 +342,23 @@ periods even though those violations are probably present, and attribute the
 failure to pre-tests being underpowered. Corollary \ref{cor:blind} says that
 where the contamination is a recording response the failure is not a matter of
 power.
+
+The profession's own response to the threat, where it is taken seriously, is
+already the method of this paper. \citet{harasztosi2019minwage} study a large
+Hungarian minimum-wage increase and validate the design on the pre-period,
+reporting that exposed and unexposed firms ``follow a parallel trend before the
+minimum wage hike'' and that the trend ``broke exactly in 2001, when the minimum
+wage was raised.'' In an appendix they concede that ``in the presence of tax
+evasion, some of the estimated effects may reflect only reporting behavior,'' and
+that firms absorbing the shock by declaring previously undeclared earnings would
+make ``the change in reported wages overstate the actual wage change.'' They
+settle the question not from the pre-period but across outcomes: ``if the main
+response to the minimum wage is simply reporting, it is not clear why firms would
+adjust their capital stock or raise their prices,'' and a reporting story predicts
+a negative effect on materials that the data do not show. That is a cross-outcome
+falsification test conducted informally. Corollary \ref{cor:blind} explains why
+the pre-period could not have served instead, and the rest of this paper supplies
+the reference distribution such a test needs when clusters are few.
 
 The sharpest illustration is a design that works. Studying upcoding in Medicare
 Advantage, \citet{geruso2020upcoding} observe that ``because MA risk scores are
@@ -2513,6 +2530,10 @@ identify causal effects of COVID-19 policies. \emph{Survey Research Methods}
 \bibitem[Gutknecht and Liu(2024)]{gutknecht2026cic}
 Gutknecht, D. and C.~Liu (2024). Changes-in-changes for ordered choice models
 with underreporting. arXiv:2401.00618.
+
+\bibitem[Harasztosi and Lindner(2019)]{harasztosi2019minwage}
+Harasztosi, P. and A.~Lindner (2019). Who pays for the minimum wage?
+\emph{American Economic Review} 109(8), 2693--2727.
 
 \bibitem[Hausman et al.(1998)]{hausman1998misclassification}
 Hausman, J.~A., J.~Abrevaya, and F.~M. Scott-Morton (1998). Misclassification
