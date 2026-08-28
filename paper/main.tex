@@ -35,7 +35,7 @@
 \author{Ethan Xie\thanks{Charter School of Wilmington, Wilmington, DE.
 Email: \texttt{ethanxie@udel.edu}. Replication code, the simulation scripts and
 the output files underlying the tables are at
-\url{https://github.com/opxie1/Exact-Randomization-Inference-for-Cross-Outcome-Falsification-Tests-with-Few-Clusters},
+\url{https://github.com/opxie1/what-pre-trends-cannot-see},
 on the \texttt{main} branch. The note to each table and figure names the
 output file its entries are read from. The simulations are written in Python and need
 version 3.11 or later with \texttt{numpy}, \texttt{scipy} and \texttt{pandas}.
@@ -70,11 +70,12 @@ $0.983$ for the directed cluster sign-change test.
 \end{abstract}
 
 \smallskip
-\noindent\textbf{Keywords:} randomization inference; cluster-robust inference;
-falsification tests; permutation tests; Hotelling's $T^2$; difference-in-differences.
+\noindent\textbf{Keywords:} measurement change; pre-trend tests; sensitivity
+analysis; randomization inference; cluster-robust inference; falsification
+tests; difference-in-differences.
 
 \smallskip
-\noindent\textbf{JEL codes:} C12, C15, C23.
+\noindent\textbf{JEL codes:} C12, C15, C18, C23, C81.
 
 \newpage
 \onehalfspacing
@@ -1775,6 +1776,14 @@ that under measurement invariance the post-treatment event-study coefficients do
 not vary with the exposure index, so \eqref{eq:null} holds. The application is
 illustrative of the inference problem rather than a contribution to either
 substantive literature.
+
+The first design is an unusually direct instance of the mechanism of Section
+\ref{sec:why}. A state's move to incident-based reporting changes the recording
+system itself, on a date the state chooses, so the recorded series can move
+without the offense rate moving at all. Lemma \ref{lem:oe} says the pre-period
+cannot separate the two, and neither design below offers the announcement window
+that Section \ref{sec:why} identifies as the one place a placebo test retains
+power. The cross-category gradient is what is left.
 
 The first panel is a state-by-year-by-offense panel of recorded index crime
 covering $51$ states from 1979 to 2024, clustered on state. Recorded counts are
