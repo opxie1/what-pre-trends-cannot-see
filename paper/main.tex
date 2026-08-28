@@ -46,7 +46,7 @@ every output file cited here takes $61.2$ minutes in total
 (\texttt{results/theory/inference/summary.json}, field
 \texttt{runtime\_min\_total}).}}
 
-\date{August 22, 2026}
+\date{August 27, 2026}
 
 \begin{document}
 \maketitle
@@ -2023,26 +2023,31 @@ floors.
 
 \section{Conclusion}
 
-The chi-square calibration of a cross-outcome falsification test is oversized
-at the cluster counts these tests are run on: at $G = 51$ and $m = 13$ its size
-is $0.389$ against a nominal $0.05$. Under equal cluster design weights the
-statistic is a scaled Hotelling $T^2$, giving the rate $m = o(G^{2/3})$ at
-which chi-square stays valid. The label-permutation test of Definition \ref{def:perm} is exact in finite
-samples for \eqref{eq:null} under Assumption \ref{as:CE}, with no condition on
-$G$; the cluster sign-change test is exact under sign symmetry of the
-cluster contributions, which the feasible statistic attains at every $G$ under
-Assumption \ref{as:I}(ii); the bootstrap carries no exactness claim. Their
-simulated sizes in Table \ref{tab:size} are $0.043$--$0.059$, $0.022$--$0.066$
-and $0.051$--$0.067$ at $C \in \{5,8\}$. In the crime design the chi-square
-test rejects at $p = 0.025$ and none of the three does.
+A treatment-induced change in recording is not separated from a treatment
+effect by anything computed from the outcome panel. Under Assumption
+\ref{as:rec} the deviation reproducing it is exactly zero before treatment, so
+every such diagnostic rejects with probability equal to its size, and the
+relative-magnitudes class scales a pre-period quantity that is identically zero,
+admitting no deviation at any $\bar M$. Its coverage of the latent effect falls
+from $0.955$ to $0.000$ in Table \ref{tab:cov}, while a bound set from the
+recording institution holds at $1.000$.
 
-Two limitations bound what is claimed. Proposition \ref{prop:anatomy} needs
-equal design weights across clusters, which no design here satisfies; where
-that fails its $F$ calibration is neither exact nor conservative, so the result
-explains the distortion rather than replacing it. The second is Assumption
-\ref{as:CE}, which fails when categories have different error variances. At a variance ratio of $25$ the simulated size of the
-label-permutation test is $0.102$ at $C = 5$ and $0.125$ at $C = 8$. The
-cluster-level procedures do not use it.
+The information must come from the cross-section of outcome categories, and
+that test needs a reference distribution. The chi-square one is oversized at the
+cluster counts these tests are run on: at $G = 51$ and $m = 13$ its size is
+$0.389$. The label-permutation test of Definition \ref{def:perm} is exact in
+finite samples for \eqref{eq:null} under Assumption \ref{as:CE} with no
+condition on $G$; the cluster sign-change test is exact under sign symmetry of
+the cluster contributions; the bootstrap carries no exactness claim. Simulated
+sizes in Table \ref{tab:size} are $0.043$--$0.059$, $0.022$--$0.066$ and
+$0.051$--$0.067$ at $C \in \{5,8\}$.
+
+Three limitations bound what is claimed. Proposition \ref{prop:rm} is proved
+for a single adoption cohort. Proposition \ref{prop:anatomy} needs equal design
+weights, which no design here satisfies, so it explains the distortion rather
+than replacing it. Assumption \ref{as:CE} fails when categories have different
+error variances: at a variance ratio of $25$ the label-permutation test has size
+$0.102$ at $C = 5$. The cluster-level procedures do not use it.
 
 Lemma \ref{lem:sep} requires a category-balanced design, which the health panel
 shows binding, and what blocks Theorem \ref{thm:exact} there is Assumption
