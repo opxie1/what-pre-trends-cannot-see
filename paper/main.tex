@@ -2068,6 +2068,79 @@ are surveyed on different schedules.
 \section{Proofs}
 \label{app:proofs}
 
+\begin{proof}[Proof of Lemma \ref{lem:oe}]
+Write $s_1$ for the structure of the statement: latent outcomes $Y^{*}$
+satisfying parallel trends, recording paths $m_c$ with $m_c(\ell)=0$ for
+$\ell<0$, and unit-by-category terms $\mu_{ic}$, period-by-category terms
+$\phi_{tc}$, recording noise $u_{itc}$ and cohort labels $G_i$. By Assumption
+\ref{as:rec} the observed panel under $s_1$ is
+\begin{equation}
+\label{eq:s1}
+Y_{itc} = Y^{*}_{itc} + \mu_{ic} + \phi_{tc} + m_c(\ell_{it})D_{it} + u_{itc}.
+\end{equation}
+
+Construct $s_2$ on the same probability space by leaving
+$\mu$, $\phi$, $u$ and $G$ unchanged, setting the recording paths to zero, and
+replacing the latent untreated potential outcome by
+\begin{equation}
+\label{eq:dagger}
+Y^{\dagger}_{itc}(\infty) = Y^{*}_{itc}(\infty) + m_c(t-g)\mathbf 1\{t \ge g\}
+\qquad \text{on } \{G_i = g\},
+\end{equation}
+with treated potential outcomes shifted by the same increment, so that latent
+treatment effects are unchanged. Since $s_2$ has no recording response, its
+observed panel is $Y_{itc} = Y^{\dagger}_{itc} + \mu_{ic} + \phi_{tc} +
+u_{itc}$, and substituting \eqref{eq:dagger} and $\ell_{it} = t - G_i$ returns
+\eqref{eq:s1} cell by cell, pointwise on the underlying sample space. The two
+structures therefore induce the same joint law of
+$\{(Y_{itc})_{t,c}, G_i\}_{i \le N}$, not merely the same moments.
+
+For the deviation induced by $s_2$, note that $s_1$ satisfies latent parallel
+trends, so any departure under $s_2$ is the increment in \eqref{eq:dagger}.
+Differencing it across $t$ and across cohorts in the definition of
+$\Delta_c(g,t)$ gives $\Delta_c(g,t) = m_c(t-g)\mathbf 1\{t \ge g\}$, which is
+\eqref{eq:equivdev}. It vanishes for $t < g$ because $m_c(\ell) = 0$ for
+$\ell < 0$, which is the no-anticipation restriction in the recording layer.
+\end{proof}
+
+\begin{proof}[Proof of Corollary \ref{cor:blind}]
+Let $\varphi$ be measurable with respect to $\sigma(\{(Y_{itc})_{t,c},G_i\}_{i
+\le N})$. By Lemma \ref{lem:oe} the law of that array is the same under $s_1$ and
+$s_2$, so $E_{s_1}[\varphi] = E_{s_2}[\varphi]$. Under $s_2$ the deviation
+$\Delta_c(g,t)$ is identically zero for $t<g$, so $s_2$ lies in the null of any
+test whose null hypothesis restricts pre-treatment deviations. If $\varphi$ has
+size $\alpha$ over that null then $E_{s_2}[\varphi] \le \alpha$, with equality
+when the test is similar. Hence $E_{s_1}[\varphi] \le \alpha$, and equal to
+$\alpha$ for a similar test, although $s_1$ carries a recording response of
+arbitrary magnitude. The same argument applies to placebo-in-time statistics and
+to leads-and-lags coefficient vectors, which are also functions of the observed
+panel and the cohort labels.
+\end{proof}
+
+\begin{proof}[Proof of Proposition \ref{prop:rm}]
+Adopt the normalisation $\delta_{-1}=0$ and let the pre-period first differences
+be $\delta_{s+1}-\delta_s$ for $s \le -2$, which are the differences a
+relative-magnitudes calibration reads. By Lemma \ref{lem:oe} the deviation
+equivalent to the recording response is $\delta_\ell = m_c(\ell)\mathbf 1\{\ell
+\ge 0\}$, so $\delta_\ell = 0$ for every $\ell \le -1$ and every pre-period first
+difference is exactly zero. Hence
+$\max_{s<0}\lvert \delta_{s+1}-\delta_s \rvert = 0$, and the defining constraint
+of \eqref{eq:drm} reads $\lvert \delta_{\ell+1}-\delta_\ell \rvert \le \bar M
+\cdot 0 = 0$ for every $\ell \ge -1$ and every $\bar M \ge 0$. Together with
+$\delta_{-1}=0$ this forces $\delta_\ell = 0$ for all $\ell$, so
+$\Delta^{\mathrm{RM}}(\bar M) = \{0\}$ irrespective of $\bar M$.
+
+The identified set for the target under a deviation class $\Delta$ is
+$\{\,l'\beta_{\mathrm{post}} - l'\delta_{\mathrm{post}} : \delta \in \Delta\,\}$
+with $\delta_{\mathrm{pre}}$ pinned at its population value. With
+$\Delta^{\mathrm{RM}}(\bar M) = \{0\}$ this is the singleton
+$\{\,l'\beta_{\mathrm{post}}\,\}$. By Lemma \ref{lem:oe},
+$\beta_c(\ell) = \vartheta_c(\ell) + m_c(\ell)$, so the singleton is
+$\{\vartheta_c(\ell) + m_c(\ell)\}$ and excludes $\vartheta_c(\ell)$ whenever
+$m_c(\ell) \ne 0$. Since the set is a point, no value of $\bar M$ returns an
+interval containing the latent effect, and no breakdown value exists.
+\end{proof}
+
 \begin{proof}[Proof of Lemma \ref{lem:sep}]
 Under Assumption \ref{as:B} the regressor block in \eqref{eq:pooled} is common
 across categories after the two-way within transformation, so stacking the $C$
