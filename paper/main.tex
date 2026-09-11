@@ -57,9 +57,9 @@ every output file cited here takes $61.2$ minutes in total
 \noindent
 A policy that changes how an outcome is recorded is invisible to every
 pre-treatment diagnostic: the parallel-trends deviation reproducing it is
-exactly zero before treatment, so pre-trend tests reject with probability equal
-to their size and sensitivity analysis calibrated from the pre-period loses
-coverage. Falsification tests across categories graded by recording discretion
+exactly zero before treatment, so pre-trend tests reject no more often than
+their nominal level and sensitivity analysis calibrated from the pre-period
+loses coverage. Falsification tests across categories graded by recording discretion
 supply the missing information. Run as one joint test of
 $m$ restrictions with cluster-robust standard errors, chi-square calibration is
 oversized: at $G=51$ and $m=13$ its null rejection rate is $0.389$. We give
@@ -90,14 +90,14 @@ a change in the outcome with a change in the record.
 advised against shifting measuring instruments and policy at the same time.
 Section \ref{sec:why} prices what happens when that advice cannot be followed.
 The parallel-trends deviation that reproduces a recording response is exactly
-zero before treatment, so any diagnostic computed from the observed panel and
-the cohort labels rejects with probability equal to its size, and a sensitivity
+zero before treatment, so no diagnostic computed from the observed panel and the
+cohort labels rejects more often than its nominal level, and a sensitivity
 analysis whose bound is read off the pre-period inherits the same blindness. In
 the relative-magnitudes class of \citet{rambachan2023credible} the bound is a
 multiple of a pre-period quantity that is identically zero here, so no choice of
-$\bar M$ admits any deviation and the analysis reports no breakdown value;
-coverage of the latent effect falls from $0.955$ at $N = 400$ to $0.007$ at
-$N = 6{,}400$ and to $0.000$ thereafter. Information has to come from somewhere
+$\bar M$ admits any deviation and the analysis reports no breakdown value; at
+$\bar M = 1$ coverage of the latent effect falls from $0.955$ at $N = 400$ to
+$0.007$ at $N = 6{,}400$ and to $0.000$ thereafter. Information has to come from somewhere
 other than the pre-period, and this paper takes it from the cross-section of
 outcome categories, which differ in how much discretion the recording system has
 over them.
@@ -120,8 +120,8 @@ $p$-value comes from a chi-square reference distribution with cluster-robust
 standard errors.
 
 That calibration fails in the sample sizes where these tests are run. At
-$G = 51$ and $m = 13$ we measure a null rejection rate of $0.389$ against a
-nominal $0.05$, and at $G = 20$ the rate is $0.905$. Section
+$G = 51$, $m = 13$ and $C = 5$ we measure a null rejection rate of $0.389$
+against a nominal $0.05$, and at $G = 20$ the rate is $0.905$. Section
 \ref{sec:anatomy} prices the failure. When every cluster carries the same
 design weight, the cluster-robust Wald statistic is $\omega_2$ times a
 Hotelling $T^2$ with dimension $m$ and $G-1$ degrees of freedom
@@ -333,7 +333,7 @@ The gap is live. Reviewing difference-in-differences designs for pandemic policy
 improves differently in the treatment and control groups,'' then recommend
 event-study estimates, which ``can reveal many of the biases outlined above.''
 Corollary \ref{cor:blind} says that when the policy is what changed the
-recording, that remedy rejects with probability equal to its size.
+recording, that remedy rejects no more often than its nominal level.
 \citet{richardson2025ipv} report a formal pre-trend test as evidence that
 parallel trends holds, and separately concede that their estimated increase in
 reported intimate partner violence may reflect disclosure rather than incidence,
@@ -437,9 +437,10 @@ deviations are exactly zero.
 \label{cor:blind}
 Let $\varphi$ be any test that is a measurable function of the observed panel
 and the cohort labels. Its rejection probability is the same under both
-structures. In particular a pre-trend test, a placebo-in-time test, and a
-leads-and-lags plot have rejection probability equal to size against a recording
-response.
+structures. In particular a pre-trend test, a placebo-in-time test and a
+leads-and-lags plot reject a recording response with probability no greater than
+their nominal level, and exactly equal to it when the test is similar on the
+pre-treatment null.
 \end{corollary}
 
 A reader may object that this is a restatement of a familiar fact. Post-treatment
@@ -496,8 +497,16 @@ a multiple of the largest pre-treatment first difference,
 \begin{equation}
 \label{eq:drm}
 \Delta^{\mathrm{RM}}(\bar M) = \Big\{\delta : |\delta_{\ell+1} - \delta_\ell|
-\le \bar M \max_{s<0} |\delta_{s+1} - \delta_s| \ \ \forall \ell \ge 0 \Big\}.
+\le \bar M \max_{s \le -2} |\delta_{s+1} - \delta_s| \ \ \forall \ell \ge -1 \Big\},
 \end{equation}
+with the reference period normalised to $\delta_{-1} = 0$. Two index ranges
+carry the argument and are worth stating explicitly. The maximum on the right
+runs over $s \le -2$, so it uses only differences computable from pre-treatment
+coefficients. The constraint on the left starts at $\ell = -1$, so the first
+difference it binds is $\delta_0 - \delta_{-1} = \delta_0$, the step out of the
+reference period into the first post-treatment period. Both conventions are
+those of the reference implementation, which bounds $|\delta_0|$ by the same
+quantity that bounds every later difference.
 
 Substituting \eqref{eq:equivdev} into \eqref{eq:drm} gives the difficulty at
 once. The equivalent deviation is zero throughout the pre-period, so the
@@ -584,7 +593,8 @@ implementation of \citet{rambachan2023credible}. $\widehat M$ calibrates the
 smoothness bound from the pre-period as the reference software's exported
 routine does; institutional sets it from the size of the recording change. The
 last column is coverage of the recorded effect, which is what the interval is
-built to cover.}
+built to cover. Source: \texttt{results/theory/coverage\_zero\_ref.json},
+produced by \texttt{scripts/coverage\_zero\_ref.py}.}
 \label{tab:cov}
 \begin{tabular}{rrrccccccc}
 \toprule
@@ -2037,7 +2047,7 @@ floors.
 A treatment-induced change in recording is not separated from a treatment
 effect by anything computed from the outcome panel. Under Assumption
 \ref{as:rec} the deviation reproducing it is exactly zero before treatment, so
-every such diagnostic rejects with probability equal to its size, and the
+no such diagnostic rejects more often than its nominal level, and the
 relative-magnitudes class scales a pre-period quantity that is identically zero,
 admitting no deviation at any $\bar M$. Its coverage of the latent effect falls
 from $0.955$ to $0.000$ in Table \ref{tab:cov}, while a bound set from the
@@ -2126,7 +2136,7 @@ relative-magnitudes calibration reads. By Lemma \ref{lem:oe} the deviation
 equivalent to the recording response is $\delta_\ell = m_c(\ell)\mathbf 1\{\ell
 \ge 0\}$, so $\delta_\ell = 0$ for every $\ell \le -1$ and every pre-period first
 difference is exactly zero. Hence
-$\max_{s<0}\lvert \delta_{s+1}-\delta_s \rvert = 0$, and the defining constraint
+$\max_{s \le -2}\lvert \delta_{s+1}-\delta_s \rvert = 0$, and the defining constraint
 of \eqref{eq:drm} reads $\lvert \delta_{\ell+1}-\delta_\ell \rvert \le \bar M
 \cdot 0 = 0$ for every $\ell \ge -1$ and every $\bar M \ge 0$. Together with
 $\delta_{-1}=0$ this forces $\delta_\ell = 0$ for all $\ell$, so

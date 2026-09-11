@@ -1,0 +1,239 @@
+{
+ "recording": [
+  {
+   "n_units": 400,
+   "kappa": 0.6,
+   "reps": 400,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.6,
+   "coverage_observed_effect_unadjusted": 0.955,
+   "coverage_latent_RM_point": {
+    "0.5": 0.68,
+    "1.0": 0.955,
+    "2.0": 0.9975
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 1.0,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_SD_precalibrated_point": 0.995,
+   "coverage_latent_SD_precalibrated_conservative": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "mean_pre_first_diff_point": 0.2083422948181443,
+   "mean_pre_first_diff_conservative": 0.6233613405699123,
+   "mean_Mhat_second_diff_point": 0.3191460051590374,
+   "mean_halfwidth_RM1_point": 1.1469350246585952
+  },
+  {
+   "n_units": 1600,
+   "kappa": 0.6,
+   "reps": 400,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.6,
+   "coverage_observed_effect_unadjusted": 0.9625,
+   "coverage_latent_RM_point": {
+    "0.5": 0.0475,
+    "1.0": 0.4275,
+    "2.0": 0.8725
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 0.94,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_SD_precalibrated_point": 0.945,
+   "coverage_latent_SD_precalibrated_conservative": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "mean_pre_first_diff_point": 0.10689206814502974,
+   "mean_pre_first_diff_conservative": 0.31509036929827666,
+   "mean_Mhat_second_diff_point": 0.16472013518823608,
+   "mean_halfwidth_RM1_point": 0.5848488796013217
+  },
+  {
+   "n_units": 6400,
+   "kappa": 0.6,
+   "reps": 400,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.6,
+   "coverage_observed_effect_unadjusted": 0.9475,
+   "coverage_latent_RM_point": {
+    "0.5": 0.0,
+    "1.0": 0.0075,
+    "2.0": 0.2875
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 0.005,
+    "1.0": 0.9075,
+    "2.0": 1.0
+   },
+   "coverage_latent_SD_precalibrated_point": 0.7675,
+   "coverage_latent_SD_precalibrated_conservative": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "mean_pre_first_diff_point": 0.05449459175684417,
+   "mean_pre_first_diff_conservative": 0.1579814328191003,
+   "mean_Mhat_second_diff_point": 0.08377797159362124,
+   "mean_halfwidth_RM1_point": 0.29667958413052226
+  },
+  {
+   "n_units": 25600,
+   "kappa": 0.6,
+   "reps": 200,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.6,
+   "coverage_observed_effect_unadjusted": 0.945,
+   "coverage_latent_RM_point": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.685
+   },
+   "coverage_latent_SD_precalibrated_point": 0.21,
+   "coverage_latent_SD_precalibrated_conservative": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "mean_pre_first_diff_point": 0.025352586165686027,
+   "mean_pre_first_diff_conservative": 0.07704870381236996,
+   "mean_Mhat_second_diff_point": 0.03902338037339525,
+   "mean_halfwidth_RM1_point": 0.1407508729379819
+  },
+  {
+   "n_units": 102400,
+   "kappa": 0.6,
+   "reps": 100,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.6,
+   "coverage_observed_effect_unadjusted": 0.91,
+   "coverage_latent_RM_point": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_SD_precalibrated_point": 0.0,
+   "coverage_latent_SD_precalibrated_conservative": 0.8,
+   "coverage_latent_SD_institutional": 1.0,
+   "mean_pre_first_diff_point": 0.012704911833497175,
+   "mean_pre_first_diff_conservative": 0.03871215645254071,
+   "mean_Mhat_second_diff_point": 0.0194564169278613,
+   "mean_halfwidth_RM1_point": 0.07049411724613609
+  },
+  {
+   "n_units": 409600,
+   "kappa": 0.6,
+   "reps": 60,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.6,
+   "coverage_observed_effect_unadjusted": 0.95,
+   "coverage_latent_RM_point": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_SD_precalibrated_point": 0.0,
+   "coverage_latent_SD_precalibrated_conservative": 0.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "mean_pre_first_diff_point": 0.007034299293572866,
+   "mean_pre_first_diff_conservative": 0.019795176131290376,
+   "mean_Mhat_second_diff_point": 0.010935781397469934,
+   "mean_halfwidth_RM1_point": 0.037975122751292556
+  }
+ ],
+ "placebo": [
+  {
+   "n_units": 1600,
+   "kappa": 0.0,
+   "reps": 60,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.0,
+   "coverage_observed_effect_unadjusted": 0.95,
+   "coverage_latent_RM_point": {
+    "0.5": 1.0,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 1.0,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_SD_precalibrated_point": 1.0,
+   "coverage_latent_SD_precalibrated_conservative": 1.0,
+   "coverage_latent_SD_institutional": 0.36666666666666664,
+   "mean_pre_first_diff_point": 0.10617936076459995,
+   "mean_pre_first_diff_conservative": 0.31207387511469925,
+   "mean_Mhat_second_diff_point": 0.16973647390635457,
+   "mean_halfwidth_RM1_point": 0.5821714678003307
+  },
+  {
+   "n_units": 25600,
+   "kappa": 0.0,
+   "reps": 60,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.0,
+   "coverage_observed_effect_unadjusted": 0.9333333333333333,
+   "coverage_latent_RM_point": {
+    "0.5": 1.0,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 1.0,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_SD_precalibrated_point": 1.0,
+   "coverage_latent_SD_precalibrated_conservative": 1.0,
+   "coverage_latent_SD_institutional": 0.2,
+   "mean_pre_first_diff_point": 0.028269977947258256,
+   "mean_pre_first_diff_conservative": 0.0795798979288038,
+   "mean_Mhat_second_diff_point": 0.043106403167428614,
+   "mean_halfwidth_RM1_point": 0.15242833407926373
+  },
+  {
+   "n_units": 409600,
+   "kappa": 0.0,
+   "reps": 60,
+   "true_latent_att": 1.0,
+   "true_measurement_wedge": 0.0,
+   "coverage_observed_effect_unadjusted": 0.9333333333333333,
+   "coverage_latent_RM_point": {
+    "0.5": 1.0,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_RM_conservative": {
+    "0.5": 1.0,
+    "1.0": 1.0,
+    "2.0": 1.0
+   },
+   "coverage_latent_SD_precalibrated_point": 1.0,
+   "coverage_latent_SD_precalibrated_conservative": 1.0,
+   "coverage_latent_SD_institutional": 0.43333333333333335,
+   "mean_pre_first_diff_point": 0.005905146451136623,
+   "mean_pre_first_diff_conservative": 0.01886369544315559,
+   "mean_Mhat_second_diff_point": 0.009464276904378396,
+   "mean_halfwidth_RM1_point": 0.03345669191072346
+  }
+ ],
+ "ell_star": 3,
+ "k_pre": 5,
+ "k_post": 5,
+ "mbars": [
+  0.5,
+  1.0,
+  2.0
+ ]
+}

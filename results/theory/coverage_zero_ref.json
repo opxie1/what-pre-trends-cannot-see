@@ -1,0 +1,127 @@
+{
+ "runs": [
+  {
+   "n_units": 400,
+   "reps": 400,
+   "mean_Mhat_upperBound_Mpre": 0.7165219998971176,
+   "coverage_latent_RM": {
+    "0.5": 0.68,
+    "1.0": 0.955,
+    "2.0": 0.9975
+   },
+   "coverage_latent_SD_precalibrated": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 400,
+    "RM:1.0": 400,
+    "RM:2.0": 400,
+    "SD:precal": 400,
+    "SD:inst": 400
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 1600,
+   "reps": 400,
+   "mean_Mhat_upperBound_Mpre": 0.36153383247374465,
+   "coverage_latent_RM": {
+    "0.5": 0.0475,
+    "1.0": 0.4275,
+    "2.0": 0.8725
+   },
+   "coverage_latent_SD_precalibrated": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 400,
+    "RM:1.0": 400,
+    "RM:2.0": 400,
+    "SD:precal": 400,
+    "SD:inst": 400
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 6400,
+   "reps": 400,
+   "mean_Mhat_upperBound_Mpre": 0.1814284649675386,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.0075,
+    "2.0": 0.2875
+   },
+   "coverage_latent_SD_precalibrated": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 400,
+    "RM:1.0": 400,
+    "RM:2.0": 400,
+    "SD:precal": 400,
+    "SD:inst": 400
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 25600,
+   "reps": 200,
+   "mean_Mhat_upperBound_Mpre": 0.08900699781669492,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_SD_precalibrated": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 200,
+    "RM:1.0": 200,
+    "RM:2.0": 200,
+    "SD:precal": 200,
+    "SD:inst": 200
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 102400,
+   "reps": 100,
+   "mean_Mhat_upperBound_Mpre": 0.045043436741076644,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_SD_precalibrated": 0.21,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 100,
+    "RM:1.0": 100,
+    "RM:2.0": 100,
+    "SD:precal": 100,
+    "SD:inst": 100
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 409600,
+   "reps": 20,
+   "mean_Mhat_upperBound_Mpre": 0.02257498590731042,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_SD_precalibrated": 0.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 20,
+    "RM:1.0": 20,
+    "RM:2.0": 20,
+    "SD:precal": 20,
+    "SD:inst": 20
+   },
+   "coverage_observed_effect_RM1": 1.0
+  }
+ ],
+ "latent": 1.0,
+ "wedge": 0.6,
+ "ell_star": 3
+}
