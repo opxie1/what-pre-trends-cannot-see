@@ -10,8 +10,8 @@
       "rho_factor": 0.0,
       "rho_idio": 0.0,
       "reps": 400,
-      "ev21_rejection": 0.9775,
-      "triad_rejection": 0.115,
+      "ev21_rejection": 0.9875,
+      "triad_rejection": 0.09,
       "mcse": 0.0109
     },
     {
@@ -21,8 +21,8 @@
       "rho_factor": 0.7,
       "rho_idio": 0.5,
       "reps": 400,
-      "ev21_rejection": 0.085,
-      "triad_rejection": 0.1075,
+      "ev21_rejection": 0.09,
+      "triad_rejection": 0.095,
       "mcse": 0.0109
     },
     {
@@ -32,8 +32,8 @@
       "rho_factor": 0.0,
       "rho_idio": 0.0,
       "reps": 400,
-      "ev21_rejection": 0.97,
-      "triad_rejection": 0.1725,
+      "ev21_rejection": 0.9825,
+      "triad_rejection": 0.1775,
       "mcse": 0.0109
     },
     {
@@ -43,8 +43,8 @@
       "rho_factor": 0.7,
       "rho_idio": 0.5,
       "reps": 400,
-      "ev21_rejection": 0.9,
-      "triad_rejection": 0.1475,
+      "ev21_rejection": 0.9075,
+      "triad_rejection": 0.1125,
       "mcse": 0.0109
     },
     {
@@ -54,7 +54,7 @@
       "rho_factor": 0.0,
       "rho_idio": 0.0,
       "reps": 400,
-      "ev21_rejection": 0.9975,
+      "ev21_rejection": 0.995,
       "triad_rejection": 0.155,
       "mcse": 0.0109
     },
@@ -65,8 +65,8 @@
       "rho_factor": 0.7,
       "rho_idio": 0.5,
       "reps": 400,
-      "ev21_rejection": 0.9725,
-      "triad_rejection": 0.12,
+      "ev21_rejection": 0.95,
+      "triad_rejection": 0.125,
       "mcse": 0.0109
     }
   ]

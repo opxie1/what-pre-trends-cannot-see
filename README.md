@@ -56,7 +56,7 @@ mechanism that generates an exactly-zero pre-period deviation, the resulting
 statement about rejection probabilities, and the calibration of a test that
 works where the pre-period does not.
 
-Proposition 1 requires equal cluster design weights, which no design here
+Proposition 2 requires equal cluster design weights, which no design here
 satisfies; it enters as a diagnostic and as the source of a design rule, not as
 a calibration the paper recommends. The corollary concerns diagnostics computed
 from the outcome panel, and says nothing against identifying a recording
