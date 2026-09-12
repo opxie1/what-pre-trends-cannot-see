@@ -70,6 +70,9 @@ src/did_measurement/               estimators, inference, diagnostics
 scripts/                           analysis and verification scripts
 scripts/coverage_zero.py           coverage under a hand-built interval
 scripts/coverage_zero_ref.py       coverage under a reference implementation
+scripts/oa_studentized.py          exchangeability failure, priced two ways
+scripts/oa_onefactor.py            is the one-factor premise of (6.1) credible
+scripts/oa_onefactor_calib.py      calibration check for the above
 results/theory/inference/          simulated size and power
 results/fixes/referee/             the heteroskedastic-permutation size check
 tests/test_core.py                 69 checks
@@ -82,6 +85,17 @@ pip install -r requirements.txt
 python tests/test_core.py
 python scripts/coverage_zero_ref.py
 ```
+
+`oa_studentized.py` and `oa_onefactor_calib.py` are self-contained and run
+from a clean checkout. `oa_onefactor.py` reads the two application panels from
+`data/processed/`, which are not redistributed here.
+
+The p-value columns written by `oa_onefactor.py` are not calibrated references
+and the paper does not report them. `oa_onefactor_calib.py` generates data from
+a true one-factor model and finds those references reject between 0.090 and
+0.995 on the eigenvalue ratio and between 0.090 and 0.178 on the triad
+dispersion, against a nominal 0.05, because the null is fitted to the data. The
+paper reports the descriptive columns only.
 
 The label-permutation test enumerates all `C!` assignments at `C = 3` and
 samples otherwise. Every table in the paper can be regenerated on its own and

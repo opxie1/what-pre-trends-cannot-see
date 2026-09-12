@@ -1,0 +1,221 @@
+experiment,C,var_ratio,inflated,stat,calibration,nu,size,reps,mcse,median_resid_var_ratio
+gaussian,5,1.0,high_d,wald,homoskedastic,,0.05,,,
+gaussian,5,1.0,high_d,wald,studentized,10,0.05045,,,
+gaussian,5,1.0,high_d,wald,studentized,50,0.0485,,,
+gaussian,5,1.0,high_d,wald,studentized,inf,0.05,,,
+gaussian,5,1.0,high_d,directed,homoskedastic,,0.05015,,,
+gaussian,5,1.0,high_d,directed,studentized,10,0.04785,,,
+gaussian,5,1.0,high_d,directed,studentized,50,0.0477,,,
+gaussian,5,1.0,high_d,directed,studentized,inf,0.05015,,,
+gaussian,5,1.0,low_d,wald,homoskedastic,,0.05,,,
+gaussian,5,1.0,low_d,wald,studentized,10,0.05045,,,
+gaussian,5,1.0,low_d,wald,studentized,50,0.0485,,,
+gaussian,5,1.0,low_d,wald,studentized,inf,0.05,,,
+gaussian,5,1.0,low_d,directed,homoskedastic,,0.05015,,,
+gaussian,5,1.0,low_d,directed,studentized,10,0.04785,,,
+gaussian,5,1.0,low_d,directed,studentized,50,0.0477,,,
+gaussian,5,1.0,low_d,directed,studentized,inf,0.05015,,,
+gaussian,5,2.0,high_d,wald,homoskedastic,,0.0635,,,
+gaussian,5,2.0,high_d,wald,studentized,10,0.04225,,,
+gaussian,5,2.0,high_d,wald,studentized,50,0.0372,,,
+gaussian,5,2.0,high_d,wald,studentized,inf,0.0393,,,
+gaussian,5,2.0,high_d,directed,homoskedastic,,0.06115,,,
+gaussian,5,2.0,high_d,directed,studentized,10,0.04195,,,
+gaussian,5,2.0,high_d,directed,studentized,50,0.04095,,,
+gaussian,5,2.0,high_d,directed,studentized,inf,0.0427,,,
+gaussian,5,2.0,low_d,wald,homoskedastic,,0.06405,,,
+gaussian,5,2.0,low_d,wald,studentized,10,0.0409,,,
+gaussian,5,2.0,low_d,wald,studentized,50,0.0381,,,
+gaussian,5,2.0,low_d,wald,studentized,inf,0.03865,,,
+gaussian,5,2.0,low_d,directed,homoskedastic,,0.06155,,,
+gaussian,5,2.0,low_d,directed,studentized,10,0.04245,,,
+gaussian,5,2.0,low_d,directed,studentized,50,0.04185,,,
+gaussian,5,2.0,low_d,directed,studentized,inf,0.04365,,,
+gaussian,5,4.0,high_d,wald,homoskedastic,,0.0772,,,
+gaussian,5,4.0,high_d,wald,studentized,10,0.031,,,
+gaussian,5,4.0,high_d,wald,studentized,50,0.02685,,,
+gaussian,5,4.0,high_d,wald,studentized,inf,0.0281,,,
+gaussian,5,4.0,high_d,directed,homoskedastic,,0.0735,,,
+gaussian,5,4.0,high_d,directed,studentized,10,0.0346,,,
+gaussian,5,4.0,high_d,directed,studentized,50,0.0326,,,
+gaussian,5,4.0,high_d,directed,studentized,inf,0.0327,,,
+gaussian,5,4.0,low_d,wald,homoskedastic,,0.0779,,,
+gaussian,5,4.0,low_d,wald,studentized,10,0.02995,,,
+gaussian,5,4.0,low_d,wald,studentized,50,0.0279,,,
+gaussian,5,4.0,low_d,wald,studentized,inf,0.0274,,,
+gaussian,5,4.0,low_d,directed,homoskedastic,,0.0751,,,
+gaussian,5,4.0,low_d,directed,studentized,10,0.03445,,,
+gaussian,5,4.0,low_d,directed,studentized,50,0.0338,,,
+gaussian,5,4.0,low_d,directed,studentized,inf,0.0338,,,
+gaussian,5,9.0,high_d,wald,homoskedastic,,0.0901,,,
+gaussian,5,9.0,high_d,wald,studentized,10,0.02005,,,
+gaussian,5,9.0,high_d,wald,studentized,50,0.015,,,
+gaussian,5,9.0,high_d,wald,studentized,inf,0.0149,,,
+gaussian,5,9.0,high_d,directed,homoskedastic,,0.08685,,,
+gaussian,5,9.0,high_d,directed,studentized,10,0.02545,,,
+gaussian,5,9.0,high_d,directed,studentized,50,0.0229,,,
+gaussian,5,9.0,high_d,directed,studentized,inf,0.02285,,,
+gaussian,5,9.0,low_d,wald,homoskedastic,,0.0908,,,
+gaussian,5,9.0,low_d,wald,studentized,10,0.0193,,,
+gaussian,5,9.0,low_d,wald,studentized,50,0.01665,,,
+gaussian,5,9.0,low_d,wald,studentized,inf,0.0139,,,
+gaussian,5,9.0,low_d,directed,homoskedastic,,0.0882,,,
+gaussian,5,9.0,low_d,directed,studentized,10,0.0261,,,
+gaussian,5,9.0,low_d,directed,studentized,50,0.02385,,,
+gaussian,5,9.0,low_d,directed,studentized,inf,0.02235,,,
+gaussian,5,25.0,high_d,wald,homoskedastic,,0.10175,,,
+gaussian,5,25.0,high_d,wald,studentized,10,0.0093,,,
+gaussian,5,25.0,high_d,wald,studentized,50,0.00525,,,
+gaussian,5,25.0,high_d,wald,studentized,inf,0.00555,,,
+gaussian,5,25.0,high_d,directed,homoskedastic,,0.10085,,,
+gaussian,5,25.0,high_d,directed,studentized,10,0.01455,,,
+gaussian,5,25.0,high_d,directed,studentized,50,0.0113,,,
+gaussian,5,25.0,high_d,directed,studentized,inf,0.01145,,,
+gaussian,5,25.0,low_d,wald,homoskedastic,,0.10365,,,
+gaussian,5,25.0,low_d,wald,studentized,10,0.0091,,,
+gaussian,5,25.0,low_d,wald,studentized,50,0.00605,,,
+gaussian,5,25.0,low_d,wald,studentized,inf,0.0041,,,
+gaussian,5,25.0,low_d,directed,homoskedastic,,0.10135,,,
+gaussian,5,25.0,low_d,directed,studentized,10,0.0154,,,
+gaussian,5,25.0,low_d,directed,studentized,50,0.0131,,,
+gaussian,5,25.0,low_d,directed,studentized,inf,0.0115,,,
+gaussian,8,1.0,high_d,wald,homoskedastic,,0.0476,,,
+gaussian,8,1.0,high_d,wald,studentized,10,0.0485,,,
+gaussian,8,1.0,high_d,wald,studentized,50,0.0509,,,
+gaussian,8,1.0,high_d,wald,studentized,inf,0.0476,,,
+gaussian,8,1.0,high_d,directed,homoskedastic,,0.04945,,,
+gaussian,8,1.0,high_d,directed,studentized,10,0.04875,,,
+gaussian,8,1.0,high_d,directed,studentized,50,0.05555,,,
+gaussian,8,1.0,high_d,directed,studentized,inf,0.04945,,,
+gaussian,8,1.0,low_d,wald,homoskedastic,,0.0476,,,
+gaussian,8,1.0,low_d,wald,studentized,10,0.0485,,,
+gaussian,8,1.0,low_d,wald,studentized,50,0.0509,,,
+gaussian,8,1.0,low_d,wald,studentized,inf,0.0476,,,
+gaussian,8,1.0,low_d,directed,homoskedastic,,0.04945,,,
+gaussian,8,1.0,low_d,directed,studentized,10,0.04875,,,
+gaussian,8,1.0,low_d,directed,studentized,50,0.05555,,,
+gaussian,8,1.0,low_d,directed,studentized,inf,0.04945,,,
+gaussian,8,2.0,high_d,wald,homoskedastic,,0.0624,,,
+gaussian,8,2.0,high_d,wald,studentized,10,0.0426,,,
+gaussian,8,2.0,high_d,wald,studentized,50,0.0437,,,
+gaussian,8,2.0,high_d,wald,studentized,inf,0.04025,,,
+gaussian,8,2.0,high_d,directed,homoskedastic,,0.0592,,,
+gaussian,8,2.0,high_d,directed,studentized,10,0.0443,,,
+gaussian,8,2.0,high_d,directed,studentized,50,0.0515,,,
+gaussian,8,2.0,high_d,directed,studentized,inf,0.0454,,,
+gaussian,8,2.0,low_d,wald,homoskedastic,,0.06215,,,
+gaussian,8,2.0,low_d,wald,studentized,10,0.04275,,,
+gaussian,8,2.0,low_d,wald,studentized,50,0.04295,,,
+gaussian,8,2.0,low_d,wald,studentized,inf,0.0409,,,
+gaussian,8,2.0,low_d,directed,homoskedastic,,0.05985,,,
+gaussian,8,2.0,low_d,directed,studentized,10,0.04525,,,
+gaussian,8,2.0,low_d,directed,studentized,50,0.05105,,,
+gaussian,8,2.0,low_d,directed,studentized,inf,0.0453,,,
+gaussian,8,4.0,high_d,wald,homoskedastic,,0.07865,,,
+gaussian,8,4.0,high_d,wald,studentized,10,0.03425,,,
+gaussian,8,4.0,high_d,wald,studentized,50,0.03315,,,
+gaussian,8,4.0,high_d,wald,studentized,inf,0.03025,,,
+gaussian,8,4.0,high_d,directed,homoskedastic,,0.0718,,,
+gaussian,8,4.0,high_d,directed,studentized,10,0.03925,,,
+gaussian,8,4.0,high_d,directed,studentized,50,0.0432,,,
+gaussian,8,4.0,high_d,directed,studentized,inf,0.03815,,,
+gaussian,8,4.0,low_d,wald,homoskedastic,,0.0793,,,
+gaussian,8,4.0,low_d,wald,studentized,10,0.03365,,,
+gaussian,8,4.0,low_d,wald,studentized,50,0.03135,,,
+gaussian,8,4.0,low_d,wald,studentized,inf,0.0306,,,
+gaussian,8,4.0,low_d,directed,homoskedastic,,0.07405,,,
+gaussian,8,4.0,low_d,directed,studentized,10,0.03985,,,
+gaussian,8,4.0,low_d,directed,studentized,50,0.0435,,,
+gaussian,8,4.0,low_d,directed,studentized,inf,0.03735,,,
+gaussian,8,9.0,high_d,wald,homoskedastic,,0.10035,,,
+gaussian,8,9.0,high_d,wald,studentized,10,0.0228,,,
+gaussian,8,9.0,high_d,wald,studentized,50,0.0195,,,
+gaussian,8,9.0,high_d,wald,studentized,inf,0.0175,,,
+gaussian,8,9.0,high_d,directed,homoskedastic,,0.0896,,,
+gaussian,8,9.0,high_d,directed,studentized,10,0.03035,,,
+gaussian,8,9.0,high_d,directed,studentized,50,0.03175,,,
+gaussian,8,9.0,high_d,directed,studentized,inf,0.02775,,,
+gaussian,8,9.0,low_d,wald,homoskedastic,,0.10275,,,
+gaussian,8,9.0,low_d,wald,studentized,10,0.02155,,,
+gaussian,8,9.0,low_d,wald,studentized,50,0.01935,,,
+gaussian,8,9.0,low_d,wald,studentized,inf,0.0171,,,
+gaussian,8,9.0,low_d,directed,homoskedastic,,0.09375,,,
+gaussian,8,9.0,low_d,directed,studentized,10,0.03015,,,
+gaussian,8,9.0,low_d,directed,studentized,50,0.0313,,,
+gaussian,8,9.0,low_d,directed,studentized,inf,0.026,,,
+gaussian,8,25.0,high_d,wald,homoskedastic,,0.12515,,,
+gaussian,8,25.0,high_d,wald,studentized,10,0.0114,,,
+gaussian,8,25.0,high_d,wald,studentized,50,0.0067,,,
+gaussian,8,25.0,high_d,wald,studentized,inf,0.0054,,,
+gaussian,8,25.0,high_d,directed,homoskedastic,,0.11355,,,
+gaussian,8,25.0,high_d,directed,studentized,10,0.01915,,,
+gaussian,8,25.0,high_d,directed,studentized,50,0.01645,,,
+gaussian,8,25.0,high_d,directed,studentized,inf,0.01455,,,
+gaussian,8,25.0,low_d,wald,homoskedastic,,0.13395,,,
+gaussian,8,25.0,low_d,wald,studentized,10,0.00965,,,
+gaussian,8,25.0,low_d,wald,studentized,50,0.00735,,,
+gaussian,8,25.0,low_d,wald,studentized,inf,0.00505,,,
+gaussian,8,25.0,low_d,directed,homoskedastic,,0.12435,,,
+gaussian,8,25.0,low_d,directed,studentized,10,0.0187,,,
+gaussian,8,25.0,low_d,directed,studentized,50,0.0167,,,
+gaussian,8,25.0,low_d,directed,studentized,inf,0.01385,,,
+panel,5,1.0,high_d,wald,CR1 label permutation,,0.0565,2000.0,0.005162739098579358,2.7649912826501786
+panel,5,1.0,high_d,directed,CR1 label permutation,,0.0505,2000.0,0.00489641450451246,2.7649912826501786
+panel,5,1.0,high_d,chi2,chi square,,0.169,2000.0,0.008379707632131327,2.7649912826501786
+panel,5,1.0,low_d,wald,CR1 label permutation,,0.0565,2000.0,0.005162739098579358,2.7649912826501786
+panel,5,1.0,low_d,directed,CR1 label permutation,,0.0505,2000.0,0.00489641450451246,2.7649912826501786
+panel,5,1.0,low_d,chi2,chi square,,0.169,2000.0,0.008379707632131327,2.7649912826501786
+panel,5,2.0,high_d,wald,CR1 label permutation,,0.045,2000.0,0.004635461142108733,3.070000900322852
+panel,5,2.0,high_d,directed,CR1 label permutation,,0.04,2000.0,0.004381780460041329,3.070000900322852
+panel,5,2.0,high_d,chi2,chi square,,0.168,2000.0,0.008359904305672404,3.070000900322852
+panel,5,2.0,low_d,wald,CR1 label permutation,,0.039,2000.0,0.004328914413568372,3.0675405134027254
+panel,5,2.0,low_d,directed,CR1 label permutation,,0.047,2000.0,0.00473238840333293,3.0675405134027254
+panel,5,2.0,low_d,chi2,chi square,,0.1615,2000.0,0.008228540271518394,3.0675405134027254
+panel,5,4.0,high_d,wald,CR1 label permutation,,0.032,2000.0,0.0039354796403996304,5.0902208393076425
+panel,5,4.0,high_d,directed,CR1 label permutation,,0.0315,2000.0,0.0039056209493497957,5.0902208393076425
+panel,5,4.0,high_d,chi2,chi square,,0.172,2000.0,0.0084384832760396,5.0902208393076425
+panel,5,4.0,low_d,wald,CR1 label permutation,,0.0275,2000.0,0.0036567574434189644,5.036766294805924
+panel,5,4.0,low_d,directed,CR1 label permutation,,0.03,2000.0,0.00381444622455213,5.036766294805924
+panel,5,4.0,low_d,chi2,chi square,,0.1575,2000.0,0.00814535910810567,5.036766294805924
+panel,5,9.0,high_d,wald,CR1 label permutation,,0.02,2000.0,0.0031304951684997056,11.2218594733523
+panel,5,9.0,high_d,directed,CR1 label permutation,,0.0225,2000.0,0.0033161536454151216,11.2218594733523
+panel,5,9.0,high_d,chi2,chi square,,0.1725,2000.0,0.008448187675472178,11.2218594733523
+panel,5,9.0,low_d,wald,CR1 label permutation,,0.0235,2000.0,0.0033873108803297047,10.987603412274426
+panel,5,9.0,low_d,directed,CR1 label permutation,,0.0245,2000.0,0.003456859123539749,10.987603412274426
+panel,5,9.0,low_d,chi2,chi square,,0.1775,2000.0,0.008543820866567839,10.987603412274426
+panel,5,25.0,high_d,wald,CR1 label permutation,,0.009,2000.0,0.002111752826445368,32.904296465776625
+panel,5,25.0,high_d,directed,CR1 label permutation,,0.0095,2000.0,0.002169072382379159,32.904296465776625
+panel,5,25.0,high_d,chi2,chi square,,0.174,2000.0,0.008477145746063352,32.904296465776625
+panel,5,25.0,low_d,wald,CR1 label permutation,,0.015,2000.0,0.0027179955849853765,30.962238104235247
+panel,5,25.0,low_d,directed,CR1 label permutation,,0.0135,2000.0,0.0025804796065847916,30.962238104235247
+panel,5,25.0,low_d,chi2,chi square,,0.1735,2000.0,0.008467518821945422,30.962238104235247
+panel,8,1.0,high_d,wald,CR1 label permutation,,0.054,2000.0,0.005053909377897471,2.7895079131569602
+panel,8,1.0,high_d,directed,CR1 label permutation,,0.05,2000.0,0.004873397172404482,2.7895079131569602
+panel,8,1.0,high_d,chi2,chi square,,0.168,2000.0,0.008359904305672404,2.7895079131569602
+panel,8,1.0,low_d,wald,CR1 label permutation,,0.054,2000.0,0.005053909377897471,2.7895079131569602
+panel,8,1.0,low_d,directed,CR1 label permutation,,0.05,2000.0,0.004873397172404482,2.7895079131569602
+panel,8,1.0,low_d,chi2,chi square,,0.168,2000.0,0.008359904305672404,2.7895079131569602
+panel,8,2.0,high_d,wald,CR1 label permutation,,0.0475,2000.0,0.004756245893559331,3.077452328286712
+panel,8,2.0,high_d,directed,CR1 label permutation,,0.046,2000.0,0.00468422885862764,3.077452328286712
+panel,8,2.0,high_d,chi2,chi square,,0.172,2000.0,0.0084384832760396,3.077452328286712
+panel,8,2.0,low_d,wald,CR1 label permutation,,0.0425,2000.0,0.0045107510461119445,3.064677461448842
+panel,8,2.0,low_d,directed,CR1 label permutation,,0.048,2000.0,0.0047799581588126895,3.064677461448842
+panel,8,2.0,low_d,chi2,chi square,,0.159,2000.0,0.008176765864325577,3.064677461448842
+panel,8,4.0,high_d,wald,CR1 label permutation,,0.038,2000.0,0.004275277768753745,5.068094564932089
+panel,8,4.0,high_d,directed,CR1 label permutation,,0.041,2000.0,0.004433903472111228,5.068094564932089
+panel,8,4.0,high_d,chi2,chi square,,0.167,2000.0,0.008339994004794009,5.068094564932089
+panel,8,4.0,low_d,wald,CR1 label permutation,,0.033,2000.0,0.003994433626936364,5.040514349658077
+panel,8,4.0,low_d,directed,CR1 label permutation,,0.04,2000.0,0.004381780460041329,5.040514349658077
+panel,8,4.0,low_d,chi2,chi square,,0.177,2000.0,0.00853437168161781,5.040514349658077
+panel,8,9.0,high_d,wald,CR1 label permutation,,0.027,2000.0,0.0036242930345103167,11.268883014183963
+panel,8,9.0,high_d,directed,CR1 label permutation,,0.033,2000.0,0.003994433626936364,11.268883014183963
+panel,8,9.0,high_d,chi2,chi square,,0.1615,2000.0,0.008228540271518394,11.268883014183963
+panel,8,9.0,low_d,wald,CR1 label permutation,,0.0305,2000.0,0.0038451105315712316,11.237498170608557
+panel,8,9.0,low_d,directed,CR1 label permutation,,0.0285,2000.0,0.0037207358143249033,11.237498170608557
+panel,8,9.0,low_d,chi2,chi square,,0.169,2000.0,0.008379707632131327,11.237498170608557
+panel,8,25.0,high_d,wald,CR1 label permutation,,0.009,2000.0,0.002111752826445368,33.280583971726216
+panel,8,25.0,high_d,directed,CR1 label permutation,,0.0155,2000.0,0.0027622228367747597,33.280583971726216
+panel,8,25.0,high_d,chi2,chi square,,0.1575,2000.0,0.00814535910810567,33.280583971726216
+panel,8,25.0,low_d,wald,CR1 label permutation,,0.011,2000.0,0.002332273568859365,33.03342246101695
+panel,8,25.0,low_d,directed,CR1 label permutation,,0.0155,2000.0,0.0027622228367747597,33.03342246101695
+panel,8,25.0,low_d,chi2,chi square,,0.1775,2000.0,0.008543820866567839,33.03342246101695

@@ -1089,6 +1089,53 @@ twelve $(G,C)$ cells of Section \ref{sec:sim} the smallest $|\hat{\rho}_c|$ is
 $0.539$. Sources: \texttt{verification.json} for the loading errors and
 \texttt{loading\_guard\_check.csv} for the guard.
 
+A third condition is the one factor structure that \eqref{eq:triad} inverts, and
+unlike the first two it can be examined in the data. Two quantities computed
+from the same untreated covariance matrix bear on it. The first is the share of
+a category's demeaned variance that the common factor carries,
+$\hat{\theta}_c^2/\hat{\Sigma}_{cc}$, which is the quantity the normalization
+divides by. The second works in the units of \eqref{eq:triad} itself: for a
+category $c$ and a pair $k < l$ drawn from the others,
+$(L_{ck} + L_{cl} - L_{kl})/2$ identifies $\log|\theta_c|$ up to a constant
+common to all $c$, and \eqref{eq:triad} averages those single triad values, so
+their dispersion within $c$ measures the departure from one factor where the
+estimator is sensitive to it.
+
+The three designs of Section \ref{sec:app} differ sharply on both. In the crime
+panel the factor carries $0.397$ of the median category's demeaned variance, the
+largest eigenvalue of the cross category correlation matrix carries $0.522$ of
+its trace against the $1/C = 0.167$ that no factor at all would give, and single
+triads disagree about $\rho_c$ by a factor of $1.23$. In the annual and odd year
+health sub designs the median shares are $0.121$ and $0.065$, the trace shares
+are $0.269$ and $0.241$ where no factor would give $0.200$ and $0.143$, and the
+single triads disagree by factors of $2.39$ and $8.59$. One category in the odd
+year sub design has a share of $0.004$. The premise is a serviceable
+approximation in the crime design and is not one in the health designs, where
+\eqref{eq:triad} averages quantities that do not agree with each other.
+
+These are descriptive quantities and we attach no $p$ value to them. A bootstrap
+reference fitted under a one factor null is not calibrated for either: on data
+generated from a true one factor structure at the dimensions of the three
+designs, with and without serial correlation in the factor and in the
+idiosyncratic errors, a circular block bootstrap reference rejects between
+$0.090$ and $0.995$ on the eigenvalue ratio and between $0.090$ and $0.178$ on
+the triad dispersion, against a nominal $0.05$ over $400$ replications per cell.
+Fitting the null to the data biases both references, and we report the
+statistics rather than tests built on them. Sources:
+\texttt{onefactor\_diagnostic.csv} and \texttt{onefactor\_calibration.csv}.
+
+What a failure of the premise costs is worth stating precisely. Lemma
+\ref{lem:equi} is algebraic and holds whatever generates the data, and one
+factor is not among the hypotheses of Theorem \ref{thm:exact}, which are
+Assumption \ref{as:CE} and order invariance. What the structure supplies is the
+reason to expect Assumption \ref{as:CE} to hold after normalizing, since
+dividing by an estimated loading equalizes the factor component of the arrays
+only when there is a common factor to equalize. Where the premise fails the
+conclusion of Theorem \ref{thm:exact} is untouched and the case for its
+hypothesis is weaker, which is a reason to report the cluster level procedures
+of Section \ref{sec:cluster}, since they use neither the normalization nor
+Assumption \ref{as:CE}.
+
 \begin{assumption}[category exchangeability]
 \label{as:CE}
 Conditional on $\mathcal{Z}$,
@@ -1599,13 +1646,48 @@ independence and asymptotically valid under heteroskedasticity, so a
 studentized category level statistic is the natural repair for this
 departure; we have not derived its behaviour under Assumption \ref{as:CE}.
 
-The sign of the distortion depends on how the variance spread lines up with
-the exposure index. In the implementation used for Tables \ref{tab:size} and
+Two further experiments show that the rates above overstate what the departure
+costs the procedure we run. The homoskedastic covariance estimate of the limit
+experiment is not the one the panel uses. The CR1 meat
+$\sum_g \eta^f_{gP}\eta^{f\prime}_{gP}$ is quadratic in the realized residuals,
+which enter it category by category weighted by $\delta_{\pi(c)}$, so its
+variance estimate already carries a separate contribution per category and
+already moves with $\pi$. Supplying the limit experiment with a variance
+estimate of the same kind, $\hat{\omega}_c = \omega_c \chi^2_\nu/\nu$ drawn
+independently across $c$, reverses the sign of the distortion: with the
+inflated variance on the highest exposure category the studentized Wald
+statistic rejects at $0.050$, $0.039$, $0.028$, $0.015$ and $0.006$ at $C = 5$
+and at $0.048$, $0.040$, $0.030$, $0.018$ and $0.005$ at $C = 8$ as $\nu$ grows
+without bound, over the same grid. Studentizing leaves the exchangeable case at
+nominal size and makes the departure conservative rather than liberal.
+
+The panel behaves the same way. Running the same departure through the design of
+this section with the CR1 statistic itself, drawing category error standard
+deviations that deliver median realized residual variance ratios of $2.77$,
+$3.07$, $5.09$, $11.22$ and $32.90$ over $2{,}000$ replications per cell, the
+two sided label permutation test rejects at $0.057$, $0.045$, $0.032$, $0.020$
+and $0.009$ at $C = 5$ and at $0.054$, $0.048$, $0.038$, $0.027$ and $0.009$ at
+$C = 8$, with a Monte Carlo standard error of at most $0.005$ across the forty
+randomization cells. The directed
+version rejects at $0.051$, $0.040$, $0.032$, $0.023$ and $0.010$ and at
+$0.050$, $0.046$, $0.041$, $0.033$ and $0.016$. No cell exceeds the nominal
+level, and the rates track the studentized limit experiment at $\nu = 10$, which
+gives $0.051$, $0.042$, $0.031$, $0.020$ and $0.009$ at $C = 5$. Against a
+category variance ratio of $33$ the cost of the departure is power and not
+level. Source: \texttt{studentized\_check.csv}.
+
+In the limit experiment with a homoskedastic covariance estimate the sign of
+the distortion depends on how the variance spread lines up with the exposure
+index. In the implementation used for Tables \ref{tab:size} and
 \ref{tab:power}, which recomputes the CR1 covariance for every permuted label
-vector, a $C = 6$ design with category variances decreasing in exposure moves
-the permutation rejection rate the other way, from $0.047$ at variance ratio
-$1$ to $0.021$ at ratio $25$ over $2{,}000$ replications. Sources:
-\texttt{exchangeability\_failure.csv}, and
+vector, it does not. Moving the inflated variance to the lowest exposure
+category instead of the highest gives $0.057$, $0.039$, $0.028$, $0.024$ and
+$0.015$ at $C = 5$ and $0.054$, $0.043$, $0.033$, $0.031$ and $0.011$ at
+$C = 8$, so the panel rejection rate falls with the variance ratio under either
+placement. A separate $C = 6$ design with category variances decreasing in
+exposure moves the same way, from $0.047$ at variance ratio $1$ to $0.021$ at
+ratio $25$ over $2{,}000$ replications. Sources:
+\texttt{exchangeability\_failure.csv} and \texttt{studentized\_check.csv}, and
 \texttt{a2\_size\_heteroskedastic.csv} under
 \texttt{results/fixes/referee/}.
 
@@ -1938,6 +2020,17 @@ $0.391$ and label permutation $p = 0.850$ and $0.854$ over all $C!$ assignments,
 nor under the naive normalization, at chi square $0.295$ and $0.967$ and label
 permutation $0.867$ and $0.964$.
 
+The health panel is also where the one factor premise behind \eqref{eq:triad} is
+least credible. By the quantities of Section \ref{sec:perm} the common factor
+carries $0.121$ and $0.065$ of the median category's demeaned variance in the
+two sub designs, against $0.397$ in the crime panel, and the single triads
+disagree about $\rho_c$ by factors of $2.39$ and $8.59$. The nonrejections above
+are therefore weak evidence in two separate senses. The design supports $m = 2$
+restrictions and tests $m = 7$, and the normalization the equivariance of
+Theorem \ref{thm:exact} runs through is estimating loadings on a factor that
+carries little of the variation. Neither point bears on the crime design, where
+the factor is the strongest of the three.
+
 The reference category normalization gives a different answer, and it is the one
 Theorem \ref{thm:exact} does not cover. Its loading guard drops any category
 whose estimated loading is below $0.1$ in absolute value: diagnosed diabetes,
@@ -2108,9 +2201,16 @@ Three limitations bound what we claim. Proposition \ref{prop:rm} is proved only
 for a single adoption cohort. Proposition \ref{prop:anatomy} requires equal
 design weights, which no design we study satisfies, so we use it to explain the
 distortion rather than to replace it. Assumption \ref{as:CE} fails when
-categories have different error variances, and at a variance ratio of $25$ the
-label permutation test has size $0.102$ at $C = 5$, though the cluster level
-procedures do not rely on that assumption at all.
+categories have different error variances. In a Gaussian limit experiment with a
+homoskedastic covariance estimate that failure is liberal, and at a variance
+ratio of $25$ the label permutation test has size $0.102$ at $C = 5$. In the
+panel, where the CR1 covariance is recomputed for every permuted label vector
+and is therefore already studentized across categories, it is conservative
+instead, with size $0.009$ at a median realized variance ratio of $33$, so what
+the departure costs there is power. The cluster level procedures do not rely on
+the assumption at all. And \eqref{eq:triad} inverts a one factor structure that
+the health panel does not have, which weakens the case for Assumption
+\ref{as:CE} there without disturbing the conclusion of Theorem \ref{thm:exact}.
 
 Lemma \ref{lem:sep} requires a category balanced design, a restriction the
 health panel shows to be binding, and what blocks Theorem \ref{thm:exact} there

@@ -1,0 +1,73 @@
+{
+  "alpha": 0.05,
+  "reps": 400,
+  "n_boot": 400,
+  "rows": [
+    {
+      "design": "crime",
+      "n": 1675,
+      "C": 6,
+      "rho_factor": 0.0,
+      "rho_idio": 0.0,
+      "reps": 400,
+      "ev21_rejection": 0.9775,
+      "triad_rejection": 0.115,
+      "mcse": 0.0109
+    },
+    {
+      "design": "crime",
+      "n": 1675,
+      "C": 6,
+      "rho_factor": 0.7,
+      "rho_idio": 0.5,
+      "reps": 400,
+      "ev21_rejection": 0.085,
+      "triad_rejection": 0.1075,
+      "mcse": 0.0109
+    },
+    {
+      "design": "medicaid annual",
+      "n": 333,
+      "C": 5,
+      "rho_factor": 0.0,
+      "rho_idio": 0.0,
+      "reps": 400,
+      "ev21_rejection": 0.97,
+      "triad_rejection": 0.1725,
+      "mcse": 0.0109
+    },
+    {
+      "design": "medicaid annual",
+      "n": 333,
+      "C": 5,
+      "rho_factor": 0.7,
+      "rho_idio": 0.5,
+      "reps": 400,
+      "ev21_rejection": 0.9,
+      "triad_rejection": 0.1475,
+      "mcse": 0.0109
+    },
+    {
+      "design": "medicaid odd year",
+      "n": 183,
+      "C": 7,
+      "rho_factor": 0.0,
+      "rho_idio": 0.0,
+      "reps": 400,
+      "ev21_rejection": 0.9975,
+      "triad_rejection": 0.155,
+      "mcse": 0.0109
+    },
+    {
+      "design": "medicaid odd year",
+      "n": 183,
+      "C": 7,
+      "rho_factor": 0.7,
+      "rho_idio": 0.5,
+      "reps": 400,
+      "ev21_rejection": 0.9725,
+      "triad_rejection": 0.12,
+      "mcse": 0.0109
+    }
+  ]
+}
