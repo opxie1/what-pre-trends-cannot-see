@@ -30,6 +30,11 @@
 
 \numberwithin{equation}{section}
 
+% Captions sit above tables, and the article class leaves no space below a
+% caption, so a caption running to two lines collides with \toprule.
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{7pt}
+
 \title{What Pre-Trends Cannot See:\\[2pt]
 Testing for Treatment-Induced Recording Change\\[2pt]
 with Few Clusters}
@@ -904,10 +909,10 @@ against $m$ at five cluster counts.
   xmin=0, xmax=21.5, ymin=0, ymax=1,
   xtick={1,2,3,6,13,20},
   ytick={0,0.2,0.4,0.6,0.8,1.0},
-  legend pos=north west,
   legend cell align=left,
-  legend columns=2,
-  legend style={font=\footnotesize, draw=none, fill=none},
+  legend columns=3,
+  legend style={font=\footnotesize, draw=none, fill=none,
+    at={(0.5,-0.27)}, anchor=north, column sep=1.1em},
   tick label style={font=\footnotesize},
   label style={font=\small},
 ]
