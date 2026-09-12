@@ -1,0 +1,151 @@
+{
+  "alpha": 0.05,
+  "reps_A": 2000,
+  "reps_B": 600,
+  "rows": [
+    {
+      "part": "A",
+      "C": 3,
+      "loading": "triad",
+      "reps": 2000,
+      "chi2_size": 0.3875,
+      "mcse": 0.0109
+    },
+    {
+      "part": "A",
+      "C": 3,
+      "loading": "none",
+      "reps": 2000,
+      "chi2_size": 0.396,
+      "mcse": 0.0109
+    },
+    {
+      "part": "A",
+      "C": 5,
+      "loading": "triad",
+      "reps": 2000,
+      "chi2_size": 0.3845,
+      "mcse": 0.0109
+    },
+    {
+      "part": "A",
+      "C": 5,
+      "loading": "none",
+      "reps": 2000,
+      "chi2_size": 0.391,
+      "mcse": 0.0109
+    },
+    {
+      "part": "A",
+      "C": 8,
+      "loading": "triad",
+      "reps": 2000,
+      "chi2_size": 0.384,
+      "mcse": 0.0109
+    },
+    {
+      "part": "A",
+      "C": 8,
+      "loading": "none",
+      "reps": 2000,
+      "chi2_size": 0.396,
+      "mcse": 0.0109
+    },
+    {
+      "part": "B",
+      "C": 5,
+      "kappa": 0.0,
+      "reps": 600,
+      "mean_gamma": 9e-05,
+      "median_wald": 19.15,
+      "power_size_adjusted": 0.0583,
+      "mcse": 0.0204
+    },
+    {
+      "part": "B",
+      "C": 5,
+      "kappa": 0.15,
+      "reps": 600,
+      "mean_gamma": 0.14063,
+      "median_wald": 24.683,
+      "power_size_adjusted": 0.0933,
+      "mcse": 0.0204
+    },
+    {
+      "part": "B",
+      "C": 5,
+      "kappa": 0.3,
+      "reps": 600,
+      "mean_gamma": 0.26693,
+      "median_wald": 36.765,
+      "power_size_adjusted": 0.1933,
+      "mcse": 0.0204
+    },
+    {
+      "part": "B",
+      "C": 5,
+      "kappa": 0.45,
+      "reps": 600,
+      "mean_gamma": 0.3736,
+      "median_wald": 56.061,
+      "power_size_adjusted": 0.335,
+      "mcse": 0.0204
+    },
+    {
+      "part": "B",
+      "C": 5,
+      "kappa": 0.6,
+      "reps": 600,
+      "mean_gamma": 0.44951,
+      "median_wald": 70.24,
+      "power_size_adjusted": 0.335,
+      "mcse": 0.0204
+    },
+    {
+      "part": "B",
+      "C": 5,
+      "kappa": 0.8,
+      "reps": 600,
+      "mean_gamma": 0.48833,
+      "median_wald": 79.039,
+      "power_size_adjusted": 0.3483,
+      "mcse": 0.0204
+    },
+    {
+      "part": "C",
+      "G": 20,
+      "m": 13,
+      "trials": 200,
+      "draws_per_trial": 1000,
+      "ks_rejection_rate": 0.06,
+      "mcse": 0.0154
+    },
+    {
+      "part": "C",
+      "G": 30,
+      "m": 13,
+      "trials": 200,
+      "draws_per_trial": 1000,
+      "ks_rejection_rate": 0.045,
+      "mcse": 0.0154
+    },
+    {
+      "part": "C",
+      "G": 51,
+      "m": 13,
+      "trials": 200,
+      "draws_per_trial": 1000,
+      "ks_rejection_rate": 0.035,
+      "mcse": 0.0154
+    },
+    {
+      "part": "C",
+      "G": 100,
+      "m": 13,
+      "trials": 200,
+      "draws_per_trial": 1000,
+      "ks_rejection_rate": 0.06,
+      "mcse": 0.0154
+    }
+  ]
+}

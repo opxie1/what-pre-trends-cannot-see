@@ -43,14 +43,15 @@ with Few Clusters}
 Email: \texttt{ethanxie@udel.edu}. Replication code, the simulation scripts and
 the output files underlying the tables are at
 \url{https://github.com/opxie1/what-pre-trends-cannot-see},
-on the \texttt{main} branch. The note to each table and figure names the
+at the tagged release \texttt{v1.0}, which is immutable; the main
+branch may move. The note to each table and figure names the
 output file its entries are read from. The simulations are written in Python and need
 version 3.11 or later with \texttt{numpy}, \texttt{scipy} and \texttt{pandas}.
 They draw pseudorandom numbers from the NumPy PCG64 generator, seeded once per
 replication by the CRC-32 checksum of a string naming the design cell and the
 replication index, so that any cell can be regenerated on its own. Producing
 every output file cited here takes $61.2$ minutes in total
-(\texttt{results/theory/inference/summary.json}, field
+(\texttt{results/inference/summary.json}, field
 \texttt{runtime\_min\_total}).}}
 
 \date{September 11, 2026}
@@ -70,8 +71,9 @@ errors, chi square calibration is oversized: at $G=51$, $m=13$ and $C=5$ its nul
 three randomization calibrations: label permutation, exact under category
 exchangeability with no condition on $G$; cluster sign changes, exact under sign
 symmetry of cluster contributions; and the restricted wild cluster
-bootstrap. Permutation $p$ values floor at $2/C!$, so it needs $C\ge5$ at
-$5\%$; at $C=5$ its size adjusted power is $0.383$ against $0.983$ for the
+bootstrap. Permutation $p$ values floor at $2/C!$ when the statistic is even in the
+labels and the exposure indices are symmetric, and at $1/C!$ otherwise, so it
+needs $C\ge5$ at $5\%$; at $C=5$ its size adjusted power is $0.383$ against $0.983$ for the
 directed sign change test.
 \end{abstract}
 
@@ -497,6 +499,25 @@ system has over each of them. The equivalence is what makes the deviation
 invisible, and the structure is what makes it recoverable from somewhere else.
 Neither half is of much use without the other.
 
+Corollary \ref{cor:blind} covers the test this paper goes on to propose. The
+exposure indices $d_1,\dots,d_C$ are fixed known constants, so the cross
+category statistic of Section \ref{sec:setup} is a measurable function of the
+observed panel and the cohort labels, and its rejection probability is the same
+under both structures of Lemma \ref{lem:oe}. Nothing below separates a recording
+response from a latent deviation that happens to reproduce it. What changes
+between this section and the rest of the paper is the null under test rather
+than the information available. A pre trend test asks whether the pre treatment
+deviation is zero, and \eqref{eq:equivdev} makes it zero under both structures,
+which is why its power equals its size. The null \eqref{eq:null} asks whether
+the post treatment coefficients vary with the exposure index, which holds under
+measurement invariance and fails under any recording response whose path differs
+across categories. Both structures of Lemma \ref{lem:oe} violate
+\eqref{eq:null}, and violate it identically. The cross section buys detection
+and not attribution. Reading a rejection as a recording response rather than as
+a latent deviation that tracks recording discretion is a judgment about which
+structures are plausible, and Assumption \ref{as:rec} is where that judgment is
+recorded.
+
 That pre treatment parallelism fails to guarantee post treatment parallelism is
 long established \citep{kahnlang2020promise,roth2023trending}, and
 \citet{ghanem2026when} state that pre trend tests are inherently uninformative
@@ -631,7 +652,7 @@ implementation of \citet{rambachan2023credible}. $\widehat M$ calibrates the
 smoothness bound from the pre period as the reference software's exported
 routine does; institutional sets it from the size of the recording change. The
 last column is coverage of the recorded effect, which is what the interval is
-built to cover. Source: \texttt{results/theory/coverage\_zero\_ref.json},
+built to cover. Source: \texttt{results/coverage/coverage\_zero\_ref.json},
 produced by \texttt{scripts/coverage\_zero\_ref.py}.}
 \label{tab:cov}
 \begin{tabular}{rrrccccccc}
@@ -658,6 +679,23 @@ sampling rate while the wedge does not move, so every relative magnitudes
 interval eventually excludes the latent effect, and larger $\bar M$ only delays
 the crossing. The institutional bound, which never consults the pre period, is
 unaffected.
+
+Two of the three blocks in Table \ref{tab:cov} bear on different questions, and
+only one of them is about calibration. The relative magnitudes columns fix
+$\bar M$ in advance at $0.5$, $1$ and $2$, so no quantity in them is chosen from
+the data. What fails there is not a calibration rule but the class itself: by
+Lemma \ref{lem:oe} the pre period second differences that
+$\Delta^{\mathrm{RM}}(\bar M)$ scales are identically zero under a recording
+response, so the class is $\{0\}$ for every $\bar M$, which is Proposition
+\ref{prop:rm}. The row labelled $\widehat M$ is the one that reads a bound off
+the pre period, and the nonadaptivity result of \citet{low1997nonparametric} and
+\citet{cailow2004adaptation} is already a reason to expect it to fail; we report
+it because it is what the exported routine computes, not because
+\citet{rambachan2023credible} recommend it. Their own guidance, like that of
+\citet{armstrong2020simple}, is to choose the sensitivity parameter from
+knowledge of the setting. The institutional row is that recommendation carried
+out, and it is the row that holds coverage at $1.000$ throughout. The table is
+therefore an argument for the a priori bound rather than against the framework.
 
 \subsection{Scope}
 
@@ -718,7 +756,7 @@ cells, the label permutation test of \eqref{eq:null} rejects at $0.047$ when
 the missing cells are tied to the category label and at $0.049$ when they are
 independent of it, against a nominal $0.05$ over $1{,}200$ replications with a
 Monte Carlo standard error of $0.006$
-(\texttt{verification\_extra6\_3.json} in \texttt{results/theory/inference/}). With the
+(\texttt{verification\_extra6\_3.json} in \texttt{results/inference/}). With the
 observation rate falling from $1.00$ to $0.40$ across categories ordered by
 $d_c$, the rate is $0.040$, against $0.053$ for a control that assigns the same
 five rates to a category drawn at random in each replication, over $1{,}500$
@@ -956,9 +994,9 @@ replications each with a Monte Carlo standard error of at most $0.011$. They
 lie above the corresponding curves because the simulated design gives
 $G_{\mathrm{eff}} = 0.727\,G$ rather than the equal cluster weights of
 Assumption \ref{as:I}(ii). Sources:
-\texttt{results/theory/inference/anatomy\_expansion.csv},
-\texttt{results/theory/inference/size\_table.csv} and
-\texttt{results/theory/inference/anatomy\_effective\_clusters.csv}.
+\texttt{results/inference/anatomy\_expansion.csv},
+\texttt{results/inference/size\_table.csv} and
+\texttt{results/inference/anatomy\_effective\_clusters.csv}.
 \end{minipage}
 \end{figure}
 
@@ -1056,7 +1094,16 @@ The randomization is over the assignments of the exposure labels to the
 normalized category data arrays, holding the arrays and the design fixed.
 Nothing is permuted at the unit, cluster or period level. Every run reported
 below sets $B = 999$, so the reference set is all of $S_C$ at $C \le 6$ and a
-Monte Carlo sample at $C = 8$.
+Monte Carlo sample at $C = 8$. Enumeration costs $C!$ evaluations of
+$\mathcal{T}$ and is the binding constraint well before the statistic is: $720$
+at $C = 6$, $5{,}040$ at $C = 7$ and $40{,}320$ at $C = 8$, against the $999$ a
+Monte Carlo reference set uses at any $C$. Sampling the group costs resolution
+rather than validity. Theorem \ref{thm:exact} holds on either reference set,
+the attainable floor becomes $1/B$ by Proposition \ref{prop:resolution}(i), and
+the Monte Carlo $p$ value has standard error at most $1/(2\sqrt{B})$, which is
+$0.016$ at $B = 999$. The batched implementation evaluates all $B$ label vectors
+in one pass over the cluster scores, so the cost is linear in $B$ and does not
+grow with $C!$.
 
 \begin{lemma}[equivariance of the normalization]
 \label{lem:equi}
@@ -1176,10 +1223,10 @@ the pairs are listed. Then for every $N$, $T$, $G$ and $C$, the test of
 Definition \ref{def:perm} for the null \eqref{eq:null} under the randomization
 over its reference set $\mathcal{R}$ satisfies $\Pr(\text{reject}) \le \alpha$.
 If the distinct values among $\{T(\pi): \pi \in \mathcal{R}\}$ are almost surely
-attained with a common multiplicity $\varkappa$, then $\Pr(\text{reject}) =
-\varkappa \lfloor \alpha M/\varkappa \rfloor / M$. Here $\varkappa = 2$ for the
+attained with a common multiplicity $\mathfrak{m}$, then $\Pr(\text{reject}) =
+\mathfrak{m} \lfloor \alpha M/\mathfrak{m} \rfloor / M$. Here $\mathfrak{m} = 2$ for the
 two sided Wald statistic with $\{\delta_c\}$ symmetric about zero, by
-Proposition \ref{prop:resolution}(ii), and $\varkappa = 1$ for the one sided
+Proposition \ref{prop:resolution}(ii), and $\mathfrak{m} = 1$ for the one sided
 directed statistic. At $C = 5$ and $\alpha = 0.05$ the two give $0.05$ alike.
 \end{theorem}
 
@@ -1417,7 +1464,7 @@ calibrated Wald test. Replacing $\chi^2_{m,1-\alpha}$ by the exact critical
 value from \eqref{eq:Fexact} raises the required noncentrality from $17.85$ to
 $41.46$ at $G_{\mathrm{eff}} = 36.42$ and $m = 13$, inflating the minimum
 detectable response by a factor of $1.524$
-(\texttt{results/theory/inference/verification.json}, entry \texttt{E11}).
+(\texttt{results/inference/verification.json}, entry \texttt{E11}).
 
 At the design of Section \ref{sec:sim} with $C = 5$ and $m = 13$,
 \eqref{eq:mde} returns $\kappa^{\mathrm{Wald}}_{\mathrm{MDE}} = 0.363$ and
@@ -1469,6 +1516,43 @@ detectable response is the $\kappa^{\mathrm{dir}}_{\mathrm{MDE}}$ of
 approaches orthogonality to $k_P$ in that metric. The test is level $\alpha$ for
 every choice of $\tilde{k}$.
 
+Which statistic that statement describes matters, and the two behave
+differently enough that the distinction is worth measuring. The cosine above
+governs the statistic of Theorem \ref{thm:umpi}, which weights by $V^{-1}$. The
+statistic reported in Tables \ref{tab:size} and \ref{tab:power} is the fixed
+contrast $w'\hat{\gamma}_P/\sqrt{w'Vw}$, whose noncentrality is $\kappa
+w'k_P/\sqrt{w'Vw}$, so its loss relative to the optimum is
+$w'k_P/\{\sqrt{w'Vw}\sqrt{k_P'V^{-1}k_P}\}$, at most one by Cauchy Schwarz with
+equality exactly when $w \propto V^{-1}k_P$. The two ratios differ sharply. In
+the design of Section \ref{sec:sim} at $G = 51$ and $C = 5$ against a flat
+truth, running the fixed contrast at a response growing with horizon, at one
+that fades, and at one confined to the second half of the post window gives
+ratios of $0.80$, $0.78$ and $0.79$ against $0.80$ at the truth, while the same
+shapes give the $V^{-1}$ cosines of Theorem \ref{thm:umpi} as $0.46$, $0.12$
+and $0.36$ against $1$.
+
+The simulated consequences follow the ratios. Over $600$ replications per cell,
+every one of the forty eight cells is at nominal size, between $0.057$ and
+$0.065$ for the fixed contrast and between $0.035$ and $0.070$ for the $V^{-1}$
+weighted statistic, against a Monte Carlo standard error of $0.009$ at a rate of
+$0.05$. That is the level statement of the previous paragraph measured rather
+than assumed. At $C = 5$ and $\kappa = 0.30$ the fixed contrast attains size
+adjusted power $0.607$ at the true shape and $0.530$, $0.602$ and $0.527$ at the
+three wrong ones, a worst case loss of $0.080$, while the $V^{-1}$ weighted
+statistic attains $0.467$ at the truth and $0.195$, $0.057$ and $0.212$, a worst
+case loss of $0.410$. The optimal statistic is the one a wrong shape destroys.
+
+Two things follow. The power advantage reported in Table \ref{tab:power} does
+not depend on knowing the response path, since the statistic carrying it loses
+at most $0.08$ of power across shapes that span the plausible range. And Theorem
+\ref{thm:umpi} is an optimality statement about a limit experiment with $V$
+known rather than a recommendation: with $V$ estimated from $51$ clusters on
+$13$ restrictions the fixed contrast beats the $V^{-1}$ weighted statistic even
+at the true shape, $0.607$ against $0.467$, because inverting an estimated $V$ of
+that dimension costs more than the weighting gains. We therefore report the
+fixed contrast throughout and read Theorem \ref{thm:umpi} as the bound that
+identifies what a known $V$ would buy. Source: \texttt{misdirection.csv}.
+
 When $k_P$ is restricted only to the nonnegative orthant no uniformly most
 powerful invariant test exists, and the likelihood ratio statistic has the
 chi bar square null distribution of \citet{kudo1963} and \citet{shapiro1988},
@@ -1485,7 +1569,7 @@ calibrated. Taking the Wald at the exact critical value from \eqref{eq:Fexact}
 and the directed test at the $t_{G_{\mathrm{eff}}-1}$ critical value that its
 estimated CR1 variance requires, that ratio at power $0.80$ is $0.393$ at
 $G_{\mathrm{eff}} = 36.42$, $0.448$ at $G_{\mathrm{eff}} = 51$ and $0.516$ at
-$G_{\mathrm{eff}} = 100$ (\texttt{results/theory/inference/verification.json},
+$G_{\mathrm{eff}} = 100$ (\texttt{results/inference/verification.json},
 entry \texttt{E11}). Calibrating the directed test at $z_{1-\alpha}$ instead, as
 Theorem \ref{thm:umpi} does under known $V$, gives $0.386$, $0.442$ and $0.512$.
 At the first of these designs the direction restriction divides the
@@ -1534,7 +1618,7 @@ Proposition \ref{prop:resolution}.
 The chi bar square statistic uses $B = 199$ at $C = 8$. Monte Carlo standard
 errors are $0.005$ at a rejection rate of $0.05$, $0.011$ at $0.39$ and
 $0.006$ at $0.92$. Output files named in this section sit in
-\texttt{results/theory/inference/} unless another directory is given.
+\texttt{results/inference/} unless another directory is given.
 
 Two features of the design bear on what the tables can show. The loadings are
 drawn independently of $d$ and the $\varepsilon_{itc}$ are i.i.d.\ across
@@ -1583,7 +1667,16 @@ The two sided label permutation test is at nominal size for $C \in \{5,8\}$,
 ranging from $0.043$ to $0.059$ over all eight such cells, and its directed
 version from $0.043$ to $0.053$. At $C = 3$ both have rejection rate $0.000$,
 which is Proposition \ref{prop:resolution}(iii) rather than a numerical
-artifact. The wild cluster bootstrap ranges from $0.051$ to $0.067$. The
+artifact. Three categories is not a rare design, since many recording systems
+sort outcomes into a handful of coarse classes, and the resolution floor makes
+label randomization unusable there at any conventional level however large the
+panel. A researcher with $C = 3$ has three options: use the cluster level
+procedures of Section \ref{sec:cluster}, which place no requirement on $C$ and
+carry the sizes reported in the same table; split the outcome into finer
+categories if the recording system records them separately, since the floor is
+driven by $C!$ and not by sample size; or report the realized floor alongside
+the $p$ value so that a nonrejection is not read as evidence. The third is a
+statement about what the design can support rather than a test. The wild cluster bootstrap ranges from $0.051$ to $0.067$. The
 two sided cluster sign change test ranges from $0.022$ to $0.066$ and is
 conservative at $G = 20$, where its three rates are $0.027$, $0.022$ and
 $0.033$; the directed version rejects at $0.058$, $0.058$ and $0.055$ in those
@@ -1689,7 +1782,7 @@ exposure moves the same way, from $0.047$ at variance ratio $1$ to $0.021$ at
 ratio $25$ over $2{,}000$ replications. Sources:
 \texttt{exchangeability\_failure.csv} and \texttt{studentized\_check.csv}, and
 \texttt{a2\_size\_heteroskedastic.csv} under
-\texttt{results/fixes/referee/}.
+\texttt{results/inference/}.
 
 \paragraph{The price of label randomization.} Relative to a normal benchmark
 at level $0.05$ and power $0.80$, the label permutation test requires the
@@ -1828,7 +1921,7 @@ uses $499$ draws and the cluster sign change test $999$, each including the
 identity draw. The directed rows use the contrast $w = \mathbf{1}_m$.
 $2{,}000$ replications per cell; the Monte Carlo standard error is $0.005$ at
 a rate of $0.05$, $0.011$ at $0.39$ and $0.006$ at $0.92$. Sources:
-\texttt{results/theory/inference/size\_table.csv} and
+\texttt{results/inference/size\_table.csv} and
 \texttt{anatomy\_table.csv}.
 \end{minipage}
 \end{spacing}
@@ -1893,7 +1986,7 @@ permutation enumerates all $C!$ assignments at $C = 5$ and uses $998$ sampled
 assignments together with the identity at $C = 8$; the cluster sign change
 test uses $999$ draws including the identity. $600$ replications per cell;
 Monte Carlo standard error at a rate of $0.5$ is $0.020$. Sources:
-\texttt{results/theory/inference/power\_curves.csv} and
+\texttt{results/inference/power\_curves.csv} and
 \texttt{size\_adjustment\_audit.csv}.
 \end{minipage}
 \end{spacing}
@@ -1902,7 +1995,7 @@ Monte Carlo standard error at a rate of $0.5$ is $0.020$. Sources:
 \section{Application}
 \label{sec:app}
 
-We apply the procedures to two state panels assembled for a companion project on
+We apply the procedures to two state panels assembled for the study of
 treatment induced recording change. The identification claim in each case is
 that under measurement invariance the post treatment event study coefficients do
 not vary with the exposure index, so \eqref{eq:null} holds. The application is
@@ -2077,7 +2170,7 @@ $\sigma^2$ set to the median category residual variance, gives
 $\kappa^{\mathrm{Wald}}_{\mathrm{MDE}} = 0.255$ log points per unit $d$ for the
 crime design at $m = 9$, $\Sigma_\delta^2 = 0.349$ and $I_k = 40.5$ under the
 naive normalization, and $0.326$ under the reference category normalization.
-The recording wedges that the companion project's own bounds identify as the
+The recording wedges that the institutional bounds of Section \ref{sec:why} identify as the
 magnitudes that would matter run from $0.008$ to $0.074$ log points per unit
 $d$. For the health sub designs the same expression gives $0.863$ and $0.930$
 percentage points of prevalence per unit $d$ at $m = 7$, $\Sigma_\delta^2 =
@@ -2098,9 +2191,9 @@ Kaiser Family Foundation table of state Medicaid expansion decisions. All are
 public. The two constructed panels and the code that builds them are in the
 replication archive named in the title footnote. Every $p$ value,
 $G_{\mathrm{eff}}$ and predicted size reported in this section is read from
-\texttt{results/fixes/empirics/inference\_gradient.csv}, and every realized
+\texttt{results/empirics/inference\_gradient.csv}, and every realized
 resolution floor from
-\texttt{results/fixes/empirics/app\_floors\_injection.csv}.
+\texttt{results/empirics/app\_floors\_injection.csv}.
 
 \begin{table}[htbp]
 \centering
@@ -2113,39 +2206,39 @@ designs and three loading normalizations}
 Design & Normalization & $C$ & $G_{\mathrm{eff}}$ & $\chi^2$ & Hotelling
  & Perm. & Bootstrap & Sign \\
 \midrule
-Baseline & adjusted & 6 & 45.9 & $0.018$ & $0.097$ & $0.096$ & $0.075$ & $0.083$ \\
+Baseline & reference & 6 & 45.9 & $0.018$ & $0.097$ & $0.096$ & $0.075$ & $0.083$ \\
  & naive &  &  & $0.141$ & $0.304$ & $0.396$ & $0.277$ & $0.311$ \\
  & triad &  &  & $0.025$ & $0.115$ & $0.115$ & $0.092$ & $0.104$ \\
 \addlinespace
-Pre 2020 & adjusted & 6 & 33.2 & $0.367$ & $0.604$ & $0.782$ & $0.630$ & $0.593$ \\
+Pre 2020 & reference & 6 & 33.2 & $0.367$ & $0.604$ & $0.782$ & $0.630$ & $0.593$ \\
  & naive &  &  & $0.596$ & $0.769$ & $0.911$ & $0.773$ & $0.766$ \\
  & triad &  &  & $0.422$ & $0.647$ & $0.813$ & $0.670$ & $0.639$ \\
 \addlinespace
-Drop rape & adjusted & 5 & 45.9 & $0.016$ & $0.089$ & $0.075$ & $0.063$ & $0.048$ \\
+Drop rape & reference & 5 & 45.9 & $0.016$ & $0.089$ & $0.075$ & $0.063$ & $0.048$ \\
  & naive &  &  & $0.008$ & $0.062$ & $0.067$ & $0.040$ & $0.052$ \\
  & triad &  &  & $0.018$ & $0.096$ & $0.083$ & $0.066$ & $0.051$ \\
 \addlinespace
-Drop rape, larceny & adjusted & 4 & 45.9 & $0.107$ & $0.258$ & $0.667$ & $0.218$ & $0.209$ \\
+Drop rape, larceny & reference & 4 & 45.9 & $0.107$ & $0.258$ & $0.667$ & $0.218$ & $0.209$ \\
  & naive &  &  & $0.139$ & $0.300$ & $0.667$ & $0.254$ & $0.303$ \\
  & triad &  &  & $0.106$ & $0.257$ & $0.667$ & $0.220$ & $0.203$ \\
 \addlinespace
-Cohort $+1$ & adjusted & 6 & 45.7 & $0.017$ & $0.094$ & $0.117$ & $0.079$ & $0.078$ \\
+Cohort $+1$ & reference & 6 & 45.7 & $0.017$ & $0.094$ & $0.117$ & $0.079$ & $0.078$ \\
  & naive &  &  & $0.120$ & $0.277$ & $0.371$ & $0.258$ & $0.299$ \\
  & triad &  &  & $0.023$ & $0.110$ & $0.122$ & $0.097$ & $0.099$ \\
 \addlinespace
-Threshold $0.8$ & adjusted & 6 & 38.0 & $0.182$ & $0.394$ & $0.243$ & $0.411$ & $0.367$ \\
+Threshold $0.8$ & reference & 6 & 38.0 & $0.182$ & $0.394$ & $0.243$ & $0.411$ & $0.367$ \\
  & naive &  &  & $0.000$ & $0.007$ & $0.011$ & $0.002$ & $0.003$ \\
  & triad &  &  & $0.204$ & $0.419$ & $0.268$ & $0.431$ & $0.399$ \\
 \addlinespace
-Core agency types & adjusted & 6 & 46.9 & $0.012$ & $0.074$ & $0.032$ & $0.062$ & $0.062$ \\
+Core agency types & reference & 6 & 46.9 & $0.012$ & $0.074$ & $0.032$ & $0.062$ & $0.062$ \\
  & naive &  &  & $0.164$ & $0.328$ & $0.389$ & $0.306$ & $0.359$ \\
  & triad &  &  & $0.018$ & $0.093$ & $0.051$ & $0.083$ & $0.091$ \\
 \addlinespace
-Drop never treated & adjusted & 6 & 45.3 & $0.017$ & $0.094$ & $0.172$ & $0.093$ & $0.094$ \\
+Drop never treated & reference & 6 & 45.3 & $0.017$ & $0.094$ & $0.172$ & $0.093$ & $0.094$ \\
  & naive &  &  & $0.079$ & $0.220$ & $0.338$ & $0.216$ & $0.245$ \\
  & triad &  &  & $0.026$ & $0.119$ & $0.207$ & $0.121$ & $0.131$ \\
 \addlinespace
-Core types, pre 2020 & adjusted & 6 & 35.8 & $0.320$ & $0.547$ & $0.793$ & $0.566$ & $0.554$ \\
+Core types, pre 2020 & reference & 6 & 35.8 & $0.320$ & $0.547$ & $0.793$ & $0.566$ & $0.554$ \\
  & naive &  &  & $0.537$ & $0.717$ & $0.926$ & $0.728$ & $0.717$ \\
  & triad &  &  & $0.367$ & $0.587$ & $0.819$ & $0.601$ & $0.602$ \\
 \bottomrule
@@ -2167,8 +2260,8 @@ $1{,}999$ draws. Naive sets every loading to one; triad is the
 $S_C$-equivariant estimator \eqref{eq:triad}; adjusted fixes the reference
 category at the smallest $d_c$ and is not covered by Theorem \ref{thm:exact}.
 The entry shown as $0.000$ is $2.1 \times 10^{-5}$. Sources:
-\texttt{results/fixes/empirics/inference\_gradient.csv} for the $p$ values and
-\texttt{results/fixes/empirics/app\_floors\_injection.csv} for the realized
+\texttt{results/empirics/inference\_gradient.csv} for the $p$ values and
+\texttt{results/empirics/app\_floors\_injection.csv} for the realized
 floors.
 \end{minipage}
 \end{table}
@@ -2211,6 +2304,40 @@ the departure costs there is power. The cluster level procedures do not rely on
 the assumption at all. And \eqref{eq:triad} inverts a one factor structure that
 the health panel does not have, which weakens the case for Assumption
 \ref{as:CE} there without disturbing the conclusion of Theorem \ref{thm:exact}.
+
+Three findings in Section \ref{sec:sim} that an earlier draft reported without
+a cause are resolved by replication. The measured chi square size falls from
+$0.393$ at $C = 3$ to $0.356$ at $C = 8$ at $G = 51$, a decline of $2.45$
+standard errors, where \eqref{eq:Fexact} predicts almost no movement, and the
+draft attributed it to the loading normalization. An independent run of the same
+twelve cells at $2{,}000$ draws gives $0.388$, $0.385$ and $0.384$, flat to
+within a quarter of a standard error, and removing the normalization entirely
+gives $0.396$, $0.391$ and $0.396$, also flat. The decline is neither the
+normalization nor a feature of the design.
+
+The size adjusted power of the two sided label permutation test at $C = 5$ rises
+to $0.452$ at $\kappa = 0.60$ and falls to $0.383$ at $\kappa = 0.80$ in Table
+\ref{tab:power}, a difference of $2.4$ standard errors. Two candidates separate.
+The realized signal is strictly monotone: over $600$ replications per cell the
+mean post treatment gradient rises through $0.141$, $0.267$, $0.374$, $0.450$
+and $0.488$ and the median Wald statistic through $24.7$, $36.8$, $56.1$, $70.2$
+and $79.0$ as $\kappa$ rises from $0.15$ to $0.80$, so neither the statistic nor
+the log wedge turns over. Size adjusted power over the same grid runs $0.093$,
+$0.193$, $0.335$, $0.335$ and $0.348$, which is a plateau and not a decline.
+What the permutation test has at $C = 5$ is a ceiling rather than a turning
+point: the reference set has $120$ points, and once the observed statistic is
+larger than most of the relabelled ones a further increase in $\kappa$ cannot
+raise its rank. The large sample local power calculation, which knows nothing of
+the reference set, is the same statement from the other side, and it is why it
+overstates simulated power by between $15$ and $54$ percentage points here.
+
+The Kolmogorov Smirnov test of $p$ value uniformity rejects at $G = 30$ in the
+experiment built to satisfy Assumption \ref{as:I}. Repeating that test on $200$
+independent sets of $1{,}000$ draws gives rejection rates of $0.060$, $0.045$,
+$0.035$ and $0.060$ at $G = 20$, $30$, $51$ and $100$, each within one Monte
+Carlo standard error of $0.015$ of the nominal $0.05$. The reported rejection is
+what a correctly sized test does one time in twenty. Source:
+\texttt{anomalies.csv}.
 
 Lemma \ref{lem:sep} requires a category balanced design, a restriction the
 health panel shows to be binding, and what blocks Theorem \ref{thm:exact} there
@@ -2392,7 +2519,7 @@ $G = 51$ and $C = 3$, where $\omega_2 = 0.9981$, the two terms in that bracket
 are $0.354$ and $1.9 \times 10^{-3}$ at $m = 13$ and $\alpha = 0.05$, and
 $G(1-\omega_2)$ is at most $0.098$ over the twelve designs of Table
 \ref{tab:size}
-(\texttt{results/theory/inference/anatomy\_table.csv}).
+(\texttt{results/inference/anatomy\_table.csv}).
 
 For (ii), take logarithms. The event is $\log \chi^2_m - \log \chi^2_{G-m} >
 \log c_m - \log(\omega_2(G-1))$. With $m \to \infty$, $\log\chi^2_m$ is
@@ -2464,13 +2591,13 @@ so $\Pr(\hat{p} \le \alpha \mid \mathcal{Z}) \le \lfloor \alpha M\rfloor/M
 
 Two cases sharpen it. When the $M$ values are almost surely distinct, $N$ takes
 each of $1,\dots,M$ exactly once, so $|\mathcal{A}| = \lfloor \alpha M \rfloor$
-and the bound holds with equality. When they fall into $M/\varkappa$ groups of
-exactly $\varkappa$ equal values, distinct across groups, which is what
-Proposition \ref{prop:resolution}(ii) gives with $\varkappa = 2$ for the
-two sided Wald statistic, $N$ takes each of $\varkappa, 2\varkappa,\dots,M$ with
-multiplicity $\varkappa$, so $|\mathcal{A}| = \varkappa\lfloor \alpha
-M/\varkappa \rfloor$ and $\Pr(\hat{p} \le \alpha) = \varkappa\lfloor \alpha
-M/\varkappa\rfloor/M$. In either case the randomized version rejects with
+and the bound holds with equality. When they fall into $M/\mathfrak{m}$ groups of
+exactly $\mathfrak{m}$ equal values, distinct across groups, which is what
+Proposition \ref{prop:resolution}(ii) gives with $\mathfrak{m} = 2$ for the
+two sided Wald statistic, $N$ takes each of $\mathfrak{m}, 2\mathfrak{m},\dots,M$ with
+multiplicity $\mathfrak{m}$, so $|\mathcal{A}| = \mathfrak{m}\lfloor \alpha
+M/\mathfrak{m} \rfloor$ and $\Pr(\hat{p} \le \alpha) = \mathfrak{m}\lfloor \alpha
+M/\mathfrak{m}\rfloor/M$. In either case the randomized version rejects with
 probability one on
 $\{\hat{p} \le \alpha_-\}$, whose probability is $\alpha_-$, and with
 probability $(\alpha-\alpha_-)/(\alpha_+-\alpha_-)$ on $\{\hat{p} = \alpha_+\}$,
@@ -2482,7 +2609,7 @@ are i.i.d.\ uniform on $S_C$ and drawn independently of the data, the vector
 $(T(\pi))_{\pi \in \mathcal{R}}$ is exchangeable conditional on $\mathcal{Z}$
 under Assumption \ref{as:CE}, and the rank argument above gives
 $\Pr(\text{reject}) \le \alpha$ with equality at
-$\varkappa\lfloor \alpha B/\varkappa\rfloor/B$.
+$\mathfrak{m}\lfloor \alpha B/\mathfrak{m}\rfloor/B$.
 \end{proof}
 
 \begin{proof}[Proof of Proposition \ref{prop:resolution}]

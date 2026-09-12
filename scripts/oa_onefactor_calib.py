@@ -7,7 +7,7 @@ generates such data at the dimensions of each application design, including a
 serially correlated factor and serially correlated idiosyncratic errors, and
 reports the realised rejection rate of both statistics.
 
-Writes results/theory/inference/onefactor_calibration.csv.
+Writes results/inference/onefactor_calibration.csv.
 """
 import json
 import os
@@ -24,7 +24,9 @@ sys.path.insert(0, HERE)
 
 import oa_onefactor as OF                                       # noqa: E402
 
-OUT = os.path.join(ROOT, "results", "theory", "inference")
+OUT = os.path.join(ROOT, "results", "inference")
+if not os.path.isdir(OUT):                 # older working tree layout
+    OUT = os.path.join(ROOT, "results", "theory", "inference")
 REPS = 400
 N_BOOT = 400          # inner bootstrap draws; smaller than the headline 2000
 ALPHA = 0.05

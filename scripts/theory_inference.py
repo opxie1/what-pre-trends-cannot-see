@@ -15,7 +15,7 @@ demonstrates the fixes:
 Run repeatedly until it prints COMPLETE (per-cell checkpoints resume):
     cd ruler-did && PYTHONPATH=src python scripts/theory_inference.py
 Env: TI_BUDGET_S (default 100000), TI_WORKERS, TI_SMOKE=1.
-Outputs -> results/theory/inference/.
+Outputs -> results/inference/.
 """
 import os
 
@@ -38,7 +38,9 @@ from did_measurement.estimators import build_event_dummies, demean_two_way
 from did_measurement import inference as inf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "results", "theory", "inference")
+OUT = os.path.join(ROOT, "results", "inference")
+if not os.path.isdir(OUT):                 # older working tree layout
+    OUT = os.path.join(ROOT, "results", "theory", "inference")
 SMOKE = os.environ.get("TI_SMOKE", "") == "1"
 if SMOKE:
     OUT = OUT + "_smoke"

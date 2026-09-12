@@ -73,8 +73,9 @@ scripts/coverage_zero_ref.py       coverage under a reference implementation
 scripts/oa_studentized.py          exchangeability failure, priced two ways
 scripts/oa_onefactor.py            is the one-factor premise of (6.1) credible
 scripts/oa_onefactor_calib.py      calibration check for the above
-results/theory/inference/          simulated size and power
-results/fixes/referee/             the heteroskedastic-permutation size check
+results/inference/                 simulated size and power
+results/coverage/                  coverage under a recording response
+results/empirics/                  application p-values and floors
 tests/test_core.py                 69 checks
 ```
 

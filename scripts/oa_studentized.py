@@ -13,7 +13,7 @@ Two experiments.
     variance estimate already tracks category-specific variances; (B) measures
     whether that is enough.
 
-Writes results/theory/inference/studentized_check.csv and .json.
+Writes results/inference/studentized_check.csv and .json.
 """
 import dataclasses
 import json
@@ -32,7 +32,9 @@ sys.path.insert(0, HERE)
 from did_measurement import inference as inf          # noqa: E402
 from theory_inference import make_cfg, panel          # noqa: E402
 
-OUT = os.path.join(ROOT, "results", "theory", "inference")
+OUT = os.path.join(ROOT, "results", "inference")
+if not os.path.isdir(OUT):                 # older working tree layout
+    OUT = os.path.join(ROOT, "results", "theory", "inference")
 ALPHA = 0.05
 N_SIM_GAUSS = 20_000
 RATIOS = (1.0, 2.0, 4.0, 9.0, 25.0)

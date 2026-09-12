@@ -39,8 +39,10 @@ K_PRE, K_POST = 5, 5
 ELL_STAR = 3           # horizon at which the latent ATT is targeted
 Z = 1.959963984540054
 MBARS = (0.5, 1.0, 2.0)
-OUT = os.path.join(os.path.dirname(__file__), "..", "results", "theory",
-                   "coverage_zero.json")
+_R = os.path.join(os.path.dirname(__file__), "..")
+OUT = os.path.join(_R, "results", "coverage")
+if not os.path.isdir(OUT):                 # older working tree layout
+    OUT = os.path.join(_R, "results", "theory")
 
 
 def config(n_units, seed, kappa):

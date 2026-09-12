@@ -7,8 +7,8 @@
                      headline design, against the equal-weight contrast
 
 Run:  cd ruler-did && PYTHONPATH=src python scripts/theory_inference_guard.py
-Out:  results/theory/inference/loading_guard_check.csv
-      results/theory/inference/geff_eigen_sweep.csv
+Out:  results/inference/loading_guard_check.csv
+      results/inference/geff_eigen_sweep.csv
 """
 import os
 
@@ -23,7 +23,9 @@ import pandas as pd
 from did_measurement import inference as inf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "results", "theory", "inference")
+OUT = os.path.join(ROOT, "results", "inference")
+if not os.path.isdir(OUT):                 # older working tree layout
+    OUT = os.path.join(ROOT, "results", "theory", "inference")
 CKPT = os.path.join(OUT, "checkpoints")
 R = int(os.environ.get("TIG_REPS", "400"))
 ONLY = os.environ.get("TIG_ONLY", "")

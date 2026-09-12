@@ -34,7 +34,7 @@ rejects between 0.090 and 0.995 on the eigenvalue ratio and between 0.090 and
 data biases both references.  The paper reports the descriptive columns only:
 communality, ev1_share against the 1/C no-factor floor, and triad_mult.
 
-Writes results/theory/inference/onefactor_diagnostic.csv and .json.
+Writes results/inference/onefactor_diagnostic.csv and .json.
 """
 import json
 import os
@@ -51,7 +51,9 @@ sys.path.insert(0, HERE)
 from did_measurement.estimators import demean_two_way          # noqa: E402
 from did_measurement.inference import estimate_loadings_triad  # noqa: E402
 
-OUT = os.path.join(ROOT, "results", "theory", "inference")
+OUT = os.path.join(ROOT, "results", "inference")
+if not os.path.isdir(OUT):                 # older working tree layout
+    OUT = os.path.join(ROOT, "results", "theory", "inference")
 PROC = os.path.join(ROOT, "data", "processed")
 CRIME_FOCAL = [1, 2, 3, 4, 5, 6]
 MED_FOCAL = [1, 2, 3, 4, 5, 6, 7]
