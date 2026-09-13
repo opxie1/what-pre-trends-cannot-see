@@ -89,6 +89,7 @@ tests; difference-in-differences.
 \onehalfspacing
 
 \section{Introduction}
+\label{sec:intro}
 
 Applied researchers routinely assess an identifying assumption by asking whether
 an estimated treatment effect behaves across outcomes the way the assumption
@@ -204,8 +205,16 @@ power of $0.383$, while the cluster sign change test applied to the directed
 statistic attains $0.983$ and has a null rejection rate between $0.044$ and
 $0.065$ across the designs we study, with a Monte Carlo standard error of
 $0.005$ from $2{,}000$ replications. We use the label permutation test as our finite sample benchmark, because
-its reference distribution is valid for every number of clusters, and we
-recommend the directed cluster sign change test in applied work.
+its reference distribution is valid for every number of clusters, and because
+it is the only one of the three that holds its size across every design we
+try, including designs with several correlated units in a cluster, unequal
+cluster sizes, serially correlated errors and heavy tails. The directed cluster
+sign change test is the more powerful procedure and is the one to use when each
+cluster is a single unit, which is the case in both applications here, but its
+null rejection rate rises to $0.094$ when clusters hold five correlated units
+and to $0.086$ when their sizes are unequal, so we do not recommend it without
+a design in which \eqref{eq:null} leaves the cluster contributions close to
+sign symmetric.
 
 Our results connect two literatures that have developed separately. The first
 concerns what pre treatment data can reveal about parallel trends, and includes
@@ -1597,6 +1606,12 @@ post treatment horizon. All disturbances are Gaussian, independent across
 clusters and serially independent within cluster. The null \eqref{eq:null}
 corresponds to $\kappa = 0$.
 
+The design below puts one unit in every cluster, draws errors independent
+across periods and Gaussian, and makes the category loadings exchangeable by
+construction. Those choices are favourable to the procedures we propose, and
+the paragraph headed robustness at the end of this section runs the same
+calibrations in four designs that drop them.
+
 We vary $G \in \{20,30,51,100\}$ with one unit per cluster, so every cluster
 carries the same number of observations, and $C \in \{3,5,8\}$ with exposure
 indices equally spaced on $[0.1,1]$. Every design has $T = 120$, adoption at
@@ -1853,6 +1868,58 @@ cluster sign change test; the chi square null rejection rate in that block is
 $0.405$ over $600$ replications, so narrowing the pre window buys power without
 repairing the calibration. Sources: \texttt{mde\_table.csv} and
 \texttt{reference\_block\_table.csv}.
+
+\paragraph{Robustness.} Four designs drop the features of the block above that
+favour the procedures we propose, each at $G = 51$, $C = 5$ and $1{,}000$
+replications, against a Monte Carlo standard error of $0.007$ at a rate of
+$0.05$. The first gives every cluster five units and a cluster by period shock
+with standard deviation $0.6$, so that the clustering carries dependence rather
+than labelling singletons. The second adds unequal cluster sizes, spread
+geometrically from two units to sixteen at the same total, which is the
+configuration \citet{mackinnon2017wild} identify as the wild bootstrap's
+hardest case. The third replaces the independent errors by an AR(1) in the
+period index with coefficient $0.7$. The fourth replaces the Gaussian errors by
+standardized $t_5$ draws, so that only the tails change.
+
+The label permutation test holds its size in all four, rejecting at $0.050$,
+$0.058$, $0.059$ and $0.056$ against $0.046$ in the baseline design. Nothing in
+Theorem \ref{thm:exact} leads one to expect otherwise, since Assumption
+\ref{as:CE} restricts the category direction alone and is untouched by cluster
+size, serial dependence or tails, but the measurement is what the theorem is
+worth if the theorem is right. The chi square calibration over rejects in all
+four, between $0.307$ and $0.372$ against $0.394$ in the baseline design.
+
+Two procedures degrade. The restricted wild cluster bootstrap moves from
+$0.048$ to $0.066$ and $0.065$ in the two clustered designs. The directed
+cluster sign change test moves from $0.059$ to $0.094$ and $0.086$, which is
+five Monte Carlo standard errors above nominal and is the reason the
+recommendation in Section \ref{sec:intro} is qualified. Its two sided
+counterpart is far less affected, at $0.057$ and $0.063$ against $0.050$. The
+pattern is consistent with Theorem \ref{thm:signflip}: the finite sample
+statement covers the infeasible statistic, the feasible one differs by
+$O_p(G^{-1/2})$, and within cluster dependence is what makes that gap bite. A
+one sided statistic divided by a noisier estimated standard deviation is where
+it shows first.
+
+\paragraph{A bias reduced variance does not repair the calibration.} The
+literature on few clusters offers a better variance estimator than the CR1 used
+here: the bias reduced linearization of \citet{bell2002bias}, which premultiplies
+each cluster's residuals by $(I - H_{gg})^{-1/2}$ before forming the meat.
+Applying it changes almost nothing. Across the five designs the chi square
+rejection rate moves from $0.394$, $0.307$, $0.361$, $0.358$ and $0.372$ under
+CR1 to $0.390$, $0.305$, $0.357$, $0.353$ and $0.372$ under CR2, every
+difference inside one Monte Carlo standard error, and no cluster in any design
+has leverage high enough for the adjustment to be undefined. In the two
+applications it moves the crime chi square $p$ value from $0.025$ to $0.026$ and
+the two health values from $0.730$ and $0.391$ to $0.736$ and $0.435$. The
+reason is that the two corrections address different things. \citet{bell2002bias}
+correct the downward bias of the meat matrix, which is an $O(1/n_g)$ effect and
+is small when each cluster contributes many periods, while the distortion this
+paper is about is the substitution of a chi square for a distribution whose
+denominator has $G - m$ degrees of freedom, and that survives any reweighting of
+the residuals. The exact law of Proposition \ref{prop:anatomy} is stated for CR1
+and does not transfer, so we do not report a Hotelling calibration of the CR2
+statistic. Source: \texttt{robust.csv}.
 
 \begin{table}[htbp]
 \centering

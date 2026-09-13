@@ -68,11 +68,55 @@ class DGPConfig:
                                         # n_cat).  p_c = d_c reproduces A6; a 0/1 vector
                                         # gives the single-category ("dummy") response
                                         # that the CA application's shape test prefers.
+    n_clusters: int = None              # units per cluster > 1 when set; a
+                                        # `cluster` column is added and
+                                        # gradient_components should be called
+                                        # with cluster_col="cluster"
+    cluster_size_dispersion: float = 0.0  # 0 equal sizes, larger is more unequal
+    sigma_cluster_time: float = 0.0     # cluster-by-period shock, the source of
+                                        # within-cluster dependence
+    rho_eps: float = 0.0                # AR(1) on the idiosyncratic error in t
+    eps_dist: str = "normal"            # "normal" | "t5" (standardised)
     sigma_u: float = 0.2                # recording noise, additive map only
     r_base: float = 0.6                 # multiplicative/poisson baseline recording rate
     exposure: float = 2000.0            # poisson exposure
     latent_scale: float = 0.25          # index scale for exp() maps to keep rates sane
     seed: int = 0
+
+
+def _cluster_assignment(N, n_clusters, dispersion, rng):
+    """Unit to cluster map with sizes spread geometrically at fixed total N."""
+    if n_clusters is None or n_clusters >= N:
+        return np.arange(N), np.ones(N, dtype=int)
+    w = np.exp(dispersion * np.linspace(0.0, 1.0, n_clusters))
+    sizes = np.maximum(1, np.round(w / w.sum() * N).astype(int))
+    # repair rounding so the sizes sum to N exactly
+    while sizes.sum() > N:
+        sizes[int(np.argmax(sizes))] -= 1
+    while sizes.sum() < N:
+        sizes[int(np.argmin(sizes))] += 1
+    lab = np.repeat(np.arange(n_clusters), sizes)
+    return lab, sizes
+
+
+def _ar1(shape, rho, rng, dist="normal"):
+    """AR(1) in the last axis with unit stationary variance."""
+    n, T = shape
+    if dist == "t5":
+        nu = 5.0
+        z = rng.standard_t(nu, size=(n, T)) / np.sqrt(nu / (nu - 2.0))
+    elif dist == "normal":
+        z = rng.standard_normal((n, T))
+    else:
+        raise ValueError(f"unknown eps_dist {dist!r}")
+    if rho == 0.0:
+        return z
+    out = np.empty((n, T))
+    out[:, 0] = z[:, 0]
+    s = np.sqrt(1.0 - rho ** 2)
+    for j in range(1, T):
+        out[:, j] = rho * out[:, j - 1] + s * z[:, j]
+    return out
 
 
 def _tau_path(cfg, n_h):
@@ -124,6 +168,15 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
         d_all, th_all = d_focal, th_focal
     n_cat = len(d_all)
 
+    # --- cluster structure ---
+    clus_lab, clus_sizes = _cluster_assignment(
+        N, cfg.n_clusters, cfg.cluster_size_dispersion, rng)
+    n_clus = len(clus_sizes)
+    if cfg.sigma_cluster_time > 0.0:
+        ct = rng.normal(0, cfg.sigma_cluster_time, (n_clus, T))[clus_lab]
+    else:
+        ct = None
+
     # --- latent factor F[i,t] ---
     f_i = rng.normal(0, cfg.sigma_unit, N)
     g_t = rng.normal(0, cfg.sigma_time, T)
@@ -163,7 +216,9 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
     for c in range(n_cat):
         alpha = rng.normal(0, cfg.sigma_unit, N)
         lam = rng.normal(0, cfg.sigma_time, T)
-        eps = rng.normal(0, sig_eps[c], (N, T))
+        eps = sig_eps[c] * _ar1((N, T), cfg.rho_eps, rng, cfg.eps_dist)
+        if ct is not None:
+            eps = eps + ct
         ystar = alpha[:, None] + lam[None, :] + th_all[c] * F + eps
         mu = rng.normal(0, cfg.mu_scale, N)              # time-invariant recording distortion
         kap_it = cfg.kappa * np.where(treated_mask, kpath[np.clip(ell, 0, n_h - 1)], 0.0) * prof[c]
@@ -184,6 +239,7 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
 
         df_c = pd.DataFrame({
             "unit": np.repeat(np.arange(N), T),
+            "cluster": np.repeat(clus_lab, T),
             "period": np.tile(per, N),
             "cohort": np.repeat(G, T),
             "cat": c,
@@ -218,4 +274,5 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
     df.attrs["config"] = cfg
     df.attrs["recording_profile"] = prof
     df.attrs["sigma_eps_by_cat"] = sig_eps
+    df.attrs["cluster_sizes"] = clus_sizes
     return df

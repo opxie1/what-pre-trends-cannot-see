@@ -102,13 +102,37 @@ def estimate_loadings_triad(Cov):
     return np.exp(a), neg_share
 
 
+def _cr2_transform(W, Sinv, E, tol=1e-10):
+    """Apply the Bell-McCaffrey CR2 adjustment A_g = (I - H_gg)^{-1/2} to E.
+
+    H_gg = W Sinv W' has rank at most q << n_g, so the inverse square root is
+    built from the thin decomposition rather than from a dense n_g by n_g
+    eigendecomposition.  With L = W Sinv^{1/2} = P diag(s) Q', H_gg = P diag(s^2) P'
+    and (I - H_gg)^{-1/2} = I + P diag((1 - s^2)^{-1/2} - 1) P', which acts as the
+    identity off the column space of W.
+
+    Leverage of one or more would make the adjustment undefined; such directions
+    are left unadjusted and counted in the returned `capped`.
+    """
+    w, U = np.linalg.eigh((Sinv + Sinv.T) / 2.0)
+    w = np.where(w > tol * max(w.max(), tol), w, 0.0)
+    Sinv_half = U @ (np.sqrt(w)[:, None] * U.T)
+    L = W @ Sinv_half
+    P, s, _ = np.linalg.svd(L, full_matrices=False)
+    h = s ** 2
+    capped = int((h >= 1.0 - 1e-12).sum())
+    f = np.where(h < 1.0 - 1e-12, 1.0 / np.sqrt(np.maximum(1.0 - h, 1e-300)) - 1.0, 0.0)
+    return E + P @ (f[:, None] * (P.T @ E)), capped
+
+
 # --------------------------------------------------------------------------
 # component extraction
 # --------------------------------------------------------------------------
 
 def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
                         use_bridge=False, cluster_col="unit",
-                        loading="triad", rho_guard=RHO_GUARD):
+                        loading="triad", rho_guard=RHO_GUARD,
+                        vcov="CR1"):
     """Category-level sufficient objects for the pooled gradient regression.
 
     Requires a panel balanced across categories: every category must be observed
@@ -205,9 +229,16 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
     bounds = np.append(np.searchsorted(cs, cl), len(cs))
     A = np.empty((G, q, C))
     Sg = np.empty((G, q, q))
+    n_capped = 0
     for g in range(G):
         sl = slice(bounds[g], bounds[g + 1])
-        A[g] = Xs[sl].T @ Es[sl]
+        Eg = Es[sl]
+        if vcov == "CR2":
+            Eg, c = _cr2_transform(Xs[sl], Sinv, Eg)
+            n_capped += c
+        elif vcov != "CR1":
+            raise ValueError(f"unknown vcov {vcov!r}")
+        A[g] = Xs[sl].T @ Eg
         Sg[g] = Xs[sl].T @ Xs[sl]
 
     delta = d - d.mean()
@@ -215,6 +246,8 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
     pre = np.array([j for j, l in enumerate(labels) if l < -1])
     n = C * n_cells
     adj = (G / max(G - 1, 1)) * ((n - 1) / max(n - 2 * q, 1))
+    if vcov == "CR2":
+        adj = 1.0          # the bias correction is in the residuals
     n_unit = len(np.unique(unit))
     n_time = len(np.unique(period))
     dfree = max(n_cells - q - n_unit - n_time + 1, 1)
@@ -228,6 +261,7 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
             # --- provenance needed to state the randomisation reference set and
             #     the exactness claim honestly (referee items on the loading
             #     guard and on non-equivariant normalisations).
+            "vcov": vcov, "cr2_capped": n_capped,
             "loading": loading, "rho_full": rho_full, "d_full": d_all,
             "cats": np.asarray(cats), "kept": keep, "dropped": dropped,
             "guard_fired": bool((~keep).any()), "C_full": int(C0),
