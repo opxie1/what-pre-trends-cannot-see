@@ -134,6 +134,17 @@ def main():
                                        use_bridge=(r["bridge"] == "included"))
         st = r["statistic"]
         rec = dict(r)
+        # the closed form understates the label permutation test's MDE; report
+        # the permutation calibrated value too, since that test is the one the
+        # paper recommends
+        s2 = float(np.mean(comp["resid_var"]))
+        mp = inf.mde_kappa_permutation(
+            comp, alpha=ALPHA, power=POWER, sigma2=s2,
+            wedge=lambda k: np.log1p(k * comp["d"]))
+        rec["mde_perm"] = round(float(mp["kappa"]), 4)
+        rec["e_perm"] = round(float(mp["e_perm"]), 4)
+        rec["ratio_perm"] = round(float(mp["kappa"]) / r["wedge"], 3)
+        rec["powered_perm"] = bool(mp["kappa"] <= r["wedge"])
         rec["p_chi2"] = round(float(inf.chi2_wald(comp)["pvalue"]), 4)
         pt = inf.permutation_test(comp, st, N_PERM, 7)
         rec["p_perm"] = round(float(pt["pvalue"]), 4)
@@ -143,9 +154,10 @@ def main():
         rec["p_wcb"] = round(float(
             inf.wild_cluster_bootstrap(comp, N_BOOT, 7, "wald")["pvalue"]), 4)
         live.append(rec)
-        print("   %-18s %-8s ratio %.3f  chi2 %.4f  perm %.4f  sign %.4f  wcb %.4f"
-              % (r["design"], st, r["ratio"], rec["p_chi2"], rec["p_perm"],
-                 rec["p_signflip"], rec["p_wcb"]), flush=True)
+        print("   %-18s %-8s ratio %.3f (perm %.3f)  chi2 %.4f  perm %.4f  "
+              "sign %.4f  wcb %.4f"
+              % (r["design"], st, r["ratio"], rec["ratio_perm"], rec["p_chi2"],
+                 rec["p_perm"], rec["p_signflip"], rec["p_wcb"]), flush=True)
 
     with open(os.path.join(OUT, "design_power.json"), "w") as f:
         json.dump({"alpha": ALPHA, "power": POWER,
