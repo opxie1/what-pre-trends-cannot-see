@@ -74,7 +74,10 @@ symmetry of cluster contributions; and the restricted wild cluster
 bootstrap. Permutation $p$ values floor at $2/C!$ when the statistic is even in the
 labels and the exposure indices are symmetric, and at $1/C!$ otherwise, so it
 needs $C\ge5$ at $5\%$; at $C=5$ its size adjusted power is $0.383$ against $0.983$ for the
-directed sign change test.
+directed sign change test. Whether a design can detect the wedge its
+recording institution implies is computable before the outcome is
+examined, and in a specification that can, the move to incident based
+reporting leaves no cross category gradient in recorded index crime.
 \end{abstract}
 
 \smallskip
@@ -2069,6 +2072,65 @@ not vary with the exposure index, so \eqref{eq:null} holds. The application is
 illustrative of the inference problem rather than a contribution to either
 substantive literature.
 
+\subsection{What the design has to satisfy}
+\label{sec:designcalc}
+
+A falsification test is worth running only against responses it could detect,
+and whether it can is a property of the design that is computable before the
+outcome is examined. Write $\kappa^{\mathrm{inst}}$ for the recording wedge the
+institution implies and $\kappa_{\mathrm{MDE}}$ for the response the design
+detects with probability $0.80$ at level $\alpha$, which by Corollary
+\ref{cor:mde} depends on the number of restrictions, the path information
+$I_k$, the exposure spread $\Sigma_\delta^2$ and the residual variance. The
+design is adequate when $\kappa_{\mathrm{MDE}} \le \kappa^{\mathrm{inst}}$, and
+four features of the specification move the ratio.
+
+The statistic is the first. By Corollary \ref{cor:mde} the directed statistic
+has the smaller minimum detectable response whenever the response path is
+signed, which the recording mechanism makes it. The pre window is the second,
+and Corollary \ref{cor:blind} is what makes narrowing it free: the pre period
+carries no information about a recording response, so horizons spent there buy
+nothing this test can use while competing with the post block for
+identification. Dropping the crime pre window from six horizons to one raises
+$I_k$ from $40.5$ to $175.5$ and cuts $\kappa_{\mathrm{MDE}}$ by the square root
+of that. The number of restrictions is the third, through the critical value.
+The fourth is the exposure spread, and the cheapest way to widen it is a
+category the recording system has no discretion over, which anchors the low end
+of $d$ at zero.
+
+Applying the four to the crime panel moves $\kappa_{\mathrm{MDE}}/
+\kappa^{\mathrm{inst}}$ from $4.21$ at the specification of Section
+\ref{sec:app} to $0.699$. Homicide, which the panel already carries and which
+the specification of Section \ref{sec:app} holds out as a $d = 0$ series, more
+than doubles $\Sigma_\delta^2$ from $0.349$ to $0.769$ when it enters the
+gradient, and the narrow pre window supplies the rest. Seven of the forty eight
+specifications we enumerate are adequate in this sense, the best of them at
+$\kappa_{\mathrm{MDE}} = 0.052$ against $\kappa^{\mathrm{inst}} = 0.074$, with
+$C = 7$, $m = 9$ and $G_{\mathrm{eff}} = 42.9$.
+
+None of the seven rejects. Over the certified specifications the label
+permutation test returns $p$ values between $0.359$ and $0.559$, the cluster
+sign change test between $0.221$ and $0.585$ and the restricted wild cluster
+bootstrap between $0.164$ and $0.220$, against an attainable floor of $0.001$.
+The chi square calibration returns between $0.059$ and $0.159$ and is the only
+one that comes near rejecting, which is the distortion of Section
+\ref{sec:anatomy} rather than evidence. The conclusion is a null with content:
+in a design that would detect a flat recording response of $0.052$ log points
+per unit of discretion four times in five, the move to incident based reporting
+leaves no cross category gradient in recorded index crime.
+
+The same calculation screens the health panels out. Neither reaches an adequate
+specification at any of the forty eight, the best ratios being $12.5$ in the
+annual sub design and $14.8$ in the odd year sub design, against $33.9$ and
+$53.2$ as run. The exposure index there already places three conditions at
+$d = 0$, so widening the spread has little left to buy, and the shortfall is an
+order of magnitude rather than a margin. We therefore report those two designs
+as an illustration of the calculus screening a design out and not as evidence
+about Medicaid expansion. The nonrejections in Section \ref{sec:app} carry no
+information about measurement invariance, and the point of computing
+$\kappa_{\mathrm{MDE}}$ first is that this was knowable without looking at the
+outcome. Source: \texttt{design\_power.csv}.
+
 The first design is an unusually direct instance of the mechanism of Section
 \ref{sec:why}. A state's move to incident based reporting changes the recording
 system itself, on a date the state chooses, so the recorded series can move
@@ -2191,62 +2253,33 @@ Theorem \ref{thm:exact} runs through is estimating loadings on a factor that
 carries little of the variation. Neither point bears on the crime design, where
 the factor is the strongest of the three.
 
-The reference category normalization gives a different answer, and it is the one
-Theorem \ref{thm:exact} does not cover. Its loading guard drops any category
-whose estimated loading is below $0.1$ in absolute value: diagnosed diabetes,
-the $d = 1$ series the design is built around, in the annual sub design, leaving
-$C = 4$; high cholesterol and no exercise in the odd year sub design, leaving
-$C = 5$. In the annual sub design the chi square test returns $p = 0.100$, the
-Hotelling calibration at $G_{\mathrm{eff}}$ returns $0.230$, the label
-permutation $0.333$ and the wild cluster bootstrap $0.261$, while the directed
-cluster sign change test rejects at $p = 0.042$. At $C = 4$ the realized
-resolution floor of the two sided label permutation test is $2/24 = 0.083$, so
-by Proposition \ref{prop:resolution} its nonrejection carries no information at
-the $5\%$ level and only the cluster level procedures of Section
-\ref{sec:cluster} are usable there. In the odd year sub design the chi square
-test returns $p = 0.443$ while the two sided label permutation rejects at
-$p = 0.033$, the reverse of the crime pattern.
+Every rejection anywhere in the health panels comes from the one
+normalization Theorem \ref{thm:exact} does not cover, and none survives the
+correct reference set. The reference category rule fixes its reference at the
+position of the smallest $d_c$, which is not $S_C$-equivariant, and its loading
+guard drops diagnosed diabetes in the annual sub design and high cholesterol
+and no exercise in the odd year sub design. Under it the odd year sub design
+rejects at $p = 0.033$ on the level outcome and under every calibration on the
+log outcome. Where the guard fires, permuting only the survivors conditions on a
+multiset that is not ancillary: Assumption \ref{as:CE} makes the reference set
+the $C_0!/(C_0-C)!$ ordered injections rather than the $C!$ permutations of the
+survivors, and recomputing against it moves the odd year value from $0.033$ to
+$0.062$. Under the two equivariant normalizations nothing rejects on either
+outcome. Given Section \ref{sec:designcalc} none of this is evidence about
+Medicaid expansion, and we report it because a normalization that is not
+equivariant is the failure mode Theorem \ref{thm:exact} is designed to exclude
+and this is what it looks like in data.
 
-Where the guard fires, permuting only the surviving labels conditions on a
-multiset that is not ancillary. Under Assumption \ref{as:CE} the reference set
-for the $C$ surviving arrays is the set of $C_0!/(C_0-C)!$ ordered injections of
-those arrays into the full $C_0$-vector of labels, not the $C!$ permutations of
-the survivors. Recomputing against the injection set moves the annual
-sub design from $0.333$ to $0.317$ over $120$ injections, with realized floor
-$2/120 = 0.017$, and the odd year sub design from $0.033$ to $0.062$ over
-$2{,}520$ injections. The odd year rejection is an artifact of the reference
-set, and neither number is exact for \eqref{eq:null} in the sense of Theorem
-\ref{thm:exact}, because the normalization that made the guard fire is not
-$S_C$-equivariant.
-
-Under the log outcome the odd year sub design rejects under every calibration
-when the reference category normalization is used: chi square $3 \times
-10^{-6}$, Hotelling at $G_{\mathrm{eff}}$ $0.0024$, label permutation $0.017$,
-restricted wild cluster bootstrap $0.021$ and cluster sign change $0.022$. The
-guard does not fire there, so the injection and label reference sets coincide.
-Under the triad and naive normalizations of the same log outcome nothing
-rejects, at chi square $0.213$ and $0.960$ and label permutation $0.485$ and
-$0.965$.
-
-Neither nonrejection is evidence that measurement invariance holds, because in
-both panels the minimum detectable response from \eqref{eq:mde} exceeds the
-magnitude the substantive mechanism implies, by a factor of $3.4$ in the crime
-panel and $17$ in the health panel. Evaluating \eqref{eq:mde} at $\alpha =
-0.05$, $\beta = 0.20$ and each design's own $\Sigma_\delta^2$ and $I_k$, with
-$\sigma^2$ set to the median category residual variance, gives
-$\kappa^{\mathrm{Wald}}_{\mathrm{MDE}} = 0.255$ log points per unit $d$ for the
-crime design at $m = 9$, $\Sigma_\delta^2 = 0.349$ and $I_k = 40.5$ under the
-naive normalization, and $0.326$ under the reference category normalization.
-The recording wedges that the institutional bounds of Section \ref{sec:why} identify as the
-magnitudes that would matter run from $0.008$ to $0.074$ log points per unit
-$d$. For the health sub designs the same expression gives $0.863$ and $0.930$
-percentage points of prevalence per unit $d$ at $m = 7$, $\Sigma_\delta^2 =
-0.958$ and $1.444$ and $I_k = 22.4$ and $13.6$, against a mechanism implied
-response of $0.052$ percentage points for diagnosed diabetes at the estimated
-$1.98$ percentage point coverage gain and an undiagnosed share of $0.213$.
-These values are stated against the chi square critical value, which Section
-\ref{sec:power} shows understates the detectable response of a correctly
-calibrated test.
+The wedge each institution implies is what Section \ref{sec:designcalc}
+compares the minimum detectable response with. For the crime panel the
+institutional bounds of Section \ref{sec:why} put it between $0.008$ and
+$0.074$ log points per unit $d$. For the health panels the mechanism implies
+$0.052$ percentage points for diagnosed diabetes, at the estimated $1.98$
+percentage point coverage gain and an undiagnosed share of $0.213$. Both are
+magnitudes the recording institution makes plausible rather than estimates,
+and both are fixed before any test is run, which is what makes the
+comparison in Section \ref{sec:designcalc} a design question rather than a
+reading of the outcome.
 
 \paragraph{Data availability.} The recorded crime series are the FBI's
 summary based estimated state totals; the NIBRS adoption dates come from the FBI
@@ -2837,6 +2870,23 @@ $\alpha(\cdot) \equiv \alpha$. Standardizing $U$ by $\sqrt{k_P'V^{-1}k_P}$ gives
 $t \sim N(\kappa\sqrt{k_P'V^{-1}k_P},1)$, from which the critical value and the
 stated power function follow.
 \end{proof}
+
+\section*{Declarations}
+
+\noindent\emph{Funding.} This research received no external funding.
+
+\smallskip
+\noindent\emph{Conflicts of interest.} The author declares no conflict
+of interest.
+
+\smallskip
+\noindent\emph{Data and code.} Every series used here is a public use
+file. Sources, the constructed panels and the code that builds them are
+listed under data availability in Section \ref{sec:app}.
+
+\smallskip
+\noindent\emph{Author contributions.} The author is solely responsible
+for the content.
 
 \begin{thebibliography}{99}
 \itemsep 3pt

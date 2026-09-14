@@ -1,0 +1,145 @@
+design,pre_window,k_pre,post_window,k_post,loading,bridge,statistic,C,m,sum_delta2,I_k,G_eff,mde,wedge,ratio,powered
+crime,as run,6,as run,8,none,excluded,wald,6,9,0.3491,40.46,45.92,0.296,0.074,4.0,False
+crime,as run,6,as run,8,none,excluded,directed,6,9,0.3491,40.46,45.92,0.1736,0.074,2.346,False
+crime,as run,6,as run,8,none,included,wald,7,9,0.7686,40.46,45.92,0.1823,0.074,2.464,False
+crime,as run,6,as run,8,none,included,directed,7,9,0.7686,40.46,45.92,0.1109,0.074,1.498,False
+crime,as run,6,as run,8,triad,excluded,wald,6,9,0.3491,40.46,45.92,0.3112,0.074,4.205,False
+crime,as run,6,as run,8,triad,excluded,directed,6,9,0.3491,40.46,45.92,0.1819,0.074,2.458,False
+crime,as run,6,as run,8,triad,included,wald,7,9,0.7686,40.46,45.92,0.19,0.074,2.568,False
+crime,as run,6,as run,8,triad,included,directed,7,9,0.7686,40.46,45.92,0.1154,0.074,1.559,False
+crime,as run,6,five,5,none,excluded,wald,6,6,0.3491,40.46,46.35,0.2731,0.074,3.691,False
+crime,as run,6,five,5,none,excluded,directed,6,6,0.3491,40.46,46.35,0.1739,0.074,2.349,False
+crime,as run,6,five,5,none,included,wald,7,6,0.7686,40.46,46.35,0.1693,0.074,2.288,False
+crime,as run,6,five,5,none,included,directed,7,6,0.7686,40.46,46.35,0.111,0.074,1.5,False
+crime,as run,6,five,5,triad,excluded,wald,6,6,0.3491,40.46,46.35,0.2872,0.074,3.881,False
+crime,as run,6,five,5,triad,excluded,directed,6,6,0.3491,40.46,46.35,0.1823,0.074,2.464,False
+crime,as run,6,five,5,triad,included,wald,7,6,0.7686,40.46,46.35,0.1765,0.074,2.385,False
+crime,as run,6,five,5,triad,included,directed,7,6,0.7686,40.46,46.35,0.1156,0.074,1.562,False
+crime,as run,6,three,3,none,excluded,wald,6,4,0.3491,40.46,46.74,0.2534,0.074,3.424,False
+crime,as run,6,three,3,none,excluded,directed,6,4,0.3491,40.46,46.74,0.1743,0.074,2.355,False
+crime,as run,6,three,3,none,included,wald,7,4,0.7686,40.46,46.74,0.158,0.074,2.135,False
+crime,as run,6,three,3,none,included,directed,7,4,0.7686,40.46,46.74,0.1113,0.074,1.503,False
+crime,as run,6,three,3,triad,excluded,wald,6,4,0.3491,40.46,46.74,0.2666,0.074,3.602,False
+crime,as run,6,three,3,triad,excluded,directed,6,4,0.3491,40.46,46.74,0.1829,0.074,2.472,False
+crime,as run,6,three,3,triad,included,wald,7,4,0.7686,40.46,46.74,0.1648,0.074,2.227,False
+crime,as run,6,three,3,triad,included,directed,7,4,0.7686,40.46,46.74,0.116,0.074,1.567,False
+crime,one,1,as run,8,none,excluded,wald,6,9,0.3491,175.47,42.9,0.1292,0.074,1.746,False
+crime,one,1,as run,8,none,excluded,directed,6,9,0.3491,175.47,42.9,0.0787,0.074,1.064,False
+crime,one,1,as run,8,none,included,wald,7,9,0.7686,175.47,42.9,0.0836,0.074,1.13,False
+crime,one,1,as run,8,none,included,directed,7,9,0.7686,175.47,42.9,0.0517,0.074,0.699,True
+crime,one,1,as run,8,triad,excluded,wald,6,9,0.3491,175.47,42.9,0.1353,0.074,1.828,False
+crime,one,1,as run,8,triad,excluded,directed,6,9,0.3491,175.47,42.9,0.0823,0.074,1.112,False
+crime,one,1,as run,8,triad,included,wald,7,9,0.7686,175.47,42.9,0.087,0.074,1.176,False
+crime,one,1,as run,8,triad,included,directed,7,9,0.7686,175.47,42.9,0.0538,0.074,0.727,True
+crime,one,1,five,5,none,excluded,wald,6,6,0.3491,175.47,44.69,0.12,0.074,1.621,False
+crime,one,1,five,5,none,excluded,directed,6,6,0.3491,175.47,44.69,0.0788,0.074,1.065,False
+crime,one,1,five,5,none,included,wald,7,6,0.7686,175.47,44.69,0.0779,0.074,1.052,False
+crime,one,1,five,5,none,included,directed,7,6,0.7686,175.47,44.69,0.0518,0.074,0.7,True
+crime,one,1,five,5,triad,excluded,wald,6,6,0.3491,175.47,44.69,0.1257,0.074,1.699,False
+crime,one,1,five,5,triad,excluded,directed,6,6,0.3491,175.47,44.69,0.0824,0.074,1.114,False
+crime,one,1,five,5,triad,included,wald,7,6,0.7686,175.47,44.69,0.0811,0.074,1.095,False
+crime,one,1,five,5,triad,included,directed,7,6,0.7686,175.47,44.69,0.0539,0.074,0.728,True
+crime,one,1,three,3,none,excluded,wald,6,4,0.3491,175.47,46.72,0.112,0.074,1.513,False
+crime,one,1,three,3,none,excluded,directed,6,4,0.3491,175.47,46.72,0.0789,0.074,1.067,False
+crime,one,1,three,3,none,included,wald,7,4,0.7686,175.47,46.72,0.0728,0.074,0.984,True
+crime,one,1,three,3,none,included,directed,7,4,0.7686,175.47,46.72,0.0519,0.074,0.701,True
+crime,one,1,three,3,triad,excluded,wald,6,4,0.3491,175.47,46.72,0.1174,0.074,1.586,False
+crime,one,1,three,3,triad,excluded,directed,6,4,0.3491,175.47,46.72,0.0827,0.074,1.117,False
+crime,one,1,three,3,triad,included,wald,7,4,0.7686,175.47,46.72,0.0759,0.074,1.025,False
+crime,one,1,three,3,triad,included,directed,7,4,0.7686,175.47,46.72,0.054,0.074,0.73,True
+medicaid annual,as run,5,as run,6,none,excluded,wald,5,7,0.958,13.88,39.04,1.7107,0.052,32.898,False
+medicaid annual,as run,5,as run,6,none,excluded,directed,5,7,0.958,13.88,39.04,0.9293,0.052,17.871,False
+medicaid annual,as run,5,as run,6,none,included,wald,6,7,1.0721,13.88,39.04,1.822,0.052,35.038,False
+medicaid annual,as run,5,as run,6,none,included,directed,6,7,1.0721,13.88,39.04,0.983,0.052,18.903,False
+medicaid annual,as run,5,as run,6,triad,excluded,wald,5,7,0.958,13.88,39.04,1.7644,0.052,33.932,False
+medicaid annual,as run,5,as run,6,triad,excluded,directed,5,7,0.958,13.88,39.04,0.9544,0.052,18.353,False
+medicaid annual,as run,5,as run,6,triad,included,wald,6,7,1.0721,13.88,39.04,3.2924,0.052,63.315,False
+medicaid annual,as run,5,as run,6,triad,included,directed,6,7,1.0721,13.88,39.04,1.6135,0.052,31.028,False
+medicaid annual,as run,5,five,5,none,excluded,wald,5,6,0.958,13.88,39.04,1.6385,0.052,31.509,False
+medicaid annual,as run,5,five,5,none,excluded,directed,5,6,0.958,13.88,39.04,0.9271,0.052,17.829,False
+medicaid annual,as run,5,five,5,none,included,wald,6,6,1.0721,13.88,39.04,1.7441,0.052,33.54,False
+medicaid annual,as run,5,five,5,none,included,directed,6,6,1.0721,13.88,39.04,0.9807,0.052,18.859,False
+medicaid annual,as run,5,five,5,triad,excluded,wald,5,6,0.958,13.88,39.04,1.6893,0.052,32.487,False
+medicaid annual,as run,5,five,5,triad,excluded,directed,5,6,0.958,13.88,39.04,0.9521,0.052,18.31,False
+medicaid annual,as run,5,five,5,triad,included,wald,6,6,1.0721,13.88,39.04,3.1263,0.052,60.12,False
+medicaid annual,as run,5,five,5,triad,included,directed,6,6,1.0721,13.88,39.04,1.6092,0.052,30.946,False
+medicaid annual,as run,5,three,3,none,excluded,wald,5,4,0.958,13.88,39.04,1.4732,0.052,28.331,False
+medicaid annual,as run,5,three,3,none,excluded,directed,5,4,0.958,13.88,39.04,0.9228,0.052,17.747,False
+medicaid annual,as run,5,three,3,none,included,wald,6,4,1.0721,13.88,39.04,1.5661,0.052,30.118,False
+medicaid annual,as run,5,three,3,none,included,directed,6,4,1.0721,13.88,39.04,0.9761,0.052,18.771,False
+medicaid annual,as run,5,three,3,triad,excluded,wald,5,4,0.958,13.88,39.04,1.5177,0.052,29.186,False
+medicaid annual,as run,5,three,3,triad,excluded,directed,5,4,0.958,13.88,39.04,0.9477,0.052,18.225,False
+medicaid annual,as run,5,three,3,triad,included,wald,6,4,1.0721,13.88,39.04,2.7543,0.052,52.967,False
+medicaid annual,as run,5,three,3,triad,included,directed,6,4,1.0721,13.88,39.04,1.6007,0.052,30.783,False
+medicaid annual,one,1,as run,6,none,excluded,wald,5,7,0.958,23.76,45.97,1.1472,0.052,22.061,False
+medicaid annual,one,1,as run,6,none,excluded,directed,5,7,0.958,23.76,45.97,0.6547,0.052,12.589,False
+medicaid annual,one,1,as run,6,none,included,wald,6,7,1.0721,23.76,45.97,1.2132,0.052,23.33,False
+medicaid annual,one,1,as run,6,none,included,directed,6,7,1.0721,23.76,45.97,0.6889,0.052,13.248,False
+medicaid annual,one,1,as run,6,triad,excluded,wald,5,7,0.958,23.76,45.97,1.1794,0.052,22.681,False
+medicaid annual,one,1,as run,6,triad,excluded,directed,5,7,0.958,23.76,45.97,0.671,0.052,12.904,False
+medicaid annual,one,1,as run,6,triad,included,wald,6,7,1.0721,23.76,45.97,2.0402,0.052,39.235,False
+medicaid annual,one,1,as run,6,triad,included,directed,6,7,1.0721,23.76,45.97,1.0829,0.052,20.825,False
+medicaid annual,one,1,five,5,none,excluded,wald,5,6,0.958,23.76,45.97,1.1033,0.052,21.217,False
+medicaid annual,one,1,five,5,none,excluded,directed,5,6,0.958,23.76,45.97,0.6532,0.052,12.562,False
+medicaid annual,one,1,five,5,none,included,wald,6,6,1.0721,23.76,45.97,1.1663,0.052,22.429,False
+medicaid annual,one,1,five,5,none,included,directed,6,6,1.0721,23.76,45.97,0.6874,0.052,13.22,False
+medicaid annual,one,1,five,5,triad,excluded,wald,5,6,0.958,23.76,45.97,1.134,0.052,21.808,False
+medicaid annual,one,1,five,5,triad,excluded,directed,5,6,0.958,23.76,45.97,0.6696,0.052,12.876,False
+medicaid annual,one,1,five,5,triad,included,wald,6,6,1.0721,23.76,45.97,1.9504,0.052,37.508,False
+medicaid annual,one,1,five,5,triad,included,directed,6,6,1.0721,23.76,45.97,1.0803,0.052,20.775,False
+medicaid annual,one,1,three,3,none,excluded,wald,5,4,0.958,23.76,45.97,1.0017,0.052,19.264,False
+medicaid annual,one,1,three,3,none,excluded,directed,5,4,0.958,23.76,45.97,0.6505,0.052,12.509,False
+medicaid annual,one,1,three,3,none,included,wald,6,4,1.0721,23.76,45.97,1.0579,0.052,20.345,False
+medicaid annual,one,1,three,3,none,included,directed,6,4,1.0721,23.76,45.97,0.6845,0.052,13.163,False
+medicaid annual,one,1,three,3,triad,excluded,wald,5,4,0.958,23.76,45.97,1.029,0.052,19.789,False
+medicaid annual,one,1,three,3,triad,excluded,directed,5,4,0.958,23.76,45.97,0.6667,0.052,12.821,False
+medicaid annual,one,1,three,3,triad,included,wald,6,4,1.0721,23.76,45.97,1.7459,0.052,33.575,False
+medicaid annual,one,1,three,3,triad,included,directed,6,4,1.0721,23.76,45.97,1.0752,0.052,20.677,False
+medicaid odd year,as run,5,as run,6,none,excluded,wald,7,7,1.4436,9.02,19.43,1.8632,0.052,35.832,False
+medicaid odd year,as run,5,as run,6,none,excluded,directed,7,7,1.4436,9.02,19.43,0.9964,0.052,19.162,False
+medicaid odd year,as run,5,as run,6,none,included,wald,8,7,1.6947,9.02,19.43,1.8892,0.052,36.33,False
+medicaid odd year,as run,5,as run,6,none,included,directed,8,7,1.6947,9.02,19.43,1.0104,0.052,19.431,False
+medicaid odd year,as run,5,as run,6,triad,excluded,wald,7,7,1.4436,9.02,19.43,2.7672,0.052,53.216,False
+medicaid odd year,as run,5,as run,6,triad,excluded,directed,7,7,1.4436,9.02,19.43,1.3882,0.052,26.696,False
+medicaid odd year,as run,5,as run,6,triad,included,wald,8,7,1.6947,9.02,19.43,2.1041,0.052,40.463,False
+medicaid odd year,as run,5,as run,6,triad,included,directed,8,7,1.6947,9.02,19.43,1.1074,0.052,21.296,False
+medicaid odd year,as run,5,five,5,none,excluded,wald,7,6,1.4436,9.02,19.43,1.7769,0.052,34.172,False
+medicaid odd year,as run,5,five,5,none,excluded,directed,7,6,1.4436,9.02,19.43,0.9915,0.052,19.068,False
+medicaid odd year,as run,5,five,5,none,included,wald,8,6,1.6947,9.02,19.43,1.8017,0.052,34.649,False
+medicaid odd year,as run,5,five,5,none,included,directed,8,6,1.6947,9.02,19.43,1.0054,0.052,19.335,False
+medicaid odd year,as run,5,five,5,triad,excluded,wald,7,6,1.4436,9.02,19.43,2.6239,0.052,50.459,False
+medicaid odd year,as run,5,five,5,triad,excluded,directed,7,6,1.4436,9.02,19.43,1.3808,0.052,26.554,False
+medicaid odd year,as run,5,five,5,triad,included,wald,8,6,1.6947,9.02,19.43,2.0038,0.052,38.535,False
+medicaid odd year,as run,5,five,5,triad,included,directed,8,6,1.6947,9.02,19.43,1.1018,0.052,21.189,False
+medicaid odd year,as run,5,three,3,none,excluded,wald,7,4,1.4436,9.02,19.43,1.5839,0.052,30.46,False
+medicaid odd year,as run,5,three,3,none,excluded,directed,7,4,1.4436,9.02,19.43,0.9819,0.052,18.883,False
+medicaid odd year,as run,5,three,3,none,included,wald,8,4,1.6947,9.02,19.43,1.6062,0.052,30.888,False
+medicaid odd year,as run,5,three,3,none,included,directed,8,4,1.6947,9.02,19.43,0.9956,0.052,19.147,False
+medicaid odd year,as run,5,three,3,triad,excluded,wald,7,4,1.4436,9.02,19.43,2.3079,0.052,44.383,False
+medicaid odd year,as run,5,three,3,triad,excluded,directed,7,4,1.4436,9.02,19.43,1.3663,0.052,26.275,False
+medicaid odd year,as run,5,three,3,triad,included,wald,8,4,1.6947,9.02,19.43,1.7804,0.052,34.238,False
+medicaid odd year,as run,5,three,3,triad,included,directed,8,4,1.6947,9.02,19.43,1.0909,0.052,20.979,False
+medicaid odd year,one,1,as run,6,none,excluded,wald,7,7,1.4436,12.92,8.02,1.404,0.052,27.001,False
+medicaid odd year,one,1,as run,6,none,excluded,directed,7,7,1.4436,12.92,8.02,0.7803,0.052,15.005,False
+medicaid odd year,one,1,as run,6,none,included,wald,8,7,1.6947,12.92,8.02,1.4234,0.052,27.374,False
+medicaid odd year,one,1,as run,6,none,included,directed,8,7,1.6947,12.92,8.02,0.7909,0.052,15.21,False
+medicaid odd year,one,1,as run,6,triad,excluded,wald,7,7,1.4436,12.92,8.02,2.0497,0.052,39.417,False
+medicaid odd year,one,1,as run,6,triad,excluded,directed,7,7,1.4436,12.92,8.02,1.0806,0.052,20.78,False
+medicaid odd year,one,1,as run,6,triad,included,wald,8,7,1.6947,12.92,8.02,1.5867,0.052,30.514,False
+medicaid odd year,one,1,as run,6,triad,included,directed,8,7,1.6947,12.92,8.02,0.8694,0.052,16.72,False
+medicaid odd year,one,1,five,5,none,excluded,wald,7,6,1.4436,12.92,8.02,1.3438,0.052,25.842,False
+medicaid odd year,one,1,five,5,none,excluded,directed,7,6,1.4436,12.92,8.02,0.7767,0.052,14.937,False
+medicaid odd year,one,1,five,5,none,included,wald,8,6,1.6947,12.92,8.02,1.3624,0.052,26.199,False
+medicaid odd year,one,1,five,5,none,included,directed,8,6,1.6947,12.92,8.02,0.7873,0.052,15.141,False
+medicaid odd year,one,1,five,5,triad,excluded,wald,7,6,1.4436,12.92,8.02,1.9526,0.052,37.549,False
+medicaid odd year,one,1,five,5,triad,excluded,directed,7,6,1.4436,12.92,8.02,1.0753,0.052,20.679,False
+medicaid odd year,one,1,five,5,triad,included,wald,8,6,1.6947,12.92,8.02,1.5168,0.052,29.169,False
+medicaid odd year,one,1,five,5,triad,included,directed,8,6,1.6947,12.92,8.02,0.8654,0.052,16.642,False
+medicaid odd year,one,1,three,3,none,excluded,wald,7,4,1.4436,12.92,8.02,1.2077,0.052,23.225,False
+medicaid odd year,one,1,three,3,none,excluded,directed,7,4,1.4436,12.92,8.02,0.7697,0.052,14.803,False
+medicaid odd year,one,1,three,3,none,included,wald,8,4,1.6947,12.92,8.02,1.2244,0.052,23.546,False
+medicaid odd year,one,1,three,3,none,included,directed,8,4,1.6947,12.92,8.02,0.7803,0.052,15.005,False
+medicaid odd year,one,1,three,3,triad,excluded,wald,7,4,1.4436,12.92,8.02,1.7358,0.052,33.382,False
+medicaid odd year,one,1,three,3,triad,excluded,directed,7,4,1.4436,12.92,8.02,1.065,0.052,20.48,False
+medicaid odd year,one,1,three,3,triad,included,wald,8,4,1.6947,12.92,8.02,1.3593,0.052,26.14,False
+medicaid odd year,one,1,three,3,triad,included,directed,8,4,1.6947,12.92,8.02,0.8575,0.052,16.49,False
