@@ -1004,7 +1004,8 @@ crosses are the measured rejection rates at $m = 13$ and $C = 5$ from Table
 \ref{tab:size}, at $G = 20$, $30$, $51$ and $100$ reading down, over $2{,}000$
 replications each with a Monte Carlo standard error of at most $0.011$. They
 lie above the corresponding curves because the simulated design gives
-$G_{\mathrm{eff}} = 0.727\,G$ rather than the equal cluster weights of
+$G_{\mathrm{eff}}$ between $0.7142\,G$ and $0.7273\,G$ rather than the
+equal cluster weights of
 Assumption \ref{as:I}(ii). Sources:
 \texttt{results/inference/anatomy\_expansion.csv},
 \texttt{results/inference/size\_table.csv} and
@@ -2664,10 +2665,24 @@ reindexing by $j = \pi(c)$ turns this into
 $\{(\delta_j,\mathcal{Y}_{\pi^{-1}(j)})\}_j$.
 
 Under Assumption \ref{as:CE}, $\mathcal{D}_{\pi^{-1}} \overset{d}{=}
-\mathcal{D}$ conditional on $\mathcal{Z}$ for each fixed $\pi$. Since $S_C$ is a
-finite group acting on the index set, the vector $(T(\pi))_{\pi \in S_C}$ is
-exchangeable conditional on $\mathcal{Z}$: for any $\sigma \in S_C$,
-$(T(\sigma\pi))_{\pi} \overset{d}{=} (T(\pi))_{\pi}$.
+\mathcal{D}$ conditional on $\mathcal{Z}$ for each fixed $\pi$. The invariance
+the argument needs is under right translation of the index. Writing
+$f(\cdot) = \mathcal{T}(\cdot,\delta)$, so that $T(\pi) =
+f(\mathcal{D}_{\pi^{-1}})$, the substitution $\pi \mapsto \pi\sigma$ gives
+$$
+T(\pi\sigma) = f\big(\mathcal{D}_{(\pi\sigma)^{-1}}\big)
+              = f\big(\mathcal{D}_{\sigma^{-1}\pi^{-1}}\big)
+              = f\big((\mathcal{D}_{\sigma^{-1}})_{\pi^{-1}}\big),
+$$
+so $(T(\pi\sigma))_{\pi}$ is the same fixed measurable function of
+$\mathcal{D}_{\sigma^{-1}}$ that $(T(\pi))_{\pi}$ is of $\mathcal{D}$. By
+Assumption \ref{as:CE}, $\mathcal{D}_{\sigma^{-1}} \overset{d}{=}
+\mathcal{D}$ conditional on $\mathcal{Z}$, whence
+$(T(\pi\sigma))_{\pi} \overset{d}{=} (T(\pi))_{\pi}$ for every
+$\sigma \in S_C$. Left translation does not have this property, since
+$T(\sigma\pi) = f(\mathcal{D}_{\pi^{-1}\sigma^{-1}})$ is not a fixed function
+of any one relabelling of $\mathcal{D}$, and it is right translation that the
+counting below uses.
 
 We bound $\Pr(\hat{p} \le \alpha)$ for the $\hat{p}$ of Definition
 \ref{def:perm} directly, which covers ties. For $\sigma \in S_C$ put
@@ -2680,10 +2695,12 @@ T(\sigma^*)\}$ and $|\mathcal{A}| \le N(\sigma^*) \le \alpha M$, hence
 $|\mathcal{A}| \le \lfloor \alpha M \rfloor$ because $|\mathcal{A}|$ is an
 integer. Write $\phi(t) = \mathbf{1}\{\#\{\pi : t_\pi \ge t_{\mathrm{id}}\}
 \le \alpha M\}$ for a vector $t$ indexed by $S_C$, so that the rejection
-indicator is $\phi\big((T(\pi))_\pi\big)$. Because $\pi \mapsto \sigma\pi$ is
-a bijection, $\phi\big((T(\sigma\pi))_\pi\big) = \mathbf{1}\{N(\sigma) \le
+indicator is $\phi\big((T(\pi))_\pi\big)$. Because $\pi \mapsto \pi\sigma$ is
+a bijection of $S_C$, the vector $(T(\pi\sigma))_\pi$ carries $T(\sigma)$ in
+its identity coordinate and the same multiset of values, so
+$\phi\big((T(\pi\sigma))_\pi\big) = \mathbf{1}\{N(\sigma) \le
 \alpha M\}$, and summing over $\sigma$ gives $\sum_{\sigma \in S_C}
-\phi\big((T(\sigma\pi))_\pi\big) = |\mathcal{A}|$. Taking expectations
+\phi\big((T(\pi\sigma))_\pi\big) = |\mathcal{A}|$. Taking expectations
 conditional on $\mathcal{Z}$ and applying exchangeability to each term,
 $$
 M \Pr(\hat{p} \le \alpha \mid \mathcal{Z})
@@ -2755,7 +2772,10 @@ $|\mathrm{Stab}(\delta)|/C! \le \alpha$ otherwise, which reduce to $2/C! \le
 For the first claim, replace $S_C$ in the proof of Theorem \ref{thm:exact} by
 the finite group $\mathcal{E} = \{-1,+1\}^G$ acting by coordinatewise sign
 change. That proof uses only finiteness of the group and invariance of the data
-law under it, both of which the sign symmetry hypothesis supplies.
+law under right translation by each of its elements, both of which the sign
+symmetry hypothesis supplies. $\mathcal{E}$ is abelian, so the distinction
+between left and right translation that the proof of Theorem \ref{thm:exact}
+turns on is vacuous here.
 
 For the second claim, let $u_{gc}$ denote the cluster-$g$ category-$c$ errors
 under \eqref{eq:null}, taken before the two way within transformation, and build
