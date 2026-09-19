@@ -65,7 +65,8 @@ response from data on the recording process itself.
 ## Layout
 
 ```
-paper/                             main.tex and the compiled PDF
+paper/                             main.tex, supplement.tex and both PDFs
+paper/build_supplement.py          splits the proofs out of main.tex
 src/did_measurement/               estimators, inference, diagnostics
 scripts/                           analysis and verification scripts
 scripts/coverage_zero.py           coverage under a hand-built interval
@@ -83,9 +84,13 @@ tests/test_core.py                 69 checks
 
 ```
 pip install -r requirements.txt
-python tests/test_core.py
-python scripts/coverage_zero_ref.py
+PYTHONPATH=src python tests/test_core.py
+PYTHONPATH=src python scripts/coverage_zero_ref.py
 ```
+
+The paper is two documents. Compile `paper/main.tex` first; `paper/supplement.tex`
+resolves its references to theorems and equations through `main.aux` and will show
+unresolved marks if built on its own.
 
 `oa_studentized.py` and `oa_onefactor_calib.py` are self-contained and run
 from a clean checkout. `oa_onefactor.py` reads the two application panels from
