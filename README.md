@@ -65,7 +65,10 @@ response from data on the recording process itself.
 ## Layout
 
 ```
-paper/                             main.tex, supplement.tex and both PDFs
+paper/main.tex                     the manuscript, with author details
+paper/main_anon.tex                the anonymous manuscript for review
+paper/supplement.tex               the online Appendix
+paper/supplement_anon.tex          the anonymous online Appendix
 paper/build_supplement.py          splits the proofs out of main.tex
 src/did_measurement/               estimators, inference, diagnostics
 src/did_measurement/api.py         screen_design and falsification_test
@@ -122,9 +125,12 @@ PYTHONPATH=src python scripts/coverage_zero_ref.py
 PYTHONPATH=src python scripts/oa_staggered.py
 ```
 
-The paper is two documents. Compile `paper/main.tex` first; `paper/supplement.tex`
-resolves its references to theorems and equations through `main.aux` and will show
-unresolved marks if built on its own.
+The manuscript is formatted to the ASA and JBES requirements: 12 point, one
+inch margins, double spaced throughout. JBES uses double-anonymous review and
+asks for two PDFs, so each document has an anonymous twin. The four files build
+independently and in any order; the journal forbids LaTeX cross-referencing
+between the paper and the online Appendix, so the Appendix carries the numbers
+it cites rather than resolving them.
 
 `oa_studentized.py` and `oa_onefactor_calib.py` are self-contained and run
 from a clean checkout. `oa_onefactor.py` reads the two application panels from
