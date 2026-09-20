@@ -76,9 +76,8 @@ changes, exact under sign symmetry of the cluster contributions; and the
 restricted wild cluster bootstrap. Label randomization carries a resolution
 floor that requires at least five categories at the five percent level. Whether
 a design can detect the recording change its institution implies is computable
-before the outcome is examined, and in a specification that can, the move to
-incident based reporting leaves no cross category gradient in recorded index
-crime.
+before the outcome is examined, and in a specification that can, the data exclude a
+recording response as large as the move to incident based reporting implies.
 \end{abstract}
 
 \smallskip
@@ -170,9 +169,7 @@ the twelve cells of Table \ref{tab:size}. The rule itself is computable before
 any outcome is observed, since the distortion is governed jointly by the number
 of restrictions and the number of clusters, and the chi square calibration is
 valid only when the former grows more slowly than the two thirds power of the
-latter. Along sequences on which $m^{3/2}/G$ converges to a positive constant
-the size converges to a limit strictly above the nominal level, and when $m/G$
-converges to a positive fraction it converges to one. At $36.4$ effective
+latter. At $36.4$ effective
 clusters, for example, size stays below $0.075$ only when two or fewer
 restrictions are imposed.
 
@@ -218,9 +215,19 @@ cluster is a single unit, which is the case in both applications here, but its
 null rejection rate rises to $0.094$ when clusters hold five correlated units
 and to $0.086$ when their sizes are unequal, so we do not recommend it without
 a design in which \eqref{eq:null} leaves the cluster contributions close to
-sign symmetric.
+sign symmetric. The two sided sign change test is far less affected in
+the same two designs, at $0.057$ and $0.063$, so a cluster holding several units
+is a reason to give up the power of the directed statistic rather than the cluster
+level calibration.
 
-The rest of the paper is organized as follows. Section \ref{sec:why} studies what a pre trend test and a pre trend calibrated sensitivity analysis can reveal about a recording response. Section \ref{sec:setup} states the design and the null. Sections \ref{sec:anatomy} to \ref{sec:power} give the exact null law, the three calibrations and the power results. Section \ref{sec:sim} reports size and power, and Section \ref{sec:app} applies the procedures to two panels. Proofs and further evidence are in the supplement.
+A falsification test is worth running only against responses it could
+detect, and whether it can is computable before any outcome is examined. We
+give that calculation and run it over forty eight specifications of each panel.
+Seven crime specifications are adequate and none rejects, which excludes a
+recording response at the magnitude the transition implies. No health
+specification is adequate.
+
+The rest of the paper is organized as follows. Section \ref{sec:why} studies what a pre trend test and a pre trend calibrated sensitivity analysis can reveal about a recording response. Section \ref{sec:setup} states the design and the null. Sections \ref{sec:anatomy} to \ref{sec:power} give the exact null law, the three calibrations and the power results. Section \ref{sec:sim} reports size and power, Section \ref{sec:designcalc} screens a design before the outcome is examined, and Section \ref{sec:app} applies the procedures to two panels. Proofs and further evidence are in the supplement.
 
 \section{Related work}
 
@@ -569,7 +576,8 @@ recording map to enter additively with a path indexed by event time; a map that
 responds to the level of the latent outcome is not covered. Lemma \ref{lem:oe}
 and Corollary \ref{cor:blind} do not require latent parallel trends, but
 Proposition \ref{prop:rm} is stated for a single adoption cohort, and the
-extension to staggered designs is not proved here. And the argument is about
+extension to staggered designs is not proved here, though the supplement
+reports the same collapse in a three cohort design. And the argument is about
 what pre treatment data can reveal; it says nothing against sensitivity analysis
 whose bound comes from outside the event study coefficients, which is the
 practice the last row of Table \ref{tab:cov} supports and which
@@ -1643,17 +1651,7 @@ Monte Carlo standard error at a rate of $0.5$ is $0.020$. Sources:
 \end{spacing}
 \end{table}
 
-\section{Application}
-\label{sec:app}
-
-We apply the procedures to two state panels assembled for the study of
-treatment induced recording change. The identification claim in each case is
-that under measurement invariance the post treatment event study coefficients do
-not vary with the exposure index, so \eqref{eq:null} holds. The application is
-illustrative of the inference problem rather than a contribution to either
-substantive literature.
-
-\subsection{What the design has to satisfy}
+\section{What the design has to satisfy}
 \label{sec:designcalc}
 
 A falsification test is worth running only against responses it could detect,
@@ -1679,7 +1677,15 @@ The fourth is the exposure spread, and the cheapest way to widen it is a
 category the recording system has no discretion over, which anchors the low end
 of $d$ at zero.
 
-Applying the four to the crime panel moves $\kappa_{\mathrm{MDE}}/
+\section{Application}
+\label{sec:app}
+
+We apply the procedures to two state panels assembled for the study of
+treatment induced recording change. The identification claim in each case is
+that under measurement invariance the post treatment event study coefficients do
+not vary with the exposure index, so \eqref{eq:null} holds.
+
+Applying the four levers of Section \ref{sec:designcalc} to the crime panel moves $\kappa_{\mathrm{MDE}}/
 \kappa^{\mathrm{inst}}$ from $4.21$ at the specification of Section
 \ref{sec:app} to $0.699$. Homicide, which the panel already carries and which
 the specification of Section \ref{sec:app} holds out as a $d = 0$ series, more
@@ -1691,7 +1697,7 @@ $C = 7$, $m = 9$ and $G_{\mathrm{eff}} = 42.9$. That closed form tracks the
 cluster sign change and bootstrap calibrations and understates the label
 permutation test, whose price of randomization inflates it by $1.166$ at
 $C = 7$, so the adequacy claim is better read at $\kappa_{\mathrm{MDE}} = 0.061$
-and a ratio of $0.818$. All seven remain adequate at the inflated value.
+and a ratio of $0.818$, at which all seven remain adequate.
 
 None of the seven rejects. Over the certified specifications the label
 permutation test returns $p$ values between $0.359$ and $0.559$, the cluster
@@ -1699,10 +1705,12 @@ sign change test between $0.221$ and $0.585$ and the restricted wild cluster
 bootstrap between $0.164$ and $0.220$, against an attainable floor of $0.001$.
 The chi square calibration returns between $0.059$ and $0.159$ and is the only
 one that comes near rejecting, which is the distortion of Section
-\ref{sec:anatomy} rather than evidence. The conclusion is a null with content:
-in a design that would detect a flat recording response of $0.052$ log points
-per unit of discretion four times in five, the move to incident based reporting
-leaves no cross category gradient in recorded index crime.
+\ref{sec:anatomy} rather than evidence. The conclusion is an exclusion rather than a silence. The wedge the
+transition implies, $\kappa^{\mathrm{inst}} = 0.074$, exceeds the $0.061$ the certified
+specification detects four times in five, so a response of that magnitude would
+have been found with probability at least $0.80$ and was not. The move to incident based reporting leaves no cross
+category gradient in recorded index crime, and the data are evidence against a
+recording response of that size rather than silent about one.
 
 The same calculation screens the health panels out. Neither reaches an adequate
 specification at any of the forty eight, the best ratios being $12.5$ in the
@@ -1828,7 +1836,8 @@ sizes in Table \ref{tab:size} are $0.043$--$0.059$, $0.022$--$0.066$ and
 $0.051$--$0.067$ at $C \in \{5,8\}$.
 
 Three limitations bound what we claim. Proposition \ref{prop:rm} is proved only
-for a single adoption cohort. Proposition \ref{prop:anatomy} requires equal
+for a single adoption cohort, where the supplement shows by simulation that the
+conclusion survives staggering. Proposition \ref{prop:anatomy} requires equal
 design weights, which no design we study satisfies, so we use it to explain the
 distortion rather than to replace it. Assumption \ref{as:CE} fails when
 categories have different error variances. In a Gaussian limit experiment with a
@@ -1874,6 +1883,7 @@ listed under data availability in Section \ref{sec:app}.
 \noindent\emph{Author contributions.} The author is solely responsible
 for the content.
 
+{\small
 \begin{thebibliography}{99}
 \itemsep 0pt
 
@@ -2075,5 +2085,6 @@ importance of crime reporting sensitivity bias. \emph{Journal of Law and
 Empirical Analysis} 1(1), 1--17.
 
 \end{thebibliography}
+}
 
 \end{document}

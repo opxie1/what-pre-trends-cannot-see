@@ -68,24 +68,58 @@ response from data on the recording process itself.
 paper/                             main.tex, supplement.tex and both PDFs
 paper/build_supplement.py          splits the proofs out of main.tex
 src/did_measurement/               estimators, inference, diagnostics
+src/did_measurement/api.py         screen_design and falsification_test
 scripts/                           analysis and verification scripts
 scripts/coverage_zero.py           coverage under a hand-built interval
 scripts/coverage_zero_ref.py       coverage under a reference implementation
 scripts/oa_studentized.py          exchangeability failure, priced two ways
 scripts/oa_onefactor.py            is the one-factor premise of (6.1) credible
 scripts/oa_onefactor_calib.py      calibration check for the above
+scripts/oa_staggered.py            does the blindness result survive staggering
 results/inference/                 simulated size and power
 results/coverage/                  coverage under a recording response
 results/empirics/                  application p-values and floors
 tests/test_core.py                 69 checks
 ```
 
+## Using the method on your own panel
+
+Install the package and call it once. The entry point answers the two questions
+in the order the paper says to ask them: whether the design can detect the
+response the institution implies, and only then whether the test rejects.
+
+```
+pip install -e .
+```
+
+```python
+from did_measurement import screen_design, falsification_test
+
+# kappa_inst is the recording wedge the institution implies, per unit of
+# discretion, on the scale of the outcome.
+verdict = screen_design(panel, kappa_inst=0.074)
+print(verdict)          # minimum detectable response, G_eff, chi square size
+
+if verdict.adequate:
+    result = falsification_test(panel, kappa_inst=0.074)
+    print(result.pvalue, result.calibration)
+```
+
+The reported p-value always comes from a randomisation calibration. The chi
+square p-value is carried in `result.all_pvalues` for comparison and is never
+the one reported, because its null rejection rate at these designs is the
+distortion the paper is about. When the number of categories puts the label
+permutation floor above the level, the entry point switches to the bootstrap and
+says so. A non-rejection from a design the screen did not certify is flagged as
+what it is.
+
 ## Reproducing
 
 ```
-pip install -r requirements.txt
+pip install -e ".[replication]"
 PYTHONPATH=src python tests/test_core.py
 PYTHONPATH=src python scripts/coverage_zero_ref.py
+PYTHONPATH=src python scripts/oa_staggered.py
 ```
 
 The paper is two documents. Compile `paper/main.tex` first; `paper/supplement.tex`

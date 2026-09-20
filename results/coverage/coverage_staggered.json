@@ -1,0 +1,172 @@
+{
+ "runs": [
+  {
+   "n_units": 400,
+   "reps": 200,
+   "cohorts": [
+    6,
+    8,
+    10
+   ],
+   "cohort_shares": [
+    0.2,
+    0.2,
+    0.2
+   ],
+   "mean_Mhat_upperBound_Mpre": 0.5375827030346916,
+   "mean_max_abs_pre_coef": 0.15406080703733305,
+   "coverage_latent_RM": {
+    "0.5": 0.3,
+    "1.0": 0.735,
+    "2.0": 0.955
+   },
+   "coverage_latent_SD_precalibrated": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 200,
+    "RM:1.0": 200,
+    "RM:2.0": 200,
+    "SD:precal": 200,
+    "SD:inst": 200
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 1600,
+   "reps": 200,
+   "cohorts": [
+    6,
+    8,
+    10
+   ],
+   "cohort_shares": [
+    0.2,
+    0.2,
+    0.2
+   ],
+   "mean_Mhat_upperBound_Mpre": 0.2728750490468699,
+   "mean_max_abs_pre_coef": 0.0726888202922889,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.15,
+    "2.0": 0.645
+   },
+   "coverage_latent_SD_precalibrated": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 200,
+    "RM:1.0": 200,
+    "RM:2.0": 200,
+    "SD:precal": 200,
+    "SD:inst": 200
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 6400,
+   "reps": 200,
+   "cohorts": [
+    6,
+    8,
+    10
+   ],
+   "cohort_shares": [
+    0.2,
+    0.2,
+    0.2
+   ],
+   "mean_Mhat_upperBound_Mpre": 0.1369919523621199,
+   "mean_max_abs_pre_coef": 0.03852974380487725,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.085
+   },
+   "coverage_latent_SD_precalibrated": 1.0,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 200,
+    "RM:1.0": 200,
+    "RM:2.0": 200,
+    "SD:precal": 200,
+    "SD:inst": 200
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 25600,
+   "reps": 100,
+   "cohorts": [
+    6,
+    8,
+    10
+   ],
+   "cohort_shares": [
+    0.2,
+    0.2,
+    0.2
+   ],
+   "mean_Mhat_upperBound_Mpre": 0.06528781869917001,
+   "mean_max_abs_pre_coef": 0.018699024323270856,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_SD_precalibrated": 0.88,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 100,
+    "RM:1.0": 100,
+    "RM:2.0": 100,
+    "SD:precal": 100,
+    "SD:inst": 100
+   },
+   "coverage_observed_effect_RM1": 1.0
+  },
+  {
+   "n_units": 102400,
+   "reps": 50,
+   "cohorts": [
+    6,
+    8,
+    10
+   ],
+   "cohort_shares": [
+    0.2,
+    0.2,
+    0.2
+   ],
+   "mean_Mhat_upperBound_Mpre": 0.03436165000496824,
+   "mean_max_abs_pre_coef": 0.009481064613251418,
+   "coverage_latent_RM": {
+    "0.5": 0.0,
+    "1.0": 0.0,
+    "2.0": 0.0
+   },
+   "coverage_latent_SD_precalibrated": 0.04,
+   "coverage_latent_SD_institutional": 1.0,
+   "n_usable": {
+    "RM:0.5": 50,
+    "RM:1.0": 50,
+    "RM:2.0": 50,
+    "SD:precal": 50,
+    "SD:inst": 50
+   },
+   "coverage_observed_effect_RM1": 1.0
+  }
+ ],
+ "latent": 1.0,
+ "wedge": 0.6,
+ "ell_star": 3,
+ "cohorts": [
+  6,
+  8,
+  10
+ ],
+ "cohort_shares": [
+  0.2,
+  0.2,
+  0.2
+ ]
+}

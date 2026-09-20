@@ -601,6 +601,45 @@ check("R16: the pre-registered A10 p-value is the max of the two valid "
       f"boot {_pre['pvalue_boot']:.4f}, Satterthwaite "
       f"{_pre['pvalue_satterthwaite']:.4f}, reported {_pre['pvalue']:.4f}")
 
+
+# ---- R17-R19  the entry point a reader of the paper calls
+from did_measurement import screen_design, falsification_test   # noqa: E402
+from did_measurement.inference import effective_clusters        # noqa: E402
+
+_api_cfg = dict(n_units=240, n_periods=24, cohorts=(8, 12, 16),
+                cohort_shares=(0.2, 0.2, 0.2), tau_level=1.0, kappa=0.0)
+_api8 = generate_panel(DGPConfig(
+    n_categories=8, discretion=tuple(0.1 + 0.9 * i / 7 for i in range(8)),
+    seed=11, **_api_cfg))
+_api3 = generate_panel(DGPConfig(
+    n_categories=3, discretion=(0.1, 0.5, 1.0), seed=11, **_api_cfg))
+
+_v8 = screen_design(_api8, kappa_inst=0.30, k_pre=5, k_post=5)
+_comp8 = gradient_components(_api8, k_pre=5, k_post=5)
+check("R17: the design screen reports the same effective cluster count and "
+      "number of restrictions as the components it is built from",
+      abs(_v8.G_eff - effective_clusters(_comp8)) < 1e-9
+      and _v8.m == len(_comp8["post"]) and _v8.C == int(_comp8["C"]),
+      f"G_eff {_v8.G_eff:.3f}, m {_v8.m}, C {_v8.C}")
+
+_v3 = screen_design(_api3, kappa_inst=0.30, k_pre=5, k_post=5)
+check("R18: the resolution floor 2/C! rules the label permutation test out at "
+      "C = 3 and leaves it usable at C = 8",
+      (not _v3.label_permutation_usable) and _v8.label_permutation_usable
+      and abs(_v3.resolution_floor - 2.0 / 6.0) < 1e-12,
+      f"floor at C=3 is {_v3.resolution_floor:.4f}, at C=8 "
+      f"{_v8.resolution_floor:.6f}")
+
+_r8 = falsification_test(_api8, kappa_inst=0.30, k_pre=5, k_post=5, seed=3)
+_r3 = falsification_test(_api3, kappa_inst=0.30, k_pre=5, k_post=5, seed=3)
+check("R19: the reported p-value is a randomisation calibration, never the chi "
+      "square one, and the floor switches C = 3 to the bootstrap",
+      "chi" not in _r8.calibration.lower() and "chi" not in _r3.calibration.lower()
+      and _r8.pvalue == _r8.all_pvalues["perm_wald"]
+      and _r3.pvalue == _r3.all_pvalues["wcb_wald"],
+      f"C=8 via {_r8.calibration.split(',')[0]}, "
+      f"C=3 via {_r3.calibration.split(',')[0]}")
+
 # ----------------------------------------------------------------
 print()
 if FAILURES:

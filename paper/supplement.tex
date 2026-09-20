@@ -1177,6 +1177,78 @@ Assumption \ref{as:I}(ii). Sources:
 \end{minipage}
 \end{figure}
 
+\section{Staggered adoption}
+\label{app:staggered}
+
+Proposition \ref{prop:rm} is stated for a single adoption cohort. The
+construction behind it is a statement about one cohort's pre period, and with
+several cohorts the comparisons that identify a later cohort before it adopts
+can involve units that have already adopted and therefore already carry the
+recording wedge. If that channel leaves a pre period signature, a pre period
+calibration can see the recording response after all and the blindness result is
+weaker under staggering than Table \ref{tab:cov} suggests.
+
+Table \ref{tab:stag} settles the question by simulation. It repeats the
+experiment of Table \ref{tab:cov} with one change: three cohorts adopt at
+periods $6$, $8$ and $10$ with $40$ percent of units never treated, in place of
+one cohort adopting at period $8$ with half the units never treated. The
+estimator, the reference implementation of the honest sets, the calibration of
+the smoothness bound, the latent effect, the recording wedge and the target
+horizon are all held fixed, so the two tables are comparable cell for cell.
+
+\begin{table}[t]
+\centering
+\caption{Coverage of the latent effect under a recording response, staggered
+adoption. Three cohorts adopting at periods $6$, $8$ and $10$, $40$ percent
+never treated, latent effect $1.0$, recording wedge $0.6$ at the target horizon,
+nominal $95\%$. The column $\max|\hat\beta_{\mathrm{pre}}|$ is the mean over
+replications of the largest pre treatment event study coefficient in absolute
+value. Everything else follows Table \ref{tab:cov}. Source:
+\texttt{results/coverage/coverage\_staggered.json}, produced by
+\texttt{scripts/oa\_staggered.py}.}
+\label{tab:stag}
+\begin{tabular}{rrrrccccc}
+\toprule
+& & & & \multicolumn{3}{c}{$\Delta^{\mathrm{RM}}(\bar M)$}
+& \multicolumn{2}{c}{$\Delta^{\mathrm{SD}}(M)$} \\
+\cmidrule(lr){5-7}\cmidrule(lr){8-9}
+$N$ & reps & $\widehat M$ & $\max|\hat\beta_{\mathrm{pre}}|$
+& $\bar M = 0.5$ & $\bar M = 1$ & $\bar M = 2$
+& $M = \widehat M$ & institutional \\
+\midrule
+$400$ & $200$ & $0.5376$ & $0.1541$ & $0.300$ & $0.735$ & $0.955$ & $1.000$ & $1.000$ \\
+$1{,}600$ & $200$ & $0.2729$ & $0.0727$ & $0.000$ & $0.150$ & $0.645$ & $1.000$ & $1.000$ \\
+$6{,}400$ & $200$ & $0.1370$ & $0.0385$ & $0.000$ & $0.000$ & $0.085$ & $1.000$ & $1.000$ \\
+$25{,}600$ & $100$ & $0.0653$ & $0.0187$ & $0.000$ & $0.000$ & $0.000$ & $0.880$ & $1.000$ \\
+$102{,}400$ & $50$ & $0.0344$ & $0.0095$ & $0.000$ & $0.000$ & $0.000$ & $0.040$ & $1.000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The collapse is the same and arrives sooner. Every relative magnitudes column
+reaches zero coverage of the latent effect one sample size earlier than it does
+in Table \ref{tab:cov}, the smoothness class calibrated from the pre period
+fails at $N = 102{,}400$ rather than at $N = 409{,}600$, and the bound set from
+the recording institution holds at $1.000$ throughout. The calibrated bound
+$\widehat M$ is smaller at every sample size than its single cohort counterpart,
+which is why the crossing happens earlier: a smaller bound admits a narrower
+set, and the set has to contain a latent effect the recorded coefficients are
+displaced away from.
+
+The fourth column is what rules the contamination channel out. If the recording
+response reached the pre period through already treated comparison units, the
+largest pre treatment coefficient would settle at a nonzero constant. It does
+not. Multiplying it by $\sqrt{N}$ gives $3.081$, $2.908$, $3.082$, $2.992$ and
+$3.034$ down the five rows, flat across a $256$ fold range of the panel size, so
+the pre period carries sampling noise and nothing else. At the largest panel the
+recording wedge is $63$ times the largest pre treatment coefficient it produces.
+
+This is evidence rather than proof, and Proposition \ref{prop:rm} remains stated
+for one cohort. What the table removes is the possibility that staggering is
+what rescues the pre period, which is the reading a reader of the scope
+restriction might otherwise reach.
+
+
 \begin{thebibliography}{99}
 \itemsep 3pt
 

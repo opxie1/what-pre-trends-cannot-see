@@ -34,8 +34,14 @@ from .robustness import (rank_gradient_test, shape_test, loco_gradient,
 from .nondiag import (rho_outer_set, rho_sharp_set, gradient_bounds_over_rho,
                       breakdown_b, rho_bias_d_shock, rho_lemma63_point)
 from .exactness import permutation_refit, equivariance_gap
+from .api import (screen_design, falsification_test,
+                  DesignVerdict, TestResult)
+
+__version__ = "1.0.0"
 
 __all__ = [
+    "screen_design", "falsification_test",
+    "DesignVerdict", "TestResult",
     "gradient_components", "gradient_inference", "permutation_test",
     "wild_cluster_bootstrap", "signflip_test", "chi2_wald", "f_wald",
     "design_information", "noncentrality", "mde_kappa",
