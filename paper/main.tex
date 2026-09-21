@@ -428,7 +428,9 @@ layout. It is a hypothesis of Lemma \ref{lem:sep} rather than of Theorem
 the fixed linear combination of per category event studies that Lemma
 \ref{lem:sep} gives and each category has to be fitted on its own cells, while
 the randomization of Section \ref{sec:perm} acts in the category direction and
-needs only Assumption \ref{as:CE}.\footnote{Fitting each category on its own
+needs only Assumption \ref{as:CE}. Section \ref{sec:app} reports one application in which
+Assumption \ref{as:B} fails through a cell pattern that depends on the category
+label, which breaks Assumption \ref{as:CE} as well.\footnote{Fitting each category on its own
 cells, the label permutation test of \eqref{eq:null} rejects at $0.047$ when
 the missing cells are tied to the category label and at $0.049$ when they are
 independent of it, against a nominal $0.05$ over $1{,}200$ replications with a
@@ -440,9 +442,7 @@ five rates to a category drawn at random in each replication, over $1{,}500$
 replications with a Monte Carlo standard error of $0.006$
 (\texttt{verification\_extra7\_8.json}, same directory). The second
 departure is downward, so the test stays at or below its nominal level and the
-cost falls on power.} Section \ref{sec:app} reports one application in which
-Assumption \ref{as:B} fails through a cell pattern that depends on the category
-label, which breaks Assumption \ref{as:CE} as well.
+cost falls on power.}
 
 Let $L$ collect the included event time horizons with $|L| = q$, omitting
 $\ell = -1$ and binning endpoints, let $X \in \mathbb{R}^{n_0 \times q}$ hold the
