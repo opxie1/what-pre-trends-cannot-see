@@ -50,9 +50,7 @@ import math
 import numpy as np
 
 
-# --------------------------------------------------------------------------
-# R1: pairwise outer set for the relative loadings
-# --------------------------------------------------------------------------
+# loading
 
 def _rho_interval_given_V(S, r, c, b, V):
     """Interval of rho_c consistent with the (r, c) block at a given factor variance."""
@@ -72,7 +70,7 @@ def _rho_interval_given_V(S, r, c, b, V):
         return None
     sq = math.sqrt(disc)
     lo, hi = (-a1 - sq) / (2 * a2), (-a1 + sq) / (2 * a2)
-    cap = math.sqrt(max(S_cc, 0.0) / V)          # psi_c >= 0
+    cap = math.sqrt(max(S_cc, 0.0) / V)  # psi_c
     lo, hi = max(lo, -cap), min(hi, cap)
     if lo > hi:
         return None
@@ -145,8 +143,7 @@ def rho_sharp_set(S, ref=0, b=0.0, n_grid=401, n_rho=801, rho_lim=None,
     S = np.asarray(S, float)
     C = S.shape[0]
     if b <= 1e-12:
-        # the constraint is an equality and a grid cannot hit it; the b = 0
-        # member of the family is exactly Lemma 6.3.
+        # constraint
         pt = rho_lemma63_point(S, ref=ref)
         return {"rho_set": {c: (pt["rho"][c], pt["rho"][c]) for c in pt["rho"]},
                 "b": 0.0, "ref": int(ref), "exact": True,
@@ -156,10 +153,7 @@ def rho_sharp_set(S, ref=0, b=0.0, n_grid=401, n_rho=801, rho_lim=None,
     if feas_tol is None:
         feas_tol = 1e-6 * float(np.max(np.abs(S)))
     others = [c for c in range(C) if c != ref]
-    # A uniform grid in V misses the narrow feasible band around the A10b value,
-    # so refine around the Lemma 6.3 factor variance.  The b = 0 solution is
-    # feasible for EVERY b >= 0 (the class is nested), so the sharp set must
-    # contain it; seeding with it also guarantees monotonicity in b.
+    # variance
     pt0 = rho_lemma63_point(S, ref=ref)
     V0 = pt0["V"]
     Vs = [np.linspace(1e-6 * S_rr, S_rr, int(n_grid))]
@@ -211,7 +205,7 @@ def rho_sharp_set(S, ref=0, b=0.0, n_grid=401, n_rho=801, rho_lim=None,
             for k in others:
                 if k == c:
                     continue
-                # exists rho_k in its box with |S_ck - V rho_c rho_k| <= b sqrt(psi_c psi_k)
+                # exists
                 A = S[c, k] - V * np.outer(grids[c], grids[k])
                 B = b * np.sqrt(np.outer(psi[c], psi[k]))
                 feas &= (np.abs(A) <= B + feas_tol).any(axis=1)
@@ -227,9 +221,7 @@ def rho_sharp_set(S, ref=0, b=0.0, n_grid=401, n_rho=801, rho_lim=None,
                      "(pairwise relaxation of the joint PSD constraint)")}
 
 
-# --------------------------------------------------------------------------
-# R2: gradient estimand bounds over a product set of loadings
-# --------------------------------------------------------------------------
+# gradient
 
 def gradient_bounds_over_rho(beta, d, rho_set, weights=None):
     """Bounds on the loading-adjusted discretion gradient over a box of loadings.
@@ -301,9 +293,7 @@ def breakdown_b(S, beta, d, ref=0, b_hi=1.0, tol=1e-4, use_sharp=False):
     return {"breakdown_b": float(lo), "note": "bisection on the sign-determinacy frontier"}
 
 
-# --------------------------------------------------------------------------
-# the parametric d-shaped alternative, for comparison
-# --------------------------------------------------------------------------
+# alternative
 
 def rho_bias_d_shock(rho, d, varkappa):
     """Closed-form A10b bias: rho_hat_c = rho_c + varkappa d_c (Result L3.4)."""

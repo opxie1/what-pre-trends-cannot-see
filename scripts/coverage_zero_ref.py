@@ -40,7 +40,7 @@ MBARS = (0.5, 1.0, 2.0)
 LATENT, WEDGE = 1.0, 0.6
 _R = os.path.join(os.path.dirname(__file__), "..")
 OUT = os.path.join(_R, "results", "coverage")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(_R, "results", "theory")
 
 

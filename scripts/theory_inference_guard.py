@@ -24,7 +24,7 @@ from did_measurement import inference as inf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 CKPT = os.path.join(OUT, "checkpoints")
 R = int(os.environ.get("TIG_REPS", "400"))

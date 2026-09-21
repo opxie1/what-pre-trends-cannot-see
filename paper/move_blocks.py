@@ -15,7 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 MAIN = os.path.join(HERE, 'main.tex')
 SUPP = os.path.join(HERE, 'supplement.tex')
 
-# paragraph heading -> section of the supplement it joins
+# supplement
 MOVE = [
     ('The exact null law in the ideal experiment.', 'sim'),
     ('Accuracy of the substitution of $G_{\\mathrm{eff}}$.', 'sim'),
@@ -41,14 +41,14 @@ for head, _ in MOVE:
     m = STOP.search(t, i + len(tag))
     j = m.start() if m else len(t)
     block = t[i:j].rstrip()
-    # a float must never be swept along
+    # float
     assert '\\begin{table}' not in block and '\\begin{figure}' not in block, head
     moved.append(block)
     taken += len(block.split())
     t = t[:i] + t[j:]
     print('   moved %5d words  %s' % (len(block.split()), head[:52]))
 
-# tidy the blank lines the removals leave behind
+# removals
 t = re.sub(r'\n{4,}', '\n\n', t)
 
 NOTE = (

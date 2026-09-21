@@ -43,7 +43,7 @@ warnings.filterwarnings("ignore")
 
 from did_measurement.dgp import DGPConfig, generate_panel          # noqa: E402
 
-# Reuse the reference run's helpers verbatim so the two experiments cannot drift.
+# reference
 _spec = importlib.util.spec_from_file_location(
     "coverage_zero_ref", os.path.join(HERE, "coverage_zero_ref.py"))
 _ref = importlib.util.module_from_spec(_spec)
@@ -57,7 +57,7 @@ MBARS = _ref.MBARS
 LATENT, WEDGE = _ref.LATENT, _ref.WEDGE
 
 COHORTS = (6, 8, 10)
-SHARES = (0.2, 0.2, 0.2)          # 40 percent never treated
+SHARES = (0.2, 0.2, 0.2)  # 40 percent never treated
 
 OUT = os.path.join(HERE, "..", "results", "coverage", "coverage_staggered.json")
 
@@ -92,8 +92,7 @@ def run(n_units, reps, seed0):
 
         mhat = _ref.m_upper_bound_mpre(labels, coef, se, vcov)
         mhats.append(mhat)
-        # the largest pre period coefficient in absolute value, which the
-        # recording response leaves at zero if the blindness result extends
+        # coefficient
         pre_dev.append(max(abs(coef[labels.index(l)]) for l in labels if l < 0))
 
         for k in keys:

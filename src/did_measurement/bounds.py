@@ -139,7 +139,7 @@ def breakdown_kappa(coef, se, d_c, alpha=0.05, sign=+1):
     s = np.sign(coef) if coef != 0 else 1.0
     b = abs(coef)
     point = b / d_c
-    z = stats.norm.ppf(1 - alpha / 2)  # conservative (IM c <= z when set degenerate)
+    z = stats.norm.ppf(1 - alpha / 2)  # conservative
     stat_bd = (b - z * se) / d_c if b > z * se else np.nan
     return {"point": float(point), "stat": float(stat_bd) if stat_bd == stat_bd else np.nan,
             "direction": float(s)}
@@ -160,17 +160,7 @@ def recording_bounds(beta_log, se, r0, alpha=0.05):
             "r0": r0, "im_c": c}
 
 
-# ---------------------------------------------------------------------------
-# Cohort aggregation: the sharp set is a MINKOWSKI AVERAGE of per-cohort sets.
-#
-# Fix for defect X2 (sharpness_review F2 / MAIN_RESULTS Corollary 1').  For each
-# cohort g the model requires beta^g_c(l) = rho_c x^g_l + m_{c,g}(l) with
-# m_{.,g} in M separately.  The sharp set for the aggregate x_l = sum_g w_g x^g_l
-# is therefore sum_g w_g X^g (Minkowski average), NOT the set built from the
-# cohort-aggregated coefficient bar-beta = sum_g w_g beta^g.  The latter is valid
-# (it contains the truth) but conservative; the two differ strictly whenever two
-# cohorts' binding constraints differ.
-# ---------------------------------------------------------------------------
+# cohort
 
 _TOL = 1e-12
 
@@ -185,7 +175,7 @@ def _cohort_interval(beta_row, m_bar, rho, sign):
     lo, hi = -np.inf, np.inf
     for b, mb, r in zip(beta_row, m_bar, rho):
         if r == 0:
-            continue                      # zero loading carries no information on x
+            continue  # loading
         if sign == 0:
             e1, e2 = (b - mb) / r, (b + mb) / r
         else:

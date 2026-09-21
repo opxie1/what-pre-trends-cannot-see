@@ -36,12 +36,12 @@ from did_measurement.dgp import DGPConfig, generate_panel          # noqa: E402
 from did_measurement.estimators import event_study_twfe            # noqa: E402
 
 K_PRE, K_POST = 5, 5
-ELL_STAR = 3           # horizon at which the latent ATT is targeted
+ELL_STAR = 3  # horizon
 Z = 1.959963984540054
 MBARS = (0.5, 1.0, 2.0)
 _R = os.path.join(os.path.dirname(__file__), "..")
 OUT = os.path.join(_R, "results", "coverage")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(_R, "results", "theory")
 
 
@@ -140,7 +140,7 @@ def run(n_units, kappa, reps, seed0):
             lo, hi = sd_interval(mhat, coef, b, sb)
             acc[("SD", "precal", mode)] += (lo <= lat_true <= hi)
 
-        # smoothness bound motivated by the recording institution instead of pre-trends
+        # institution
         lo, hi = sd_interval(abs(wedge_true), coef, b, sb)
         acc[("SD", "inst", "cons")] += (lo <= lat_true <= hi)
 

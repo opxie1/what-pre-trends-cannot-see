@@ -36,7 +36,7 @@ def cut(start, end_marker, label, include_end=True):
     return block
 
 
-# ---- 1. Table 4, the nine design robustness table, with its note
+# robustness
 i = t.find('\\label{tab:appdesigns}')
 assert i > 0
 a = t.rfind('\\begin{table}', 0, i)
@@ -46,12 +46,12 @@ t = t[:a] + t[b:]
 moved.append(('Table: crime application across nine designs', tab))
 print('   moved %5d words  Table 4 with its note' % len(tab.split()))
 
-# ---- 2. the health reporting, four paragraphs
+# paragraphs
 health = cut('The second panel is a state by year by condition panel',
              'this is what it looks like in data.',
              'health panel reporting')
 
-# ---- 3. two crime robustness paragraphs
+# robustness
 cut('The chi square rejection is joint with the normalization.',
     'is conditional on the normalization.',
     'crime normalisation and placebo detail')

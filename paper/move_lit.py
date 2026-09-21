@@ -19,7 +19,7 @@ SUPP = os.path.join(HERE, 'supplement.tex')
 t = io.open(MAIN, encoding='utf-8').read()
 moved = []
 
-# ---- 1. the whole Related work section
+# related
 a = t.index('\\section{Related work}')
 b = t.index('\\section{What the falsification test is for}')
 rel = t[a:b]
@@ -27,7 +27,7 @@ t = t[:a] + t[b:]
 moved.append(rel)
 print('   moved %5d words  Related work section' % len(rel.split()))
 
-# ---- 2. the applied literature survey inside Section 3
+# literature
 i = t.index('The gap is a live one.')
 j = t.index('That observation generalizes into the one constructive diagnostic')
 survey = t[i:j]

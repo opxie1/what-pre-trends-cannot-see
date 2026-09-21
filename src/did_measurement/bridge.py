@@ -207,7 +207,7 @@ def bridge_decomposition_by_cohort(df, outcome="Y", bridge_cat=0, control="never
     for k in ["es_recorded", "es_latent", "es_measurement"]:
         agg[k] = agg[k] / agg["weight"]
     agg = agg.drop(columns="weight").reset_index()
-    # average-then-decompose route, for the equality check
+    # decompose
     direct = agg.copy()
     direct["es_latent"] = [
         ld["rho"].get(int(r.cat), np.nan) *

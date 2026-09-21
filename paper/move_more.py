@@ -31,7 +31,7 @@ def cut(start, end, label):
     print('   moved %5d words  %s' % (len(block.split()), label))
 
 
-# ---- the one factor diagnostic, three paragraphs of detail
+# diagnostic
 cut('The three designs of Section \\ref{sec:app} differ sharply on both.',
     'is a reason to report the cluster level procedures\nof Section \\ref{sec:cluster}, since they use neither the normalization nor\nAssumption \\ref{as:CE}.',
     'one factor diagnostic detail')
@@ -53,7 +53,7 @@ k = t.find('\\begin{assumption}[category exchangeability]')
 assert k > 0, 'anchor for the one factor summary not found'
 t = t[:k] + ONEFACTOR + '\n' + t[k:]
 
-# ---- the smoothness class and the second reading
+# smoothness
 cut('A second reading deserves an answer.',
     'neither \citet{low1997nonparametric} nor \citet{cailow2004adaptation}.',
     'smoothness class and second reading')

@@ -24,7 +24,7 @@ fig = t[a:b]
 t = t[:a] + t[b:]
 print('   moved %d words of figure source' % len(fig.split()))
 
-# the text that pointed at it
+# pointed
 refs = re.findall(r'[^.]*\\ref\{fig:sizem\}[^.]*\.', t)
 for r in refs:
     print('   reference in main text: %s' % " ".join(r.split())[:100])
@@ -39,7 +39,7 @@ t = re.sub(r'\n{4,}', '\n\n', t)
 io.open(MAIN, 'w', encoding='utf-8', newline='').write(t)
 
 s = io.open(SUPP, encoding='utf-8').read()
-# the supplement needs pgfplots for this figure
+# supplement
 if '\\usepackage{pgfplots}' not in s:
     s = s.replace('\\usepackage{xr}',
                   '\\usepackage{pgfplots}\n\\pgfplotsset{compat=1.18}\n\\usepackage{xr}')

@@ -15,7 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 m = io.open(os.path.join(HERE, 'main.tex'), encoding='utf-8').read()
 s = io.open(os.path.join(HERE, 'supplement.tex'), encoding='utf-8').read()
 
-# what the supplement cites, outside its own reference list
+# reference
 body = s.split('\\begin{thebibliography}')[0]
 keys = {k.strip() for g in re.findall(r'\\cite[a-z]*\{([^}]+)\}', body)
         for k in g.split(',')}

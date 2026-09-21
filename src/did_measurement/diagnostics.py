@@ -65,7 +65,7 @@ __all__ = ["comovement_moments", "moments_from_cube", "comovement_test", "discre
            "robust_relative_loadings"]
 
 
-# ------------------------------------------------------------------ moments
+# moments
 
 def _residual_cube(df, outcome="Y", untreated_only=True):
     """Residualize on unit-by-cat and period-by-cat FE; return (units, T, C) cube
@@ -117,13 +117,13 @@ def moments_from_cube(cube, cats=None, max_lag=1, symmetrize=False, demean=False
             num.append(np.where(ok, p, 0.0).sum(axis=1))
             cnt.append(ok.sum(axis=1).astype(float))
             keys.append((h, int(c), int(k)))
-    num = np.array(num).T                      # (N, M)
+    num = np.array(num).T  # note
     cnt = np.array(cnt).T
     tot = cnt.sum(axis=0)
     if np.any(tot <= 0):
         raise ValueError("a category pair has no usable untreated observations")
     g = num.sum(axis=0) / tot
-    psi = (num - cnt * g) / (tot / N)          # ratio-estimator linearization
+    psi = (num - cnt * g) / (tot / N)  # linearization
     return {"g": g, "psi": psi, "keys": keys, "cats": np.asarray(cats),
             "n_units": N, "n_pairs": len(keys), "max_lag": max_lag}
 
@@ -142,7 +142,7 @@ def comovement_moments(df, outcome="Y", max_lag=1, symmetrize=False):
     return moments_from_cube(cube, cats, max_lag, symmetrize, demean=False)
 
 
-# ------------------------------------------------------------------ model
+# model
 
 def _model(keys, C, theta, V):
     """s(pi): Lambda_h(c,k) = theta_c theta_k V_h, with V_0 = 1."""
@@ -248,10 +248,7 @@ def comovement_test(df, outcome="Y", max_lag=1, symmetrize=False, n_boot=999,
     if weight == "optimal":
         Wh, rk = _omega_half_inv(Omega)
     elif weight == "diag":
-        # a FIXED diagonal weight matrix.  Inverting the full M x M Omega inside
-        # the criterion is what makes the optimal-weight J statistic over-reject
-        # when M/N is not small (11% at M=30, N=400; 83% at M=30, N=51); the
-        # diagonal weight plus the multiplier bootstrap below keeps the size.
+        # bootstrap
         Wh = np.diag(1.0 / np.sqrt(np.maximum(np.diag(Omega), 1e-300)))
         rk = M
     else:
@@ -270,7 +267,7 @@ def comovement_test(df, outcome="Y", max_lag=1, symmetrize=False, n_boot=999,
            "theta_hat": p[:C].tolist(), "V_hat": p[C:].tolist(),
            "n_units": N, "n_moments": M, "omega_rank": rk}
     if weight == "diag":
-        # Satterthwaite chi-square reference for the fixed-weight quadratic form
+        # satterthwaite
         QO = Q @ Omega
         tr1 = float(np.trace(QO))
         tr2 = float(np.trace(QO @ QO))
@@ -282,7 +279,7 @@ def comovement_test(df, outcome="Y", max_lag=1, symmetrize=False, n_boot=999,
     if n_boot and n_boot > 0:
         rng = np.random.default_rng(seed)
         W = rng.choice([-1.0, 1.0], size=(n_boot, N))
-        GS = (W @ psi) / N                                     # (n_boot, M)
+        GS = (W @ psi) / N  # n_boot
         boot = N * np.einsum("bm,mn,bn->b", GS, Q, GS)
         out["pvalue_boot"] = float((1.0 + np.sum(boot >= stat)) / (1.0 + n_boot))
         out["crit_boot_95"] = float(np.quantile(boot, 0.95))
@@ -327,7 +324,7 @@ def _preregistered_pvalue(out):
     return out
 
 
-# ------------------------------------------------- focused A10b (d-shock) test
+# focused
 
 def discretion_shock_test(df, d, outcome="Y", bridge_cat=0, n_boot=999, seed=0,
                           moments=None):
@@ -382,8 +379,8 @@ def discretion_shock_test(df, d, outcome="Y", bridge_cat=0, n_boot=999, seed=0,
     Jm = jac(p)
     A = Wh @ Jm
     AtA_inv = np.linalg.pinv(A.T @ A)
-    Bm_ = AtA_inv @ A.T @ Wh                      # (P, M) linear map g -> p_hat
-    Vp = (Bm_ @ Omega @ Bm_.T) / N                # sandwich (W is not optimal)
+    Bm_ = AtA_inv @ A.T @ Wh  # linear
+    Vp = (Bm_ @ Omega @ Bm_.T) / N  # sandwich
     se = float(np.sqrt(max(Vp[C, C], 0.0)))
     xi = float(p[C])
     z = xi / se if se > 0 else np.nan
@@ -404,8 +401,7 @@ def discretion_shock_test(df, d, outcome="Y", bridge_cat=0, n_boot=999, seed=0,
     th = p[:C]
     out["rho_corrected"] = {int(cats[c]): float(th[c] / th[bi])
                             for c in range(C) if c != bi}
-    # same pre-registration as the omnibus test: report the conservative
-    # maximum of the normal and the sign-flip bootstrap reference.
+    # bootstrap
     cand = [q for q in (out.get("pvalue"), out.get("pvalue_boot"))
             if q is not None and np.isfinite(q)]
     out["pvalue_normal"] = out.get("pvalue")

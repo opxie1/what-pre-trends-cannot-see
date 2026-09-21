@@ -53,13 +53,11 @@ __all__ = [
     "effective_clusters", "hotelling_wald", "predicted_wald_size",
 ]
 
-RHO_GUARD = 0.1        # drop categories whose estimated loading is this small
-COV_FLOOR = 1e-6       # relative floor on |covariance| inside the log-triad map
+RHO_GUARD = 0.1  # loading
+COV_FLOOR = 1e-6  # covariance
 
 
-# --------------------------------------------------------------------------
-# loadings
-# --------------------------------------------------------------------------
+# loading
 
 def estimate_loadings_triad(Cov):
     """Relative loadings from the C x C untreated cross-category covariance.
@@ -125,9 +123,7 @@ def _cr2_transform(W, Sinv, E, tol=1e-10):
     return E + P @ (f[:, None] * (P.T @ E)), capped
 
 
-# --------------------------------------------------------------------------
-# component extraction
-# --------------------------------------------------------------------------
+# extraction
 
 def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
                         use_bridge=False, cluster_col="unit",
@@ -155,8 +151,7 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
     if cluster_col not in cols:
         cols.append(cluster_col)
     if getattr(df, "attrs", None):
-        # pandas deep-copies .attrs on every derived object; the DGP stores the
-        # config and the truth dictionaries there, which dominates runtime.
+        # dictionaries
         df = df.copy(deep=False)
         df.attrs = {}
     dat = df if use_bridge else df[df["cat"] != bridge_cat]
@@ -178,11 +173,11 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
                 and np.array_equal(b["period"].to_numpy(), period)):
             raise ValueError("category blocks do not share the same (unit, period) cells")
     d_all = np.array([float(b["d"].iloc[0]) for b in blocks])
-    Y = np.column_stack([b[outcome].to_numpy(float) for b in blocks])   # (n_cells, C)
+    Y = np.column_stack([b[outcome].to_numpy(float) for b in blocks])  # (n_cells, C)
     Dind = ref["D"].to_numpy(int)
     ev = ref["event_time"].to_numpy(float)
 
-    # ---- loading normalisation, estimated on untreated cells only
+    # loading
     neg_share = 0.0
     if loading == "none" or C0 < 3:
         rho = np.ones(C0)
@@ -210,7 +205,7 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
     rho = rho[keep]
     C = int(keep.sum())
 
-    # ---- design and within-category two-way demeaning (identical for every c)
+    # demean
     X, labels = build_event_dummies(ev, k_pre, k_post)
     q = X.shape[1]
     M = demean_two_way(np.column_stack([X, Y]), unit, period)
@@ -218,10 +213,10 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
 
     S = Xt.T @ Xt
     Sinv = np.linalg.pinv(S)
-    B = Sinv @ (Xt.T @ Yt)                    # (q, C)
-    E = Yt - Xt @ B                           # (n_cells, C)
+    B = Sinv @ (Xt.T @ Yt)  # (q, C)
+    E = Yt - Xt @ B  # (n_cells, C)
 
-    # ---- cluster aggregation
+    # cluster
     order = np.argsort(clus, kind="stable")
     Xs, Es, cs = Xt[order], E[order], clus[order]
     cl = np.unique(cs)
@@ -247,7 +242,7 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
     n = C * n_cells
     adj = (G / max(G - 1, 1)) * ((n - 1) / max(n - 2 * q, 1))
     if vcov == "CR2":
-        adj = 1.0          # the bias correction is in the residuals
+        adj = 1.0  # residual
     n_unit = len(np.unique(unit))
     n_time = len(np.unique(period))
     dfree = max(n_cells - q - n_unit - n_time + 1, 1)
@@ -258,9 +253,7 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
             "rho": rho, "neg_cov_share": neg_share, "adj": adj, "n": n, "G": G,
             "n_cells": n_cells, "q": q, "C": C, "resid_var": resid_var,
             "clusters": cl,
-            # --- provenance needed to state the randomisation reference set and
-            #     the exactness claim honestly (referee items on the loading
-            #     guard and on non-equivariant normalisations).
+            # guard
             "vcov": vcov, "cr2_capped": n_capped,
             "loading": loading, "rho_full": rho_full, "d_full": d_all,
             "cats": np.asarray(cats), "kept": keep, "dropped": dropped,
@@ -269,9 +262,7 @@ def gradient_components(df, outcome="Y", k_pre=5, k_post=6, bridge_cat=0,
             "resid_var_ratio": float(resid_var.max() / max(resid_var.min(), 1e-300))}
 
 
-# --------------------------------------------------------------------------
-# gamma, V and the three statistics (post block)
-# --------------------------------------------------------------------------
+# statistics
 
 def _gamma_V_block(comp, D, idx):
     """gamma_hat and CR1 covariance on index block `idx`, batched over labels.
@@ -281,10 +272,10 @@ def _gamma_V_block(comp, D, idx):
     D = np.asarray(D, float)
     if D.ndim == 1:
         D = D[:, None]
-    s2 = (D ** 2).sum(0)                                            # (P,)
-    gP = (comp["B"][idx] @ D / s2).T                                # (P, m)
-    Z = np.einsum("gqc,cp->pgq", comp["A"], D, optimize=True)       # (P,G,q)
-    Zi = Z @ comp["Sinv"][:, idx]                                   # (P,G,m)
+    s2 = (D ** 2).sum(0)  # note
+    gP = (comp["B"][idx] @ D / s2).T  # (P, m)
+    Z = np.einsum("gqc,cp->pgq", comp["A"], D, optimize=True)  # (P,G,q)
+    Zi = Z @ comp["Sinv"][:, idx]  # (P,G,m)
     meat = np.einsum("pgm,pgn->pmn", Zi, Zi, optimize=True)
     VP = comp["adj"] * meat / (s2 ** 2)[:, None, None]
     return gP, VP
@@ -317,7 +308,7 @@ def _stat_directed_gls(gP, VP, k):
     w, U = np.linalg.eigh(VP)
     tol = np.maximum(w[:, -1:], 0) * VP.shape[-1] * np.finfo(float).eps
     inv = np.where(w > np.maximum(tol, 1e-300), 1.0 / np.where(w > 0, w, 1.0), 0.0)
-    yk = np.einsum("pmn,n->pm", np.swapaxes(U, 1, 2), k, optimize=True)   # U'k
+    yk = np.einsum("pmn,n->pm", np.swapaxes(U, 1, 2), k, optimize=True)  # note
     yg = np.einsum("pmn,pn->pm", np.swapaxes(U, 1, 2), gP, optimize=True)
     num = (inv * yk * yg).sum(1)
     den = np.sqrt(np.maximum((inv * yk ** 2).sum(1), 1e-300))
@@ -332,7 +323,7 @@ def _stat_chibar(gP, VP):
     w, U = np.linalg.eigh(VP)
     for p in range(P):
         ev = np.clip(w[p], 1e-14, None)
-        R = (U[p] / np.sqrt(ev)) @ U[p].T          # R'R = V^{-1}
+        R = (U[p] / np.sqrt(ev)) @ U[p].T  # note
         g = gP[p]
         rg = R @ g
         full = float(rg @ rg)
@@ -362,9 +353,7 @@ def _apply_stat(comp, D, stat, w=None, idx=None):
     return _stat_from(gP, VP, stat, w)
 
 
-# --------------------------------------------------------------------------
-# 1. status quo
-# --------------------------------------------------------------------------
+# status
 
 def chi2_wald(comp, idx=None):
     """Wald statistic on the post-period interactions with a chi-square p-value."""
@@ -502,9 +491,7 @@ def max_restrictions(G_eff, target=0.075, alpha=0.05, omega2=1.0, m_max=200):
     return best
 
 
-# --------------------------------------------------------------------------
-# 2. label permutation (exact)
-# --------------------------------------------------------------------------
+# permutation
 
 def _perm_matrix(delta, n_perm, rng):
     """Columns are permuted label vectors, column 0 being the identity."""
@@ -610,7 +597,7 @@ def permutation_test(comp, stat="wald", n_perm=None, seed=0, w=None,
         p = float((t >= obs - 1e-12).mean())
     else:
         p = float((1.0 + (t[1:] >= obs - 1e-12).sum()) / len(t))
-    # ---- resolution floor computed from the REALISED orbit, not assumed 1/M.
+    # resolution
     mult = _orbit_multiplicity(t)
     n_distinct = int(len(np.unique(np.round(t, 9))))
     min_p = (mult / len(t)) if exhaustive else (1.0 / len(t))
@@ -621,9 +608,7 @@ def permutation_test(comp, stat="wald", n_perm=None, seed=0, w=None,
            "stabilizer": label_stabilizer_size(comp["delta"]),
            "rejection_attainable": bool(min_p <= alpha + 1e-12),
            "reference": reference,
-           # exactness under Assumption CE additionally requires the loading
-           # normalisation to be S_C-equivariant; "mtest_iv" picks its reference
-           # category as argmin(d) and therefore is not.
+           # reference
            "equivariant_loading": bool(comp.get("equivariant", True)),
            "exact_under_CE": bool(comp.get("equivariant", True)
                                   and not comp.get("guard_fired", False)),
@@ -634,9 +619,7 @@ def permutation_test(comp, stat="wald", n_perm=None, seed=0, w=None,
     return out
 
 
-# --------------------------------------------------------------------------
-# 3. restricted fit, wild cluster bootstrap, cluster sign flips
-# --------------------------------------------------------------------------
+# bootstrap
 
 def _restricted(comp):
     """Restricted (gamma_post = 0) fit; cluster scores of the gamma block.
@@ -671,13 +654,7 @@ def wild_cluster_bootstrap(comp, n_boot=499, seed=0, stat="wald", w=None,
     Zr, s2, G = r["Zr"], r["s2"], comp["G"]
     Si, P = comp["Sinv"], comp["post"]
     SiP = Si[:, P]
-    # (S^{-1} S_g S^{-1})[:, P]: the bootstrap cluster score of the gamma block is
-    # z*_g = v_g z^r_g - S_g S^{-1} sum_h v_h z^r_h, and the CR1 meat needs
-    # zeta*_g = (S^{-1} z*_g)_P, hence S^{-1} on BOTH sides of S_g.  At the
-    # identity draw (v == 1) this makes zeta*_g = (S^{-1} z_g)_P exactly, so the
-    # draw-0 statistic reproduces chi2_wald to machine precision -- the check is
-    # in results/theory/inference/summary.json, field
-    # exactness_checks.wcb_identity_draw_vs_wald_abs_diff.
+    # bootstrap
     Tg = np.einsum("qr,grs,sm->gqm", Si, comp["Sg"], SiP, optimize=True)
 
     Wt = np.empty((n_boot, G))
@@ -687,9 +664,9 @@ def wild_cluster_bootstrap(comp, n_boot=499, seed=0, stat="wald", w=None,
     else:
         Wt[1:] = rng.normal(size=(n_boot - 1, G))
 
-    u = Wt @ Zr                                             # (B, q)
-    gP = (u @ SiP) / s2                                     # (B, m)
-    ZrP = Zr @ SiP                                          # (G, m)
+    u = Wt @ Zr  # (B, q)
+    gP = (u @ SiP) / s2  # (B, m)
+    ZrP = Zr @ SiP  # (G, m)
     Zb = Wt[:, :, None] * ZrP[None, :, :] - np.einsum("gqm,pq->pgm", Tg, u, optimize=True)
     meat = np.einsum("pgm,pgn->pmn", Zb, Zb, optimize=True)
     VP = comp["adj"] * meat / s2 ** 2
@@ -717,12 +694,12 @@ def signflip_test(comp, n_draws=999, seed=0, stat="wald", w=None, idx=None,
     rng = np.random.default_rng(seed)
     r = _restricted(comp)
     P = comp["post"] if idx is None else np.asarray(idx)
-    zeta = (r["Zr"] @ comp["Sinv"][:, P]) / r["s2"]          # (G, m)
+    zeta = (r["Zr"] @ comp["Sinv"][:, P]) / r["s2"]  # (G, m)
     G, m = zeta.shape
     E = np.empty((n_draws, G))
     E[0] = 1.0
     E[1:] = rng.choice([-1.0, 1.0], size=(n_draws - 1, G))
-    gP = E @ zeta                                            # (B, m)
+    gP = E @ zeta  # (B, m)
     VP = np.broadcast_to(comp["adj"] * (zeta.T @ zeta), (n_draws, m, m))
     t = _stat_from(gP, np.ascontiguousarray(VP), stat, w)
     obs = t[0]
@@ -733,9 +710,7 @@ def signflip_test(comp, n_draws=999, seed=0, stat="wald", w=None, idx=None,
     return out
 
 
-# --------------------------------------------------------------------------
-# convenience wrapper
-# --------------------------------------------------------------------------
+# convenience
 
 _METHODS = {
     "chi2":         lambda c, kw: chi2_wald(c),
@@ -776,9 +751,7 @@ def gradient_inference(df, methods=("chi2", "f", "perm_wald", "perm_dir",
     return {"components": comp, "p": out, "detail": detail}
 
 
-# --------------------------------------------------------------------------
-# design, power, MDE  (Section 6 of theory/inference.md)
-# --------------------------------------------------------------------------
+# power
 
 def design_information(comp, k=None):
     """Path information I_k = k' ([S^{-1}]_{PP})^{-1} k on the post block.
@@ -872,9 +845,7 @@ def mde_kappa(comp, kind="wald", alpha=0.05, power=0.80, k=None, sigma2=None,
         if calibration == "chi2":
             lam_star = chi2_noncentrality_for_power(q, alpha, power)
         elif calibration == "hotelling":
-            # price the test at the critical value a correctly sized procedure
-            # actually uses at this cluster count, not at chi2_{q,1-alpha},
-            # which the project's own size table shows rejects 0.15-0.31.
+            # cluster
             Ge = float(effective_clusters(comp, idx=idx)) if G_eff is None else G_eff
             lam_star = noncentrality_for_power_crit(
                 hotelling_crit(q, Ge, alpha), q, power)
@@ -894,7 +865,7 @@ def mde_kappa(comp, kind="wald", alpha=0.05, power=0.80, k=None, sigma2=None,
         raise ValueError(kind)
 
     if wedge is None:
-        info = noncentrality(comp, comp["d"], k=k, sigma2=sigma2)   # lambda(kappa)=kappa^2 lambda(1)
+        info = noncentrality(comp, comp["d"], k=k, sigma2=sigma2)  # lambda
         return {"kappa": float(np.sqrt(lam_star / info["lambda"])),
                 "lambda_star": lam_star, "lambda_at_1": info["lambda"],
                 "I_k": info["I_k"], "sum_delta2": info["sum_delta2"]}
@@ -934,13 +905,13 @@ def local_power_permutation(delta, k, W, sigma_bar2, kappa, n_sim=5000,
     Winv = np.linalg.pinv(np.asarray(W, float))
     Vg = sigma_bar2 * Winv / s2
     Le = np.linalg.cholesky(sigma_bar2 * Winv + 1e-13 * np.eye(m))
-    rho = (D.T @ (delta + delta.mean())) / s2               # sum_c delta_{pi(c)} d_c / s2
+    rho = (D.T @ (delta + delta.mean())) / s2  # delta_
     Vinv = np.linalg.pinv(Vg)
     kv = float(k @ Vg @ k)
     rej = 0
     for _ in range(n_sim):
         eps = Le @ rng.standard_normal((m, C))
-        gam = kappa * np.outer(k, rho) + (eps @ D) / s2      # (m, P)
+        gam = kappa * np.outer(k, rho) + (eps @ D) / s2  # (m, P)
         if stat == "wald":
             t = np.einsum("mp,mn,np->p", gam, Vinv, gam, optimize=True)
         elif stat == "directed":
@@ -951,9 +922,7 @@ def local_power_permutation(delta, k, W, sigma_bar2, kappa, n_sim=5000,
     return rej / n_sim
 
 
-# --------------------------------------------------------------------------
-# the label-randomisation power ceiling  (Section 5.5 of theory/inference.md)
-# --------------------------------------------------------------------------
+# power
 
 def rho_orbit(delta, d=None, n_perm=None, seed=0):
     """The label-overlap coefficients rho_pi = sum_c delta_{pi(c)} d_c / sum delta^2.
@@ -979,7 +948,7 @@ def rho_orbit(delta, d=None, n_perm=None, seed=0):
         P[0] = np.arange(C)
         for b in range(1, n):
             P[b] = rng.permutation(C)
-    Dp = delta[P]                                  # (M, C)
+    Dp = delta[P]  # (M, C)
     return Dp @ d / s2, Dp
 
 
@@ -997,7 +966,7 @@ def label_resolution(C, alpha=0.05, even=True):
     statistics with equally spaced labels), False for a one-sided statistic.
 
     `J` is the COMPETITOR BUDGET: the p-value counts the identity itself, so
-    p_hat = (1 + Z)/M with Z = #{pi != id : T(pi) >= T(id)}, and the test rejects
+    p_hat = (1 + Z)/M with Z =  # rejects
     iff Z <= alpha M - 1, i.e. Z <= J with J = floor(alpha M) - 1.  J < 0 means
     no rejection is attainable (the resolution bound of Proposition 2)."""
     M = math.factorial(C)
@@ -1060,7 +1029,7 @@ def perm_power_directed(mu, delta, d=None, alpha=0.05, n_sim=4000, seed=0,
     while done < n_sim:
         b = min(block, n_sim - done)
         U = rng.standard_normal((C, b))
-        Tm = base[:, None] + (Dp @ U) / sd            # (M, b)
+        Tm = base[:, None] + (Dp @ U) / sd  # (M, b)
         rej += int(((Tm >= Tm[0] - 1e-12).sum(axis=0) <= thr).sum())
         done += b
     return rej / n_sim
@@ -1126,16 +1095,7 @@ def mde_kappa_permutation(comp, alpha=0.05, power=0.80, k=None, sigma2=None,
             "lambda_star": lam_star, **inf}
 
 
-# --------------------------------------------------------------------------
-# 8. Anderson-Rubin set for the recording-response magnitude
-#
-# The project's single methodological recommendation is "never invert a Wald
-# statistic in this model; invert a fit criterion".  It was never computed in an
-# application, and Theorem 9.8's exactness assumes Omega KNOWN, which is exactly
-# what fails at G = 51.  The set below inverts the fit criterion with a
-# CLUSTER-ROBUST Omega and a sign-flip calibration, so its critical value comes
-# from a procedure whose size this project has verified at G = 51.
-# --------------------------------------------------------------------------
+# calibration
 
 def anderson_rubin_set(comp, kvec=None, alpha=0.05, calibration="signflip",
                        n_draws=999, seed=0, idx=None):

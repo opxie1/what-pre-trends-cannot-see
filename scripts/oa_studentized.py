@@ -33,7 +33,7 @@ from did_measurement import inference as inf          # noqa: E402
 from theory_inference import make_cfg, panel          # noqa: E402
 
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 ALPHA = 0.05
 N_SIM_GAUSS = 20_000
@@ -45,7 +45,7 @@ PANEL_REPS = 2000
 N_PERM = 999
 
 
-# ---------------------------------------------------------------- experiment A
+# experiment
 def gauss_perm_size(omega, delta, n_sim=N_SIM_GAUSS, stat="wald",
                     studentize=False, nu=np.inf, seed=0):
     """Size of the label permutation test in the Gaussian limit experiment.
@@ -60,18 +60,18 @@ def gauss_perm_size(omega, delta, n_sim=N_SIM_GAUSS, stat="wald",
     s2 = float((np.asarray(delta, float) ** 2).sum())
     omega = np.asarray(omega, float)
     sd = np.sqrt(omega)
-    D2 = D ** 2                                                   # (C, P)
-    v_homo = D2.sum(0) / s2 ** 2                                  # (P,) constant
+    D2 = D ** 2  # note
+    v_homo = D2.sum(0) / s2 ** 2  # constant
     rej = 0
     for _ in range(n_sim):
         eps = sd * rng.standard_normal(len(sd))
-        g = (eps @ D) / s2                                        # (P,)
+        g = (eps @ D) / s2  # note
         if studentize:
             if np.isinf(nu):
                 omh = omega
             else:
                 omh = omega * rng.chisquare(nu, size=len(omega)) / nu
-            v = (omh @ D2) / s2 ** 2                              # (P,)
+            v = (omh @ D2) / s2 ** 2  # note
         else:
             v = v_homo
         t = g ** 2 / v if stat == "wald" else g / np.sqrt(v)
@@ -105,13 +105,13 @@ def run_gauss():
     return pd.DataFrame(rows)
 
 
-# ---------------------------------------------------------------- experiment B
+# experiment
 def _panel_cell(args):
     C, ratio, place, rep = args
     cfg = make_cfg(G=51, T=120, C=C, seed=10_000 + rep)
     sig = np.ones(C + 1)
     if ratio != 1.0:
-        # category 0 is the bridge; focal categories run 1..C in ascending d
+        # categories
         sig[C if place == "high_d" else 1] = np.sqrt(ratio)
     cfg = dataclasses.replace(cfg, sigma_eps_by_cat=tuple(sig))
     try:

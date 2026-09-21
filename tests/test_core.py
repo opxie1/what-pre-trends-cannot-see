@@ -36,7 +36,7 @@ def post_mean(es_table, lmax=3):
     return t.loc[(t.ell >= 0) & (t.ell <= lmax), "coef"].mean()
 
 
-# ---------------------------------------------------------------- 1. additive closed form
+# additive
 cfg = DGPConfig(n_units=800, n_categories=3, discretion=(0.0, 0.5, 1.0),
                 include_bridge=False, theta_spread=0.0, tau_level=1.0,
                 kappa=0.8, sigma_eps=0.5, seed=11)
@@ -48,13 +48,13 @@ for c, dc in [(0, 0.0), (1, 0.5), (2, 1.0)]:
     check(f"additive bias formula cat{c}", abs(got - want) < 0.10,
           f"got {got:.3f} want {want:.3f}")
 
-# leads should be ~0 (no PT violation)
+# violation
 es0 = event_study_twfe(df[df.cat == 2], k_pre=5, k_post=5)
 pt = pretrend_test(es0)
 check("pretrend test does not reject under PT", pt["pvalue"] > 0.01,
       f"p={pt['pvalue']:.3f}")
 
-# ---------------------------------------------------------------- 2. Theorem 1: FE absorb time-invariant distortions
+# distortions
 cfg = DGPConfig(n_units=800, n_categories=2, discretion=(0.3, 1.0),
                 include_bridge=False, theta_spread=0.0, tau_level=1.0,
                 kappa=0.0, mu_scale=50.0, sigma_eps=0.5, seed=12)
@@ -64,7 +64,7 @@ got = post_mean(es["table"])
 check("Theorem 1: huge time-invariant distortion, zero bias", abs(got - 1.0) < 0.10,
       f"got {got:.3f} want 1.000")
 
-# ---------------------------------------------------------------- 3. multiplicative closed form (log outcome)
+# multiplicative
 cfg = DGPConfig(n_units=800, n_categories=2, discretion=(0.2, 1.0),
                 include_bridge=False, theta_spread=0.0, tau_level=1.0,
                 kappa=0.5, map_type="multiplicative", sigma_eps=0.5, seed=13)
@@ -77,7 +77,7 @@ for c, dc in [(0, 0.2), (1, 1.0)]:
     check(f"multiplicative log bias formula cat{c}", abs(got - want) < 0.10,
           f"got {got:.3f} want {want:.3f}")
 
-# ---------------------------------------------------------------- 4. CS matches TWFE under homogeneous effects
+# homogeneous
 cfg = DGPConfig(n_units=800, n_categories=1, discretion=(0.5,), include_bridge=False,
                 theta_spread=0.0, tau_level=1.0, kappa=0.6, sigma_eps=0.5, seed=14)
 df = generate_panel(cfg)
@@ -90,7 +90,7 @@ cs_ny = att_gt_cs(df, control="notyet")["es"].set_index("ell")["coef"]
 diff2 = max(abs(es_t[l] - cs_ny[l]) for l in common if l in cs_ny.index)
 check("CS not-yet-treated control also close", diff2 < 0.12, f"max diff {diff2:.3f}")
 
-# ---------------------------------------------------------------- 5. discretion-gradient test: size and power
+# gradient
 cfg0 = DGPConfig(n_units=800, n_categories=4, include_bridge=False,
                  theta_spread=0.3, kappa=0.0, sigma_eps=0.5, seed=15)
 df0 = generate_panel(cfg0)
@@ -106,7 +106,7 @@ t1 = discretion_gradient_test(generate_panel(cfg1))
 check("gradient test: rejects under measurement change", t1["pvalue"] < 0.01,
       f"p={t1['pvalue']:.4f}")
 
-# orthogonality: PT violation without measurement change -> gradient test quiet, pretrend loud
+# gradient
 cfgv = DGPConfig(n_units=800, n_categories=4, include_bridge=False, theta_spread=0.0,
                  kappa=0.0, trend_break=0.06, sigma_eps=0.5, seed=17)
 dfv = generate_panel(cfgv)
@@ -118,7 +118,7 @@ check("orthogonality: PT violation -> pretrend rejects", ptv["pvalue"] < 0.01,
 check("orthogonality: PT violation -> gradient test does NOT reject",
       tg["pvalue"] > 0.01, f"p={tg['pvalue']:.3f}")
 
-# ---------------------------------------------------------------- 6. bridge decomposition
+# decomposition
 cfg = DGPConfig(n_units=1000, n_categories=4, include_bridge=True, theta_spread=0.3,
                 tau_level=1.0, kappa=1.0, sigma_eps=0.5, seed=18)
 df = generate_panel(cfg)
@@ -135,7 +135,7 @@ meas_err = max(abs(row.loc[c, "es_measurement"] - 1.0 * dvec[c]) for c in row.in
 check("bridge: latent component recovered", lat_err < 0.15, f"max err {lat_err:.3f}")
 check("bridge: measurement component recovered", meas_err < 0.15, f"max err {meas_err:.3f}")
 
-# ---------------------------------------------------------------- 7. bounds sanity
+# sanity
 si = sensitivity_interval(coef=1.5, se=0.1, d_c=1.0, kappa_bar=0.8)
 check("sensitivity interval brackets", si["L"] < si["U"] and si["ci_lo"] < si["L"]
       and si["ci_hi"] > si["U"], f"[{si['ci_lo']:.2f},{si['ci_hi']:.2f}]")
@@ -147,8 +147,7 @@ check("recording bounds contain latent truth in closed form",
       rb["L"] <= 0.4 + np.log(0.6) + 1e-9 and rb["U"] >= 0.4 - 1e-9,
       f"[{rb['L']:.3f},{rb['U']:.3f}]")
 
-# ---------------------------------------------------------------- 8. X2: cohort
-# aggregation -- the sharp set is the MINKOWSKI AVERAGE of per-cohort sets
+# cohort
 Bc = np.array([[0.30, 0.00], [0.00, 0.30]])
 sc = cohort_sharp_interval(Bc, weights=[0.5, 0.5], m_bar=[0.5, 0.5])
 check("X2: sharpness_review F2 counterexample reproduced",
@@ -232,8 +231,7 @@ bdc = bridge_decomposition_by_cohort(dfx)
 check("X2: bridge point decomposition aggregates exactly (linear in beta)",
       bdc["max_abs_gap"] < 1e-9, f"gap {bdc['max_abs_gap']:.2e}")
 
-# ---------------------------------------------------------------- 9. X3: corrected
-# efficiency formulas
+# efficiency
 rnge = np.random.default_rng(9)
 m2_err, m2_small = 0.0, 0
 for _ in range(200):
@@ -260,8 +258,7 @@ se_bad = bridge_delta_se(2.5, 1.0, 0.01, 0.04, 0.0, corrected=False)
 check("X3: printed score understates the bridge SE when rho > 1", se_bad < se_ok,
       f"printed {se_bad:.4f} corrected {se_ok:.4f}")
 
-# ---------------------------------------------------------------- 10. X4: the A10
-# comovement diagnostic
+# comovement
 th_d = np.array([1.0, 0.8, 1.2, 0.9, 1.4])
 d_d = np.array([0.0, 0.3, 0.6, 1.0, 0.45])
 
@@ -327,22 +324,17 @@ check("X4: xi-corrected loadings beat the shipped IV under an A10b violation",
       f"corrected {np.max(np.abs(rho_rb - tr)):.4f} vs IV "
       f"{np.max(np.abs(rho_iv - tr)):.4f}")
 
-# two discretion-free bridges make rho exactly immune to A10b
+# discretion
 d2 = d_d.copy()
 d2[4] = 0.0
 Sig2 = np.outer(th_d, th_d) + 0.25 * np.outer(d2, d2) + np.diag([0.5] * 5)
-keep2 = [c for c in range(5) if c != 4]          # 4 is the instrument itself
+keep2 = [c for c in range(5) if c != 4]  # instrument
 rho_2b = np.array([Sig2[c, 4] / Sig2[0, 4] for c in keep2])
 err_2b = float(np.max(np.abs(rho_2b - (th_d / th_d[0])[keep2])))
 check("X4: a second discretion-free bridge is exactly immune to A10b",
       err_2b < 1e-12, f"max err {err_2b:.2e}")
 
-# ---------------------------------------------------------------- R. referee-response track
-#   nondiag (identified set for rho when A10b fails), robustness (A6 and the
-#   discretion index), exactness (non-equivariant loading normalisation), and
-#   the inference additions: realised-orbit resolution floors, the injection
-#   reference set, the Hotelling/permutation MDE calibrations, the validity
-#   region of the Corollary 8.4 expansion, and Anderson-Rubin sets.
+# permutation
 
 from did_measurement.nondiag import (rho_outer_set, rho_sharp_set,
                                      rho_lemma63_point, gradient_bounds_over_rho,
@@ -359,7 +351,7 @@ from did_measurement.bounds import (measurement_class_consistency,
                                     sensitivity_interval)
 from scipy import stats as _st
 
-# ---- R1  at b = 0 the sharp set is the Lemma 6.3 point, and it is the truth
+# sharp
 _th = np.array([1.0, 1.7, 0.6, 1.2])
 _V, _psi = 0.8, np.array([0.5, 0.7, 0.4, 0.6])
 _S = _V * np.outer(_th, _th) + np.diag(_psi)
@@ -372,7 +364,7 @@ _err0 = max(max(abs(_sh0[c][0] - _th[c]), abs(_sh0[c][1] - _th[c])) for c in ran
 check("R1: the b = 0 sharp set collapses to that point",
       _err0 < 5e-3, f"max endpoint err {_err0:.2e}")
 
-# ---- R2  nested in the outer set, covers the truth, widens in b
+# nested
 _w = []
 _inside = _covers = True
 for _b in (0.0, 0.05, 0.10, 0.25):
@@ -389,7 +381,7 @@ check("R2: the sharp set widens monotonically in b",
       all(_w[i] <= _w[i + 1] + 1e-9 for i in range(len(_w) - 1)),
       f"widths {[round(x, 4) for x in _w]}")
 
-# ---- R3  a genuinely non-diagonal Psi: the point estimate is biased, the set covers
+# bias
 _b_true = 0.3
 _Psi = np.diag(_psi) + _b_true * np.sqrt(np.outer(_psi, _psi)) * (1 - np.eye(4))
 _S2 = _V * np.outer(_th, _th) + _Psi
@@ -400,7 +392,7 @@ _bias2 = max(abs(_pt2[c] - _th[c]) for c in range(4))
 check("R3: under a non-diagonal Psi Lemma 6.3 is biased but the A10b(b) set covers",
       _cov2 and _bias2 > 0.02, f"Lemma 6.3 bias {_bias2:.4f}, set covers {_cov2}")
 
-# ---- R4  the closed-form d-shock bias, and the gradient bounds
+# gradient
 _rb = rho_bias_d_shock([1.0, 1.5, 2.0], [0.0, 0.5, 1.0], 0.4)
 check("R4: rho_hat = rho + varkappa d exactly",
       np.allclose(_rb, [1.0, 1.7, 2.4]), f"{np.round(_rb, 6).tolist()}")
@@ -423,7 +415,7 @@ _g_zero = gradient_bounds_over_rho(_beta, _dd, {0: (1.0, 1.0), 1: (-0.5, 0.5),
 check("R4: a loading interval straddling zero returns an unbounded gradient",
       _g_zero["unbounded"] and not _g_zero["sign_determinate"], "")
 
-# ---- R5  breakdown value of b
+# breakdown
 _bd = breakdown_b(_S, _beta, _dd, ref=0, b_hi=1.0, tol=1e-3)
 _bstar = _bd["breakdown_b"]
 _ok5 = 0.0 <= _bstar <= 1.0
@@ -435,7 +427,7 @@ if _bstar > 0.0:
 check("R5: breakdown_b lies in [0, 1] and the sign is determinate just below it",
       _ok5, f"b* = {_bstar:.4f} ({_bd['note']})")
 
-# ---- R6  the resolution floor is |Stab| x multiplicity / C!, not 1/C!
+# multiplicity
 check("R6: label_stabilizer_size counts tied-label factorials",
       label_stabilizer_size([1.0, 1.0, 0.5, 0.0]) == 2
       and label_stabilizer_size([1.0, 1.0, 0.0, 0.0]) == 4
@@ -455,7 +447,7 @@ check("R6: with tied labels the realised floor exceeds the naive 1/C!",
 check("R6: rejection_attainable is a computed function of the realised floor",
       prR["rejection_attainable"] == (prR["min_pvalue"] <= 0.05 + 1e-12), "")
 
-# ---- R7  the injection reference set when the loading guard fires
+# guard
 cfgI = DGPConfig(n_units=120, n_categories=5, discretion=(0.0, 0.25, 0.5, 0.75, 1.0),
                  include_bridge=False, theta_spread=0.0, tau_level=0.5,
                  kappa=0.0, sigma_eps=0.5, seed=808)
@@ -479,7 +471,7 @@ check("R7: the injection reference set has C0!/(C0-C)! members, the label set C!
       f"C0 = {_C0}: injection n = {prI['n_perm']}, labels n = {prL['n_perm']}; "
       f"p {prI['pvalue']:.4f} vs {prL['pvalue']:.4f}")
 
-# ---- R8  the Corollary 8.4 expansion, inside and outside its validity region
+# corollary
 _inside_err, _outside_err = [], []
 for _G in (30, 51, 100, 200, 400):
     for _m in (1, 3, 5, 9, 13, 20):
@@ -494,7 +486,7 @@ check("R8: at the paper's own design the expansion understates the exact size",
       f"expansion {wald_size_expansion(51, 13):.4f} vs exact "
       f"{predicted_wald_size(51, 13):.4f}")
 
-# ---- R9  MDE priced at a critical value the project does not refute
+# critical
 compM = gradient_components(dfI, outcome="Y", k_pre=3, k_post=3, loading="none")
 _m_chi = mde_kappa(compM, calibration="chi2")["kappa"]
 _m_hot = mde_kappa(compM, calibration="hotelling")["kappa"]
@@ -504,7 +496,7 @@ check("R9: the Hotelling critical value exceeds the chi-square one and the MDE "
       f"MDE chi2 {_m_chi:.4f} -> Hotelling {_m_hot:.4f} "
       f"(+{100 * (_m_hot / _m_chi - 1):.1f}%)")
 
-# ---- R10  Anderson-Rubin sets
+# anderson
 _ar_c = anderson_rubin_set(compM, calibration="chi2")
 _ar_h = anderson_rubin_set(compM, calibration="hotelling")
 _nested = (not _ar_c["empty"] and not _ar_h["empty"]
@@ -520,7 +512,7 @@ check("R10: an AR set is EMPTY exactly when the minimised fit criterion exceeds 
       f"min_stat {_ar_tiny['min_stat']:.3f} crit {_ar_tiny['crit']:.3f} "
       f"empty {_ar_tiny['empty']}")
 
-# ---- R11  the ordinal gradient test is invariant to any increasing recoding
+# gradient
 _yv = np.array([0.02, -0.01, 0.05, 0.03, -0.02])
 _dv = np.array([0.0, 0.2, 0.4, 0.8, 1.0])
 _r1 = rank_gradient_test(_yv, _dv, two_sided=True)
@@ -531,7 +523,7 @@ check("R11: the rank gradient test is invariant to strictly increasing recodings
       and abs(_r1["pvalue"] - _r3["pvalue"]) < 1e-12,
       f"p = {_r1['pvalue']:.4f} under all three codings")
 
-# ---- R12  the shape test, and leave-one-category-out
+# category
 _y_line = 0.1 * _dv - 0.03
 _sh_line = shape_test(_y_line, _dv)
 check("R12: an exactly linear profile gives R2_linear = 1 and no dummy advantage",
@@ -547,7 +539,7 @@ check("R12: a one-category response is flagged by both the shape test and LOCO",
       f"R2 dummy {_sh_dum['r2_dummy']:.3f} vs linear {_sh_dum['r2_linear']:.3f}; "
       f"LOCO min ratio {_lc_dum['min_ratio']:.3f}")
 
-# ---- R13  index-class slope and bridge stability
+# stability
 _ic = index_class_slope(_y_dum, [_dv, _dv ** 2, rank_recoding(_dv)],
                         names=["shipped", "squared", "rank"])
 check("R13: index_class_slope reports every coding and its range",
@@ -559,7 +551,7 @@ check("R13: bridge_stability counts sign flips against the reference bridge",
       _bs["rows"][0]["n_flip"] == 2 and not _bs["passes"],
       f"{_bs['rows'][0]['n_flip']} of 3 flip")
 
-# ---- R14  the measurement class the bounds impose must contain the point wedge
+# wedge
 _m_hat = np.array([-0.218, -0.070, -0.273, -0.140])
 _dcs = np.array([0.29, 0.60, 0.63, 0.70])
 _one = measurement_class_consistency(_m_hat, 0.25 * _dcs, sign=1)
@@ -575,7 +567,7 @@ check("R14: the two-sided class at a large cap is not refuted, and the two-sided
       and abs((_si0["U"] - _si0["L"]) / (_si1["U"] - _si1["L"]) - 2.0) < 1e-9,
       f"width ratio {(_si0['U'] - _si0['L']) / (_si1['U'] - _si1['L']):.6f}")
 
-# ---- R15  exactness of the fast permutation representation
+# permutation
 _eq_tri = equivariance_gap(dfI, stat="wald", loading="triad", outcome="Y",
                            k_pre=3, k_post=3)
 check("R15: the equivariant (triad) normalisation reproduces the refit orbit",
@@ -590,7 +582,7 @@ check("R15: the shipped mtest_iv normalisation is NOT equivariant, and the gap i
       f"gap {_eq_iv['max_abs_orbit_gap']:.4f} on a statistic of {_eq_iv['stat']:.3f}; "
       f"p_fast {_eq_iv['p_fast']:.4f} vs p_refit {_eq_iv['p_refit']:.4f}")
 
-# ---- R16  the A10 diagnostic reports ONE pre-registered p-value
+# diagnostic
 _pre = comovement_test(None, moments=moments_from_cube(_cube(4, sG2=0.25, N=800),
                                                        max_lag=1, demean=True),
                        max_lag=1, n_boot=299, seed=5)
@@ -602,7 +594,7 @@ check("R16: the pre-registered A10 p-value is the max of the two valid "
       f"{_pre['pvalue_satterthwaite']:.4f}, reported {_pre['pvalue']:.4f}")
 
 
-# ---- R17-R19  the entry point a reader of the paper calls
+# reader
 from did_measurement import screen_design, falsification_test   # noqa: E402
 from did_measurement.inference import effective_clusters        # noqa: E402
 
@@ -640,7 +632,6 @@ check("R19: the reported p-value is a randomisation calibration, never the chi "
       f"C=8 via {_r8.calibration.split(',')[0]}, "
       f"C=3 via {_r3.calibration.split(',')[0]}")
 
-# ----------------------------------------------------------------
 print()
 if FAILURES:
     print(f"{len(FAILURES)} FAILURE(S): {FAILURES}")

@@ -22,7 +22,7 @@ SUPP = os.path.join(HERE, 'supplement.tex')
 
 t = io.open(MAIN, encoding='utf-8').read()
 
-# ---------------------------------------------------------------- preamble
+# preamble
 pre = t[:t.index('\\begin{document}')]
 pre = pre.replace('\\usepackage{pgfplots}', '')
 pre = pre.replace('\\pgfplotsset{compat=1.18}', '')
@@ -32,14 +32,14 @@ pre = re.sub(r'\\date\{[^}]*\}', '', pre)
 assert '\\newtheorem' in pre, 'theorem environments lost from the preamble'
 pre += '\n\\usepackage{xr}\n\\externaldocument{main}\n'
 
-# ---------------------------------------------------------------- proofs
+# proofs
 a = t.index('\\section{Proofs}')
 b = t.index('\\section*{Declarations}')
 proofs = t[a:b].rstrip()
 assert proofs.count('\\begin{proof}') == 12, (
     'expected 12 proofs, found %d' % proofs.count('\\begin{proof}'))
 
-# ---------------------------------------------------------------- bibliography
+# bibliography
 bibstart = t.index('\\begin{thebibliography}')
 bib_all = t[bibstart:t.index('\\end{thebibliography}') + len('\\end{thebibliography}')]
 
@@ -82,7 +82,7 @@ io.open(SUPP, 'w', encoding='utf-8', newline='').write("\n\n".join(out))
 print('supplement written: %d proofs, %d bibliography entries'
       % (proofs.count('\\begin{proof}'), len(kept)))
 
-# ---------------------------------------------------------------- main.tex
+# main
 POINTER = (
     '\\appendix\n\n'
     '\\section*{Proofs}\n'

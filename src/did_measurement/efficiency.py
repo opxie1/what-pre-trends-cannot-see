@@ -30,7 +30,7 @@ __all__ = ["loading_channel_variance", "psi_rho_from_log", "eif_variance",
            "bridge_delta_se", "m2_variance", "m2_variance_gls", "m2_zeta"]
 
 
-# ----------------------------------------------------------------- R8
+# note
 
 def psi_rho_from_log(psi_log_rho, rho):
     """psi_rho = rho * psi_{log rho}.  The printed Phi^MD omits the factor rho."""
@@ -67,7 +67,7 @@ def bridge_delta_se(rho, b0, var_b0, var_rho, cov=0.0, corrected=True):
     return float(np.sqrt(max(v, 0.0)))
 
 
-# ----------------------------------------------------------------- R6
+# note
 
 def m2_zeta(theta, psi, sigma_v2):
     """Per-category signal-to-noise ratios zeta_a = sigma_v^2 theta_a^2 / psi_a."""

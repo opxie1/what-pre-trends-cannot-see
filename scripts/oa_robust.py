@@ -48,7 +48,7 @@ from theory_inference import (make_cfg, panel,               # noqa: E402
                               K_PRE, K_POST)
 
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 
 ALPHA = 0.05
@@ -60,7 +60,7 @@ G = 51
 C = 5
 T = 120
 
-# name -> (config overrides, units, cluster column)
+# cluster
 DESIGNS = {
     "baseline":  (dict(), G, "unit"),
     "clustered": (dict(n_clusters=G, sigma_cluster_time=0.6), 5 * G, "cluster"),

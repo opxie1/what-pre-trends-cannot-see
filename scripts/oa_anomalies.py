@@ -42,7 +42,7 @@ from theory_inference import (make_cfg, panel,            # noqa: E402
                               K_PRE, K_POST)
 
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 
 ALPHA = 0.05
@@ -51,7 +51,7 @@ REPS_B = 600
 N_PERM = 999
 
 
-# ---------------------------------------------------------------- A
+# note
 def _a_cell(args):
     C, loading, rep = args
     cfg = make_cfg(G=51, T=120, C=C, kappa=0.0, seed=70_000 + rep)
@@ -85,7 +85,7 @@ def run_a():
     return rows
 
 
-# ---------------------------------------------------------------- B
+# note
 def _b_cell(args):
     C, kappa, rep = args
     cfg = make_cfg(G=51, T=120, C=C, kappa=kappa, seed=80_000 + rep)
@@ -95,7 +95,7 @@ def _b_cell(args):
                                        loading="triad")
     except Exception:
         return None
-    # realised gradient on the post block at the identity labelling
+    # gradient
     gP, VP = inf._gamma_V_block(comp, comp["delta"][:, None], comp["post"])
     g = gP[0]
     V = VP[0]
@@ -135,7 +135,7 @@ def run_b():
     return rows
 
 
-# ---------------------------------------------------------------- C
+# note
 def _c_cell(args):
     G, m, seed = args
     rng = np.random.default_rng(seed)

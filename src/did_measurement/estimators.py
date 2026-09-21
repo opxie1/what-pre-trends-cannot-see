@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 
-# ---------------------------------------------------------------- helpers
+# helpers
 
 def _codes(x):
     _, inv = np.unique(np.asarray(x), return_inverse=True)
@@ -88,7 +88,7 @@ def build_event_dummies(event_time, k_pre, k_post):
     return X, labels
 
 
-# ---------------------------------------------------------------- TWFE ES
+# twfe
 
 def event_study_twfe(df, outcome="Y", k_pre=5, k_post=6,
                      unit_col="unit", time_col="period", cluster_col=None):
@@ -108,7 +108,7 @@ def event_study_twfe(df, outcome="Y", k_pre=5, k_post=6,
     return {"table": table, "vcov": V, "labels": labels, "n": n, "n_clusters": G}
 
 
-# ---------------------------------------------------------------- CS ATT(g,t)
+# att
 
 def _cs_point(df, outcome, control):
     """ATT(g,t) matrix and event-study aggregation from cohort-by-period means."""
@@ -126,14 +126,14 @@ def _cs_point(df, outcome, control):
                 if -1 not in m.index:
                     raise ValueError("no never-treated units for control='never'")
                 ctrl = m.loc[-1, t] - m.loc[-1, base]
-            else:  # not-yet-treated: cohorts with G > max(t, base), plus never
+            else:  # cohort
                 elig = [h for h in m.index if h == -1 or h > max(t, g)]
                 if not elig:
                     continue
                 w = sizes.loc[elig]
                 ctrl = ((m.loc[elig, t] - m.loc[elig, base]) * w).sum() / w.sum()
             out[(g, t)] = (m.loc[g, t] - m.loc[g, base]) - ctrl
-    # event-study aggregation, cohort-size weighted
+    # weight
     es = {}
     for (g, t), v in out.items():
         l = t - g
@@ -161,7 +161,7 @@ def att_gt_cs(df, outcome="Y", control="never", n_boot=0, seed=0):
             parts = []
             for j, uu in enumerate(samp):
                 p = gb[uu].copy()
-                p["unit"] = j  # relabel so duplicates count separately
+                p["unit"] = j  # duplicates
                 parts.append(p)
             try:
                 _, es_b = _cs_point(pd.concat(parts, ignore_index=True), outcome, control)

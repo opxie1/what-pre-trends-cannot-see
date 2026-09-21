@@ -37,50 +37,41 @@ CLIP_LO, CLIP_HI = 0.02, 1.0
 class DGPConfig:
     n_units: int = 400
     n_periods: int = 16
-    cohorts: tuple = (8, 11)            # adoption periods, 0-indexed
-    cohort_shares: tuple = (0.3, 0.3)   # shares of units per cohort; remainder never treated
-    n_categories: int = 4               # focal outcome categories (bridge is extra)
+    cohorts: tuple = (8, 11)  # adoption periods, 0-indexed
+    cohort_shares: tuple = (0.3, 0.3)  # shares of units per cohort; remainder never treated
+    n_categories: int = 4  # focal outcome categories (bridge is extra)
     include_bridge: bool = True
-    discretion: tuple = None            # d_c for focal cats; default linspace(0.2, 1.0)
+    discretion: tuple = None  # d_c for focal cats; default linspace(0.2, 1.0)
     theta_bridge: float = 1.0
-    theta_spread: float = 0.3           # focal loadings ~ evenly spaced in 1 +/- spread
-    theta_d_corr: float = 0.0           # >0 tilts loadings to increase with discretion
-    tau_level: float = 1.0              # latent effect size on the factor
-    tau_shape: str = "constant"         # "constant" | "ramp" (phases in over 3 periods)
-    kappa: float = 0.0                  # measurement-response scale
-    kappa_shape: str = "constant"       # "constant" | "ramp"
-    map_type: str = "additive"          # "additive" | "multiplicative" | "poisson"
-    mu_scale: float = 1.0               # sd of time-invariant recording distortions
-    trend_break: float = 0.0            # differential linear trend for eventual adopters
+    theta_spread: float = 0.3  # focal loadings ~ evenly spaced in 1 +/- spread
+    theta_d_corr: float = 0.0  # >0 tilts loadings to increase with discretion
+    tau_level: float = 1.0  # latent effect size on the factor
+    tau_shape: str = "constant"  # "constant" | "ramp" (phases in over 3 periods)
+    kappa: float = 0.0  # measurement-response scale
+    kappa_shape: str = "constant"  # "constant" | "ramp"
+    map_type: str = "additive"  # "additive" | "multiplicative" | "poisson"
+    mu_scale: float = 1.0  # sd of time-invariant recording distortions
+    trend_break: float = 0.0  # differential linear trend for eventual adopters
     sigma_unit: float = 1.0
     sigma_time: float = 0.5
     sigma_factor: float = 0.5
     sigma_eps: float = 1.0
-    sigma_eps_bridge: float = None      # override bridge noise (weak-bridge scenarios)
-    sigma_eps_by_cat: tuple = None      # per-category idiosyncratic sd, INCLUDING the
-                                        # bridge when include_bridge (length n_cat).
-                                        # Breaks Assumption CE (category exchangeability)
-                                        # of theory/inference.md; used to price the
-                                        # label-permutation test at each application's
-                                        # own realised residual-variance spread.
-    recording_profile: tuple = None     # per-category recording-response profile p_c
-                                        # replacing d_c in the recording map (length
-                                        # n_cat).  p_c = d_c reproduces A6; a 0/1 vector
-                                        # gives the single-category ("dummy") response
-                                        # that the CA application's shape test prefers.
-    n_clusters: int = None              # units per cluster > 1 when set; a
-                                        # `cluster` column is added and
-                                        # gradient_components should be called
-                                        # with cluster_col="cluster"
+    sigma_eps_bridge: float = None  # override bridge noise (weak-bridge scenarios)
+    sigma_eps_by_cat: tuple = None  # per-category idiosyncratic sd, INCLUDING the
+                                        # exchangeability
+    recording_profile: tuple = None  # per-category recording-response profile p_c
+                                        # application
+    n_clusters: int = None  # units per cluster > 1 when set; a
+                                        # cluster
     cluster_size_dispersion: float = 0.0  # 0 equal sizes, larger is more unequal
-    sigma_cluster_time: float = 0.0     # cluster-by-period shock, the source of
-                                        # within-cluster dependence
-    rho_eps: float = 0.0                # AR(1) on the idiosyncratic error in t
-    eps_dist: str = "normal"            # "normal" | "t5" (standardised)
-    sigma_u: float = 0.2                # recording noise, additive map only
-    r_base: float = 0.6                 # multiplicative/poisson baseline recording rate
-    exposure: float = 2000.0            # poisson exposure
-    latent_scale: float = 0.25          # index scale for exp() maps to keep rates sane
+    sigma_cluster_time: float = 0.0  # cluster-by-period shock, the source of
+                                        # cluster
+    rho_eps: float = 0.0  # AR(1) on the idiosyncratic error in t
+    eps_dist: str = "normal"  # "normal" | "t5" (standardised)
+    sigma_u: float = 0.2  # recording noise, additive map only
+    r_base: float = 0.6  # multiplicative/poisson baseline recording rate
+    exposure: float = 2000.0  # poisson exposure
+    latent_scale: float = 0.25  # index scale for exp() maps to keep rates sane
     seed: int = 0
 
 
@@ -90,7 +81,7 @@ def _cluster_assignment(N, n_clusters, dispersion, rng):
         return np.arange(N), np.ones(N, dtype=int)
     w = np.exp(dispersion * np.linspace(0.0, 1.0, n_clusters))
     sizes = np.maximum(1, np.round(w / w.sum() * N).astype(int))
-    # repair rounding so the sizes sum to N exactly
+    # size
     while sizes.sum() > N:
         sizes[int(np.argmax(sizes))] -= 1
     while sizes.sum() < N:
@@ -145,22 +136,22 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
     if shares.sum() > 1.0 + 1e-9:
         raise ValueError("cohort shares exceed 1")
     n_per = np.floor(shares * N).astype(int)
-    G = np.full(N, -1, dtype=int)  # -1 = never treated
+    G = np.full(N, -1, dtype=int)  # treated
     pos = 0
     for g, k in zip(cfg.cohorts, n_per):
         G[pos:pos + k] = g
         pos += k
     rng.shuffle(G)
 
-    # --- categories ---
+    # categories
     C = cfg.n_categories
     d_focal = np.asarray(cfg.discretion if cfg.discretion is not None
                          else np.linspace(0.2, 1.0, C), dtype=float)
     th_focal = 1.0 + cfg.theta_spread * np.linspace(-1, 1, C)
-    rng.shuffle(th_focal)  # loadings unrelated to discretion by default
+    rng.shuffle(th_focal)  # discretion
     if cfg.theta_d_corr != 0.0:
         z = (d_focal - d_focal.mean()) / max(d_focal.std(), 1e-12)
-        th_focal = 1.0 + cfg.theta_d_corr * 0.3 * z  # deterministic tilt
+        th_focal = 1.0 + cfg.theta_d_corr * 0.3 * z  # deterministic
     if cfg.include_bridge:
         d_all = np.concatenate([[0.0], d_focal])
         th_all = np.concatenate([[cfg.theta_bridge], th_focal])
@@ -168,7 +159,7 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
         d_all, th_all = d_focal, th_focal
     n_cat = len(d_all)
 
-    # --- cluster structure ---
+    # cluster
     clus_lab, clus_sizes = _cluster_assignment(
         N, cfg.n_clusters, cfg.cluster_size_dispersion, rng)
     n_clus = len(clus_sizes)
@@ -177,21 +168,21 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
     else:
         ct = None
 
-    # --- latent factor F[i,t] ---
+    # latent
     f_i = rng.normal(0, cfg.sigma_unit, N)
     g_t = rng.normal(0, cfg.sigma_time, T)
     v = rng.normal(0, cfg.sigma_factor, (N, T))
     per = np.arange(T)
-    ell = per[None, :] - G[:, None]                      # event time
-    treated_mask = (G[:, None] >= 0) & (ell >= 0)        # D[i,t]
-    n_h = T  # max horizons
+    ell = per[None, :] - G[:, None]  # event time
+    treated_mask = (G[:, None] >= 0) & (ell >= 0)  # D[i,t]
+    n_h = T  # horizon
     tau = _tau_path(cfg, n_h)
     kpath = _kappa_path(cfg, n_h)
     tau_it = np.where(treated_mask, tau[np.clip(ell, 0, n_h - 1)], 0.0)
     drift = cfg.trend_break * per[None, :] * (G[:, None] >= 0)
     F = f_i[:, None] + g_t[None, :] + tau_it + drift + v
 
-    # --- assemble long panel ---
+    # assemble
     sig_eps = np.full(n_cat, cfg.sigma_eps, dtype=float)
     if cfg.include_bridge and cfg.sigma_eps_bridge is not None:
         sig_eps[0] = cfg.sigma_eps_bridge
@@ -202,8 +193,7 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
         if np.any(sig_eps < 0):
             raise ValueError("sigma_eps_by_cat must be nonnegative")
 
-    # recording-response profile: p_c multiplies kappa in the recording map.
-    # Default p_c = d_c is Assumption A6 (discretion-proportional response).
+    # discretion
     if cfg.recording_profile is None:
         prof = d_all.copy()
     else:
@@ -220,7 +210,7 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
         if ct is not None:
             eps = eps + ct
         ystar = alpha[:, None] + lam[None, :] + th_all[c] * F + eps
-        mu = rng.normal(0, cfg.mu_scale, N)              # time-invariant recording distortion
+        mu = rng.normal(0, cfg.mu_scale, N)  # distortion
         kap_it = cfg.kappa * np.where(treated_mask, kpath[np.clip(ell, 0, n_h - 1)], 0.0) * prof[c]
 
         if cfg.map_type == "additive":
@@ -248,7 +238,7 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
             "D": D_flat.ravel(),
             "event_time": np.where(np.repeat(G, T) >= 0, ell.ravel(), np.nan),
             "Ystar": ystar.ravel(),
-            "F": F.ravel(),   # latent factor: simulation diagnostics ONLY, never estimation
+            "F": F.ravel(),  # diagnostics
             "Y": y.ravel(),
         })
         rows.append(df_c)
@@ -257,7 +247,7 @@ def generate_panel(cfg: DGPConfig) -> pd.DataFrame:
     if cfg.map_type == "poisson":
         df["exposure"] = cfg.exposure
 
-    # --- store truth for verification ---
+    # verification
     horizons = list(range(0, T - min(cfg.cohorts)))
     true_latent, true_meas = {}, {}
     for ci, (dc, thc) in enumerate(zip(prof, th_all)):

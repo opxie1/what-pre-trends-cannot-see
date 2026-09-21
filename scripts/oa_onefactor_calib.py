@@ -25,10 +25,10 @@ sys.path.insert(0, HERE)
 import oa_onefactor as OF                                       # noqa: E402
 
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 REPS = 400
-N_BOOT = 400          # inner bootstrap draws; smaller than the headline 2000
+N_BOOT = 400  # bootstrap
 ALPHA = 0.05
 
 
@@ -64,7 +64,7 @@ def _one_rep(args):
 
 
 def main():
-    # dimensions and loading/noise profiles taken from the three designs
+    # loading
     cases = [
         ("crime", 1675, np.array([0.62, 0.48, 0.93, 0.84, 0.37, 0.64]),
          np.array([0.78, 0.88, 0.37, 0.54, 0.93, 0.77])),

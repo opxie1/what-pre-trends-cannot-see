@@ -31,7 +31,7 @@ from scipy import stats
 from .estimators import build_event_dummies, demean_two_way, cluster_ols
 from .bridge import estimate_relative_loadings
 
-RHO_GUARD = 0.1  # drop categories whose |estimated loading| falls below this
+RHO_GUARD = 0.1  # loading
 
 
 def discretion_gradient_test(df, outcome="Y", k_pre=5, k_post=6,
@@ -76,7 +76,7 @@ def discretion_gradient_test(df, outcome="Y", k_pre=5, k_post=6,
     beta, V, n, G = cluster_ols(X_t, y_t, dat[cluster_col].to_numpy())
 
     k = len(labels)
-    int_idx = np.arange(k, 2 * k)                       # interaction block
+    int_idx = np.arange(k, 2 * k)  # interaction
     post_pos = [j for j, l in enumerate(labels) if l >= 0]
     pre_pos = [j for j, l in enumerate(labels) if l < -1]
 

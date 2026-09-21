@@ -39,7 +39,7 @@ from did_measurement import inference as inf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 SMOKE = os.environ.get("TI_SMOKE", "") == "1"
 if SMOKE:
@@ -68,7 +68,7 @@ if SMOKE:
     REPS = {k: 8 for k in REPS}
 
 
-# ------------------------------------------------------------------ DGP
+# dgp
 def make_cfg(G=51, T=120, C=5, kappa=0.0, disc=(0.1, 1.0), seed=0):
     cohorts = (48, 72, 96) if T >= 120 else (T * 2 // 5, T * 3 // 5, T * 4 // 5)
     d = tuple(np.round(np.linspace(disc[0], disc[1], C), 6))
@@ -118,7 +118,7 @@ def run_methods(comp, seed, methods=METHODS):
     return out
 
 
-# ------------------------------------------------------------------ job grid
+# grid
 def build_jobs():
     jobs = []
 
@@ -176,7 +176,7 @@ def run_chunk(args):
     return rows
 
 
-# ------------------------------------------------------------------ analytics
+# analytics
 def design_objects(G=51, T=120, C=5, disc=(0.1, 1.0), k_pre=K_PRE, seed=7):
     """Design-only objects (Sigma_delta2, I_k, q) plus a sigma^2 estimate."""
     df = panel(make_cfg(G=G, T=T, C=C, kappa=0.0, disc=disc, seed=seed))
@@ -210,7 +210,7 @@ def canonical_information(N=1000, T=24, g=12, p=0.5, k_pre=None, k_post=None):
     return float(k @ W @ k), len(P), N, p
 
 
-# ------------------------------------------------------------------ aggregate
+# aggregate
 def _rej(p, cut=ALPHA):
     p = np.asarray(p, float)
     p = p[np.isfinite(p)]
@@ -238,7 +238,7 @@ def aggregate(jobs):
                     "log((Y+0.5)/exposure); matches results/sims/e_calibrated"),
          "caveats": []}
 
-    # ---------------- V. exactness checks -------------------------------
+    # exactness
     df = panel(make_cfg(G=51, T=60, C=5, kappa=0.0, seed=3))
     c_iv = inf.gradient_components(df, outcome="logy", k_pre=K_PRE,
                                    k_post=K_POST, loading="mtest_iv")
@@ -256,9 +256,7 @@ def aggregate(jobs):
             dd, outcome="logy", k_pre=K_PRE, k_post=K_POST, loading="triad"))["stat"])
     D, _ = inf._perm_matrix(comp["delta"], None, np.random.default_rng(0))
     fast = inf._apply_stat(comp, D, "wald")
-    # Definition 4 / Lemma 2: at the identity Rademacher draw (v == 1) the
-    # bootstrap sample IS the data, so z*_g = z_g and the bootstrap Wald must
-    # equal chi2_wald exactly.  Likewise sum_g zeta_g = gamma_hat_post (eq. 6).
+    # bootstrap
     w_obs = inf.chi2_wald(comp)["stat"]
     w_wcb = inf.wild_cluster_bootstrap(comp, 3, 0, "wald")["stat"]
     _r = inf._restricted(comp)
@@ -284,7 +282,7 @@ def aggregate(jobs):
                  "gamma_hat on the post block."),
     }
 
-    # ---------------- A. size grid --------------------------------------
+    # size
     d = _load("size", jobs)
     rows = []
     for (G, C), g in d.groupby(["G", "C"]):
@@ -318,14 +316,14 @@ def aggregate(jobs):
     fig.savefig(os.path.join(OUT, "size_grid.png"), dpi=150)
     plt.close(fig)
 
-    # null critical cutoffs (for size adjustment), by (G, C, method)
+    # size
     cuts = {}
     for (G, C), g in d.groupby(["G", "C"]):
         for m in METHODS:
             p = g["p_" + m].dropna().to_numpy()
             cuts[(int(G), int(C), m)] = float(np.quantile(p, ALPHA, method="lower"))
 
-    # ---------------- B. power ------------------------------------------
+    # power
     d = _load("power", jobs)
     rows = []
     for (C, kap), g in d.groupby(["C", "kappa"]):
@@ -368,7 +366,7 @@ def aggregate(jobs):
     fig.savefig(os.path.join(OUT, "power_curves.png"), dpi=150)
     plt.close(fig)
 
-    # ---------------- C/E. design and reference block --------------------
+    # reference
     d = _load("design", jobs)
     rows = []
     for (T, sp, kap), g in d.groupby(["T", "spread", "kappa"]):
@@ -401,7 +399,7 @@ def aggregate(jobs):
         ref_tab[["k_pre", "kappa", "method", "power_sizeadj"]].itertuples(index=False)
         if m in ("perm_wald", "perm_dir", "signflip_dir")}
 
-    # ---------------- M. closed-form MDE vs simulation -------------------
+    # simulation
     sig_by = {}
     for part, keys in (("size", ["G", "C"]), ("design", ["T", "spread"]),
                        ("ref", ["k_pre"])):
@@ -446,7 +444,7 @@ def aggregate(jobs):
         mde_rows.append(row)
     mde_tab = pd.DataFrame(mde_rows)
 
-    # simulated size-adjusted MDE by inverting the power curves
+    # power
     def invert(ks, ps, target=0.80):
         ks, ps = np.asarray(ks, float), np.asarray(ps, float)
         o = np.argsort(ks); ks, ps = ks[o], ps[o]
@@ -531,7 +529,7 @@ def aggregate(jobs):
     fig.savefig(os.path.join(OUT, "mde_design.png"), dpi=150)
     plt.close(fig)
 
-    # ---------------- canonical design lemma ----------------------------
+    # canonical
     checks = []
     for T0mode, kp in (("single", None), ("block", 1)):
         for T, g, p in ((24, 12, 0.5), (40, 20, 0.4), (60, 30, 0.5)):
@@ -545,10 +543,7 @@ def aggregate(jobs):
     can.to_csv(os.path.join(OUT, "canonical_information.csv"), index=False)
     S["canonical_information_max_rel_err"] = float(can.rel_err.max())
 
-    # ---------------- H. exchangeability failure (Gaussian limit) --------
-    # Proposition 6: with category-specific idiosyncratic variances the limit of
-    # the category deviations is NOT exchangeable, so Theorem 1 does not apply.
-    # Quantify the resulting size distortion in the Gaussian limit experiment.
+    # exchangeability
     def gauss_perm_size(omega, delta, n_sim=20000, stat="wald", seed=0):
         rng = np.random.default_rng(seed)
         D, _ = inf._perm_matrix(np.asarray(delta, float), None, rng)
@@ -557,9 +552,8 @@ def aggregate(jobs):
         rej = 0
         for _ in range(n_sim):
             eps = sd * rng.standard_normal(len(sd))
-            g = (eps @ D) / s2                                   # (P,)
-            # CR1-style variance estimate that is blind to heteroskedasticity:
-            # v(pi) propto sum_c delta_pi(c)^2 * omegahat, omegahat common
+            g = (eps @ D) / s2  # note
+            # variance
             v = (D ** 2).sum(0) / s2 ** 2
             t = g ** 2 / v if stat == "wald" else g / np.sqrt(v)
             rej += int((t >= t[0] - 1e-12).mean() <= ALPHA + 1e-12)
@@ -582,7 +576,7 @@ def aggregate(jobs):
         f"C{int(C)}_ratio{r}_{pl}_{st}": round(v, 4) for C, r, pl, st, v in
         het[["C", "var_ratio", "inflated", "stat", "size"]].itertuples(index=False)}
 
-    # ---------------- L. Theorem 6: local power of the permutation test ---
+    # permutation
     comp5, di5 = design_objects(G=51, C=5, T=120, disc=(0.1, 1.0))
     s2_5 = float(sig_by["size"].loc[(51, 5)])
     lp_rows = []
@@ -592,7 +586,7 @@ def aggregate(jobs):
         lam = inf.noncentrality(comp5, sig, sigma2=s2_5)["lambda"]
         lp_rows.append(dict(
             kappa=kap, g=gg, lam=lam,
-            # linearised: signal g*1 per unit of rho_pi (Theorem 6)
+            # signal
             theory_perm_wald=inf.local_power_permutation(
                 comp5["delta"], np.ones(len(comp5["post"])), di5["W"], s2_5, gg,
                 n_sim=3000, alpha=ALPHA, stat="wald", seed=1),
@@ -607,7 +601,7 @@ def aggregate(jobs):
     lp.to_csv(os.path.join(OUT, "local_power_check.csv"), index=False)
     S["local_power_check"] = json.loads(lp.to_json(orient="records"))
 
-    # ---------------- caveats -------------------------------------------
+    # caveats
     S["caveats"] = [
         "The label-permutation test needs C! >= 1/alpha distinct permuted values. "
         "With C = 3 the two-sided Wald takes at most 3 distinct values over the 6 "
@@ -660,7 +654,7 @@ def aggregate(jobs):
     print(json.dumps(S["exactness_checks"], indent=1))
 
 
-# ------------------------------------------------------------------ driver
+# driver
 def main():
     t0 = time.time()
     budget = float(os.environ.get("TI_BUDGET_S", 100000))

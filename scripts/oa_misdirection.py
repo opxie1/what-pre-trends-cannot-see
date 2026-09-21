@@ -47,7 +47,7 @@ from theory_inference import (make_cfg, panel,            # noqa: E402
                               K_PRE, K_POST)
 
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 
 ALPHA = 0.05
@@ -86,19 +86,19 @@ def _cell(args):
             r = inf.permutation_test(comp, st, N_PERM, 50_000 + rep, w=w)
             out["p_%s_%s" % (st, name)] = float(r["pvalue"])
 
-    # efficiency ratios at the realised V, each for its own statistic
+    # efficiency
     _, VP = inf._gamma_V_block(comp, comp["delta"][:, None], comp["post"])
     V = VP[0]
     Vi = np.linalg.pinv(V)
     k = sh["flat"]
-    info = float(k @ Vi @ k)                      # kappa^2 info at the optimum
+    info = float(k @ Vi @ k)  # optimum
     root = np.sqrt(max(info, 1e-300))
     for name, w in sh.items():
         wVw = float(w @ V @ w)
-        # fixed contrast: kappa w'k / sqrt(w'Vw), relative to kappa sqrt(k'V^-1 k)
+        # contrast
         out["ratio_directed_" + name] = (
             float(w @ k) / (np.sqrt(max(wVw, 1e-300)) * root))
-        # GLS: the V^{-1} cosine of Section 8
+        # section
         num = float(w @ Vi @ k)
         den = float(np.sqrt(max((w @ Vi @ w) * info, 1e-300)))
         out["ratio_directed_gls_" + name] = num / den

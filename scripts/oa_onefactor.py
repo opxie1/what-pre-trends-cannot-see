@@ -52,7 +52,7 @@ from did_measurement.estimators import demean_two_way          # noqa: E402
 from did_measurement.inference import estimate_loadings_triad  # noqa: E402
 
 OUT = os.path.join(ROOT, "results", "inference")
-if not os.path.isdir(OUT):                 # older working tree layout
+if not os.path.isdir(OUT):  # working
     OUT = os.path.join(ROOT, "results", "theory", "inference")
 PROC = os.path.join(ROOT, "data", "processed")
 CRIME_FOCAL = [1, 2, 3, 4, 5, 6]
@@ -62,10 +62,7 @@ N_BOOT = 2000
 COV_FLOOR = 1e-6
 
 
-# ------------------------------------------------------------------- panels
-# The two application panels are not redistributed with this repository.  These
-# three helpers match fix_empirics_lib in the working tree; they are inlined so
-# that this script has no dependency outside src/did_measurement.
+# fix_empirics_lib
 def load_crime():
     return pd.read_csv(os.path.join(PROC, "crime_panel.csv"))
 
@@ -85,7 +82,7 @@ def balanced_subset(df, cats):
     return sub[[x in keys for x in kk]].reset_index(drop=True)
 
 
-# ------------------------------------------------------------------ statistics
+# statistics
 def untreated_array(df, cats, outcome):
     """The (n_untreated, C) two way demeaned array the triad estimator sees."""
     dat = balanced_subset(df, cats)
@@ -151,18 +148,18 @@ def stats(R):
             "communality": h, "communality_median": float(np.median(h))}
 
 
-# ------------------------------------------------------- one factor null draws
+# factor
 def fit_one_factor(R):
     """theta, factor scores and idiosyncratic residuals under one factor."""
     Cov = np.cov(R, rowvar=False)
-    rho, _ = estimate_loadings_triad(Cov)                 # geometric mean one
-    # scale: s^2 solves mean of off-diagonal Sigma_ck / (rho_c rho_k)
+    rho, _ = estimate_loadings_triad(Cov)  # geometric
+    # diagonal
     C = Cov.shape[0]
     off = ~np.eye(C, dtype=bool)
     s2 = float(np.mean((Cov / np.outer(rho, rho))[off]))
     s2 = max(s2, 1e-12)
-    theta = rho * np.sqrt(s2)                             # Sigma_ck = theta_c theta_k
-    # GLS factor score, then idiosyncratic variances from the residual
+    theta = rho * np.sqrt(s2)  # sigma_ck
+    # variance
     sig2 = np.maximum(np.diag(Cov) - theta ** 2, 1e-12)
     wts = theta / sig2
     F = (R @ wts) / float(wts @ theta)
@@ -172,7 +169,7 @@ def fit_one_factor(R):
 
 def block_indices(n, starts_len, rng, block):
     """Circular block bootstrap row indices of length n, fixed block length."""
-    nb = -(-n // block)                                   # ceil
+    nb = -(-n // block)  # ceil
     starts = rng.integers(0, starts_len, size=nb)
     idx = (starts[:, None] + np.arange(block)[None, :]) % starts_len
     return idx.ravel()[:n]
@@ -191,14 +188,14 @@ def null_draws(R, n_boot=N_BOOT, seed=0, block=None, mode="block"):
             Fs = F[block_indices(n, n, rng, block)]
             Es = np.column_stack(
                 [E[block_indices(n, n, rng, block), c] for c in range(C)])
-        else:                                             # iid cells
+        else:  # cells
             Fs = F[rng.integers(0, n, n)]
             Es = np.column_stack([E[rng.integers(0, n, n), c] for c in range(C)])
         out.append(stats(np.outer(Fs, theta) + Es))
     return out, block
 
 
-# ------------------------------------------------------------------- designs
+# designs
 def designs():
     cr = load_crime()
     md = load_medicaid()
@@ -235,8 +232,7 @@ def main():
             draws, block = null_draws(R, seed=7, mode=mode)
             ev = np.array([d["ev21"] for d in draws])
             ts = np.array([d["triad_sd"] for d in draws])
-            # one factor makes ev21 LARGE and triad_sd SMALL, so the evidence
-            # against one factor is a small ev21 or a large triad_sd
+            # triad_sd
             rec[mode + "_block_len"] = block if mode == "block" else 1
             rec[mode + "_ev21_p"] = round(float((ev <= obs["ev21"]).mean()), 4)
             rec[mode + "_ev21_q05"] = round(float(np.quantile(ev, 0.05)), 3)

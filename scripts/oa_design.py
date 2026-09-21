@@ -53,7 +53,7 @@ CRIME = [1, 2, 3, 4, 5, 6]
 MED_ANNUAL = [1, 4, 5, 6, 7]
 MED_FOCAL = [1, 2, 3, 4, 5, 6, 7]
 
-# name -> (categories, outcome, (k_pre, k_post) as run, institutional wedge)
+# wedge
 DESIGNS = {
     "crime":             (CRIME,      "y", (6, 8), 0.074),
     "medicaid annual":   (MED_ANNUAL, "Y", (5, 6), 0.052),
@@ -134,9 +134,7 @@ def main():
                                        use_bridge=(r["bridge"] == "included"))
         st = r["statistic"]
         rec = dict(r)
-        # the closed form understates the label permutation test's MDE; report
-        # the permutation calibrated value too, since that test is the one the
-        # paper recommends
+        # permutation
         s2 = float(np.mean(comp["resid_var"]))
         mp = inf.mde_kappa_permutation(
             comp, alpha=ALPHA, power=POWER, sigma2=s2,

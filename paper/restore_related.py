@@ -70,7 +70,7 @@ anchor = '\\section{What the falsification test is for}'
 i = t.index(anchor)
 t = t[:i] + SECTION + t[i:]
 
-# restore any bibitem the new text needs
+# restore
 back = io.open(BACKUP, encoding='utf-8').read()
 bib_all = back[back.index('\\begin{thebibliography}'):
                back.index('\\end{thebibliography}')]

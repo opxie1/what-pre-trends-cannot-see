@@ -34,8 +34,7 @@ from .inference import (design_information, effective_clusters,
 
 __all__ = ["screen_design", "falsification_test", "DesignVerdict", "TestResult"]
 
-# Below this many categories the two sided label permutation p value cannot fall
-# under the level, whatever the data: the smallest attainable value is 2/C!.
+# permutation
 _MIN_C_FOR_LABEL_PERMUTATION = 5
 
 
@@ -112,8 +111,7 @@ def screen_design(df, kappa_inst=None, alpha=0.05, power=0.80, k=None, **kw):
     G_eff = effective_clusters(comp)
     omega2 = (n - 2 * q) / (n - 1)
 
-    # price the minimum detectable response at the calibration a correctly sized
-    # procedure uses, not at the chi square critical value the paper rejects
+    # calibration
     kappa_mde = float(mde_kappa(comp, kind='wald', alpha=alpha, power=power,
                                 k=k, calibration='hotelling',
                                 G_eff=G_eff)['kappa'])

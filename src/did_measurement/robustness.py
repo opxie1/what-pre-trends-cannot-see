@@ -28,9 +28,7 @@ import math
 import numpy as np
 
 
-# --------------------------------------------------------------------------
-# exact label-permutation machinery on category-level summaries
-# --------------------------------------------------------------------------
+# permutation
 
 def _orbit(stat_fn, y, d):
     """All C! values of stat_fn(y, d_permuted); index 0 is the identity."""
@@ -90,9 +88,7 @@ def _r2(y, X):
     return (1.0 - float((r ** 2).sum()) / tss) if tss > 0 else np.nan, beta
 
 
-# --------------------------------------------------------------------------
-# 1. ordinal (recoding-invariant) gradient test
-# --------------------------------------------------------------------------
+# gradient
 
 def rank_gradient_test(y, d, two_sided=False):
     """Exact permutation test of monotone association between y_c and d_c.
@@ -116,9 +112,7 @@ def rank_gradient_test(y, d, two_sided=False):
     return out
 
 
-# --------------------------------------------------------------------------
-# 2. shape test: A6 (line in d) against the single-category alternative
-# --------------------------------------------------------------------------
+# alternative
 
 def shape_test(y, d):
     """Is the category profile graded in d, or a dummy for one category?
@@ -196,9 +190,7 @@ def shape_test(y, d):
             "verdict": verdict}
 
 
-# --------------------------------------------------------------------------
-# 3. leave-one-category-out profile
-# --------------------------------------------------------------------------
+# category
 
 def loco_gradient(y, d):
     """Leave-one-category-out gradient, as a ratio to the full-sample gradient.
@@ -223,9 +215,7 @@ def loco_gradient(y, d):
             "single_category_driven": bool(np.nanmin(ratios) < 0.5)}
 
 
-# --------------------------------------------------------------------------
-# 4. index-class sensitivity
-# --------------------------------------------------------------------------
+# sensitivity
 
 def index_class_slope(y, d_variants, names=None, weights=None):
     """Gradient slope over an explicit class of admissible discretion codings."""
@@ -269,9 +259,7 @@ def perturbation_ladder(d, sds=(0.05, 0.10, 0.20), n_draws=20, seed=0, clip=(0.0
     return out, names
 
 
-# --------------------------------------------------------------------------
-# 5. bridge stability
-# --------------------------------------------------------------------------
+# stability
 
 def bridge_stability(decompositions):
     """Mandatory stability check across candidate bridges.
