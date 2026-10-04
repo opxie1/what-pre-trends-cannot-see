@@ -137,26 +137,24 @@ calibration in current use fails badly at exactly those sample sizes. At $51$
 clusters, $13$ restrictions and $5$ categories we measure a null rejection rate
 of $0.389$ against a nominal $0.05$, and at $20$ clusters the rate is $0.905$.
 
-Our second result explains that failure and converts it into a design rule. When
-every cluster carries the same design weight, the cluster robust Wald statistic
-is exactly $\omega_2$ times a Hotelling $T^2$ with dimension equal to the number
-of restrictions and degrees of freedom equal to one less than the number of
-clusters \citep{hotelling1931}, where $\omega_2$ is a fitting correction lying
-between $0.995$ and $0.9997$ across the designs we study. The chi-square reference ignores the estimation of the meat matrix from the cluster scores, and
-the identity says what that costs. Equal design weights are what make the
-statement exact, and they are also what make the problem tractable. The condition
-fails in every design we run, including both applications, where the effective
-cluster counts of Definition \ref{def:geff} are $45.9$, $36.0$ and $32.8$ against
-$51$ clusters. We therefore use Proposition \ref{prop:anatomy} as a diagnostic
-and as the source of a design rule rather than as a calibration we recommend,
-since its own reference distribution rejects between $0.082$ and $0.175$ across
-the twelve cells of Table \ref{tab:size}. The rule itself is computable before
-any outcome is observed, since the distortion is governed jointly by the number
-of restrictions and the number of clusters, and the chi-square calibration is
-valid only when the former grows more slowly than the two thirds power of the
-latter. At $36.4$ effective
-clusters, for example, size stays below $0.075$ only when two or fewer
-restrictions are imposed.
+Why it fails has a closed form, and the closed form is what turns the
+failure into a design rule. When every cluster carries the same design
+weight, the cluster robust Wald statistic is exactly $\omega_2$ times a
+Hotelling $T^2$ with dimension equal to the number of restrictions and
+degrees of freedom equal to one less than the number of clusters
+\citep{hotelling1931}. The chi-square reference ignores the estimation of
+the meat matrix from the cluster scores, and the identity prices that
+omission. Equal weights are what make the statement exact and they hold in
+no design we run, including both applications, so Proposition
+\ref{prop:anatomy} earns its place as a diagnostic and not as a
+calibration we recommend; its own reference distribution rejects between
+$0.082$ and $0.175$ across the twelve cells of Table \ref{tab:size}. What
+survives the concession is the rule. The distortion is governed jointly by
+the number of restrictions and the number of clusters, so the chi-square
+calibration is valid only when the first grows more slowly than the two
+thirds power of the second, and a researcher can check that before
+collecting an outcome. At $36.4$ effective clusters size stays below
+$0.075$ only when two or fewer restrictions are imposed.
 
 We then give three calibrations that do not require equal design weights, and we
 characterize the size of each. The first permutes the exposure labels across
@@ -549,7 +547,8 @@ The chi-square calibration treats the estimated meat matrix as known. Under
 Assumption \ref{as:I} the cost of that substitution is exactly the $F$
 denominator in \eqref{eq:Fexact}, which has $G - m$ degrees of freedom. The
 statement is a degrees of freedom result: nothing about the errors beyond
-Assumption \ref{as:I}(i) enters, and $\omega_2$ equals $0.9989$ at the headline
+Assumption \ref{as:I}(i) enters, and $\omega_2$ lies between $0.995$ and $0.9997$ across the designs we
+study and equals $0.9989$ at the headline
 design of Section \ref{sec:sim} ($G = 51$, $C = 5$). The factor $(n-2q)/(n-1)$
 counts the $2q$ interacted event time regressors in \eqref{eq:pooled} and not
 the $C(N+T-1)$ absorbed unit by category and period by category effects, so a
