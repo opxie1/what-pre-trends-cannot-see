@@ -1,0 +1,516 @@
+{
+ "crime": {
+  "design_chosen": "Staggered state transition from UCR summary reporting (SRS) to NIBRS; the recording technology itself is the treatment. State x year x offense-category panel, 1979-2024, 51 states, 7 index offenses.",
+  "rejected_alternatives": [
+   "Marijuana decriminalization/legalization on recorded drug offenses: no drug-offense series in the available state-year offense panel (UCR drug data are arrests, not offenses known), and legalization shifts true incidence and legal definitions simultaneously, so the recording margin is not separately interpretable.",
+   "Other staggered policing reforms: dominated by the NIBRS design, which is the paper's mechanism in its purest form.",
+   "CDC WONDER homicide as bridge: unnecessary (UCR homicide series available in the same panel); WONDER also suppresses small cells."
+  ],
+  "sources": {
+   "recorded_crime": "data/raw/crime/state-trends.json, cached by the scoping step: FBI UCR summary-based estimated state totals (SRS-continuity series), 51 states, 1979-2024, with population. Integrity verified against published FBI figures: US 1990 murders sum to 23,438; US 1991 violent crime to 1,911,767; CA 1992 murders 3,921 (exact matches). No missing cells after repair.",
+   "nibrs_transition": "FBI Crime Data Explorer agency API (api.usa.gov/crime/fbi/cde/agency/byStateAbbr/{ST}), fetched 2026-08-13, cached in data/raw/crime/agencies/. Per-agency nibrs_start_date. Cohort = first year >= 50% of the state's listed agencies had started NIBRS; never (-1) if not reached by 2024 (FL, HI, NY, PA).",
+   "discretion_index": "NCVS percent of victimizations reported to police, 2018 and 2019 averaged: BJS, Criminal Victimization 2019, NCJ 255113, Table 6. d_c = 1 - reporting rate, rescaled so the largest focal value (larceny) = 1; homicide d = 0 by convention (bridge; not in NCVS)."
+  },
+  "ncvs_pct_reported_2018_2019": {
+   "motor_vehicle_theft": [
+    78.6,
+    79.5
+   ],
+   "aggravated_assault": [
+    60.5,
+    52.1
+   ],
+   "robbery": [
+    62.6,
+    46.6
+   ],
+   "burglary": [
+    47.5,
+    51.4
+   ],
+   "rape": [
+    24.9,
+    33.9
+   ],
+   "larceny": [
+    28.6,
+    26.8
+   ]
+  },
+  "discretion_d": {
+   "homicide": 0.0,
+   "motor_vehicle_theft": 0.2898,
+   "aggravated_assault": 0.6044,
+   "robbery": 0.6279,
+   "burglary": 0.6992,
+   "rape": 0.9765,
+   "larceny": 1.0
+  },
+  "cohorts": {
+   "AK": 2021,
+   "AL": 2020,
+   "AR": 2004,
+   "AZ": 2021,
+   "CA": 2022,
+   "CO": 1997,
+   "CT": 2002,
+   "DC": 2021,
+   "DE": 2001,
+   "FL": -1,
+   "GA": 2019,
+   "HI": -1,
+   "IA": 1992,
+   "ID": 1992,
+   "IL": 2022,
+   "IN": 2020,
+   "KS": 2000,
+   "KY": 2009,
+   "LA": 2021,
+   "MA": 2002,
+   "MD": 2022,
+   "ME": 2020,
+   "MI": 1996,
+   "MN": 2020,
+   "MO": 2020,
+   "MS": 2022,
+   "MT": 2005,
+   "NC": 2019,
+   "ND": 1991,
+   "NE": 2021,
+   "NH": 2003,
+   "NJ": 2022,
+   "NM": 2021,
+   "NV": 2021,
+   "NY": -1,
+   "OH": 2006,
+   "OK": 2012,
+   "OR": 2014,
+   "PA": -1,
+   "RI": 2004,
+   "SC": 1994,
+   "SD": 2002,
+   "TN": 1998,
+   "TX": 2021,
+   "UT": 2017,
+   "VA": 1996,
+   "VT": 2001,
+   "WA": 2011,
+   "WI": 2019,
+   "WV": 1999,
+   "WY": 2021
+  },
+  "repairs": [
+   "ND 2022 row was misfiled under NC (duplicate NC-2022 with ND population); reassigned to ND deterministically."
+  ],
+  "caveats": [
+   "FBI converts NIBRS submissions back to SRS categories (hierarchy rule) for these estimated totals, muting the mechanical count effect; what remains is incident-capture and classification differences.",
+   "Transition = share of the current CDE agency roster (2025 snapshot): not population-weighted, defunct agencies absent, and 3,252 of 19,616 entries (17%) have no start date so they count as permanent non-adopters in the denominator. This misclassifies Hawaii: its 4 county/city police departments all adopted by 2021 (Honolulu 2018) but 9 dateless state entries hold the share at 0.31, so HI is coded never-treated and enters the control group while actually treated. Variant core_agency_types (City/County/State Police only) moves HI to 2020 and SC to 1991, its documented first-NIBRS-state status.",
+   "CDE roster start dates lead actual NIBRS submission by ~1 year (7,754 agencies dated through 2018 vs 7,283 that actually submitted; CA roster share 0.41 by 2021 against under 2% actually reporting), so cohorts are biased early, which also feeds the leads placebo rejection. Variant cohort_plus1 changes nothing material. Adoption is gradual, so dose ramps around the threshold year and leads can carry partial dose. 51 state clusters: CR1 + chi-square can over-reject modestly (Study E). CS weights cohorts by state counts, not population.",
+   "Rape has the 2013 legacy-to-revised definition break. 2021+ estimates use NIBRS-only estimation whose imputation quality itself depends on a state's NIBRS coverage, i.e. on treatment, and that break coincides with the largest cohorts (9 states 2021, 5 in 2022); period FE absorb only the common part. The pre-2020 subsample is the primary specification for late cohorts, not a robustness check.",
+   "The homicide bridge itself shows a rising recorded post effect (+0.22 log points at ell=5), and its ell 6-12 rise comes from 1990s-2000s early cohorts, not COVID. The one-factor attribution scales this by rho_c, so with a pooled recorded effect near zero the POOLED measurement share is unstable and its bootstrap CI is uninformative; per-category measurement LEVELS in log points and the pre-2020 subsample are the interpretable objects. Per-category measurement SHARES divide by near-zero recorded effects and are wild (e.g. robbery). Weak-bridge diagnostic: min |cov denominator| = 0.005; IV loadings (0.79-2.21) far exceed OLS (0.11-0.37), consistent with attenuation of OLS but amplifying bridge noise.",
+   "The adjusted gradient test rejects (p=0.018) but its leads placebo also rejects (p<1e-4), and the rejection is fragile: it dies pre-2020 (p=0.37), at an 80% adoption threshold (p=0.18) and without rape+larceny (p=0.11, clean placebo).",
+   "SIGN: the adjusted gradient rejection points the WRONG WAY for the theory, which predicts LARGER recorded increases where discretion is higher, i.e. positive interaction slopes. Estimated post slopes are negative at ell 1-5 (-0.059 to -0.104), turning positive only at ell 6-8 where the sample is thinnest, while every lead slope is also negative (-0.231 at ell -6 to -0.007 at ell -3). Read it as a discretion-graded differential TREND continuing across the transition, not as a discretion-graded recording response. The loading adjustment divides rape and larceny by rho 0.456 and 0.414 (2.2-2.4x), which is why dropping them kills the rejection.",
+   "Never-treated states under the baseline rule are FL, NY, PA (plus misclassified HI): large-city states with the sharpest 1990s-2000s declines, which mechanically pushes early-adopter effects positive. Dropping them moves homicide 0.133 -> ~0.098 and flips the small focal signs (see adoption_variants.csv).",
+   "recording_bounds uses the NCVS victim-reporting rate as r0, a proxy for (not the same as) the police recording margin the theory bounds, so identified sets are illustrative and conservative. The discretion index averages only two NCVS years and robbery swings 62.6% to 46.6% across them, so the robbery-vs-aggravated-assault ordering is fragile. breakdown_kappa entries for negative recorded post-means (robbery, larceny) fall outside the function's sign convention and are just |coef|/d_c; breakdown_kappa_stat is NaN because nothing is significant at 0.",
+   "Bootstrap SEs carry Monte Carlo error: at B=300 the MC SE of the homicide post-mean SE is 0.0019, so its t stat is 3.03 +/- 0.13 (mc_se.csv); resampling-based and kurtosis-based MC SEs agree to within 5.5%. No qualitative conclusion turns on it. Reproducibility: a full re-run from cached raw files reproduces every stored table to <3e-12 (reviewer-verified), and stage 7 re-running the stage-1 bootstrap at the same seed reproduces its SEs bit for bit (stage1_bootstrap_reproduced_max_se_diff = 0.0); that field is a determinism check on a deterministic function, not independent evidence. Values resumed from CSV checkpoints can differ from a fresh in-memory run in the 16th significant digit (float round-trip). The cold pipeline costs ~9.4 min, above the 8-min per-execution budget, so every stage checkpoints to CSV and skips work already on disk; runtime_min in summary.json is that execution's wall time, not the cold cost (see runtime_note).",
+   "INFERENCE CALIBRATION (reviewer-added): with 51 state clusters the CR1 + chi-square approximation used by every p-value here is anti-conservative. Randomization inference (300 permutations of the cohort vector across states, run twice at independent seeds 4242 and 777001; both in review.json) puts the loading-adjusted gradient statistic's null mean at 11.8 and its 95th percentile at 20.3, against chi2(9) values of 9 and 16.92; the observed statistic 19.91 therefore has RI p = 0.070 at both seeds (null mean 11.8 / 11.2, p95 20.3 / 20.2), not the asymptotic 0.018. The same permutation exercise leaves the headline unchanged: the homicide bridge effect has RI p < 0.004 and every focal category has RI p >= 0.21 (>= 0.24 at the second seed)."
+  ]
+ },
+ "medicaid": {
+  "design_chosen": "ACA Medicaid expansion as a staggered increase in doctor contact that raises RECORDING of conditions requiring a clinical diagnosis to be self-reported ('ever told by a doctor'), while diagnosis-free self-reports are mechanically unaffected. State x year x condition panel, 51 jurisdictions (50 states + DC), 2011-2024, BRFSS crude prevalence.",
+  "sources": {
+   "brfss": "CDC Socrata API data.cdc.gov, dataset dttw-5yxu ('BRFSS Prevalence Data (2011 to present)'), Overall break_out, crude prevalence, cached 2026-08-13 in data/raw/medicaid/brfss_*.json. Topics: Diabetes (response Yes; excludes pregnancy-related and borderline), High Blood Pressure, Cholesterol High, Depression, BMI Categories (Obese), Current Smoker Status, Exercise (response No), Under 65 Coverage (Yes / 'Have some form of health insurance' after the 2021 redesign), Last Checkup (past year).",
+   "mortality_bridge": "NCHS 'Leading Causes of Death: United States' (data.cdc.gov bi63-dtpu), cause Diabetes, age-adjusted rate per 100k, 1999-2017; panel uses 2011-2017. Cached in nchs_diabetes_deaths.json.",
+   "expansion_dates": "KFF 'Status of State Medicaid Expansion Decisions' adoption table; hardcoded in scripts/medicaid_lib.py, verified to match the cached Wikipedia snapshot exactly on all 16 staggered implementation dates and healthinsurance.org state pages for AK/LA/MI/MO/NE/NH/NC/SD. All cached in data/raw/medicaid/sources/."
+  },
+  "bridge_alternatives_scoped_and_rejected": [
+   "CDC Chronic Disease Indicators (data.cdc.gov hksd-2xuw), question DIA03 'Diabetes mortality, underlying or contributing cause': would extend the bridge past 2017, but it covers 2019-2022 only, uses a different cause definition, leaves a 2018 gap, and its post-2019 years are COVID-contaminated in a way that correlates with expansion status. Rejected.",
+   "Legacy CDI extract g4ie-h725 (2001-2019 diabetes mortality) now requires authentication; data.cdc.gov catalog entries nxxk-8p52 and 3ptd-e7hp are stubs with no queryable resource.",
+   "Obesity from self-reported height/weight (BRFSS, d=0.05) adopted as a SECOND, internal bridge: it is the only series that actually comoves with the diagnosed conditions (see comovement table). Assumes obesity loads on the same latent health factor and that expansion does not shift self-reported height/weight."
+  ],
+  "caveats": [
+   "Crude (not age-adjusted) prevalence; state age-composition drift absorbed only by unit and period-by-category FE.",
+   "BRFSS samples the population regardless of insurance, so the denominator is stable; the recording channel is respondent knowledge of a diagnosis, not claims capture.",
+   "Hypertension and cholesterol asked in odd years only; CS effects exist only for even-year cohorts (odd base years) and only at odd event times, so the gradient test's category composition differs between odd and even event times.",
+   "Missing state-years (BRFSS non-participation): FL 2021, KY 2023, NJ 2019, PA 2023, TN 2024.",
+   "Coverage question redesigned in 2021 (response relabeled); series spliced by selecting both labels. Checkup starts 2013.",
+   "Early partial expanders (CA CT DC MN NJ WA, 2010-11 waivers) coded cohort 2014; robustness excludes them.",
+   "WI covers childless adults to 100% FPL outside the ACA expansion; classified never-treated. ME implemented Jan 2019 with retroactivity to mid-2018; coded 2019.",
+   "MORTALITY BRIDGE IS NOT IDENTIFIED: after unit-by-cat and period-by-cat FE, untreated diabetes mortality residuals correlate |r| <= 0.08 with every BRFSS series (r = +0.003 with diagnosed diabetes). The loading IV denominators are therefore ~0 and its rho are ratios of noise; that decomposition is reported only to document the failure, not as identification.",
+   "Obesity bridge is the defensible one but is not a pure d=0 outcome (d=0.05) and is a correlate of diabetes with a lag, so loading stability is an assumption, not a fact.",
+   "Adjusted gradient test rescales outcomes by loadings from noisy untreated comovement (reference: smoking); several estimated loadings are negative, so its rejection should be read cautiously - and it rejects with a NEGATIVE d-gradient, i.e. against the recording hypothesis.",
+   "COVID-era (2020-21) survey disruption coincides with the 2020-2024 cohorts; pre-2020 robustness reported.",
+   "51 state clusters: CR1/chi-square approximations can over-reject modestly (see Study E).",
+   "SURVEY SAMPLING NOISE MEASURED, NOT ASSUMED: CDC's own design-based confidence limits imply that a median 67% of the within-state-year residual variance of the BRFSS focal series is pure sampling error (69% for diagnosed diabetes). Removing it entirely would still leave an 80%-power MDE 2.9x the mechanism-implied recording response for the best-placed diagnosed condition, so the null is a limit of the state-year aggregate design, not of BRFSS data quality. Inverse-variance weighting of cells does not help (median SE ratio 0.98): the binding constraint is 51 state clusters.",
+   "Disattenuating the untreated comovement by that measured noise does not rescue either failed loading: the mortality bridge still reaches |r| <= 0.10 and the smoking reference |r| <= 0.44 (0.02 for diabetes) against the diagnosed conditions, while the diagnosed conditions comove with obesity at r up to 0.86 once disattenuated."
+  ],
+  "integrity_checks": {
+   "nchs_us_diabetes_deaths_2017": 83564,
+   "nchs_us_diabetes_deaths_2016": 80058,
+   "brfss_us_2019_diabetes_crude_pct": 10.8,
+   "note": "US 2016/2017 diabetes death counts and US 2019 crude diagnosed-diabetes prevalence match CDC-published figures exactly."
+  },
+  "expansion_effective": {
+   "AZ": "2014-01-01",
+   "AR": "2014-01-01",
+   "CA": "2014-01-01",
+   "CO": "2014-01-01",
+   "CT": "2014-01-01",
+   "DE": "2014-01-01",
+   "DC": "2014-01-01",
+   "HI": "2014-01-01",
+   "IL": "2014-01-01",
+   "IA": "2014-01-01",
+   "KY": "2014-01-01",
+   "MD": "2014-01-01",
+   "MA": "2014-01-01",
+   "MI": "2014-04-01",
+   "MN": "2014-01-01",
+   "NV": "2014-01-01",
+   "NJ": "2014-01-01",
+   "NM": "2014-01-01",
+   "NY": "2014-01-01",
+   "ND": "2014-01-01",
+   "OH": "2014-01-01",
+   "OR": "2014-01-01",
+   "RI": "2014-01-01",
+   "VT": "2014-01-01",
+   "WA": "2014-01-01",
+   "WV": "2014-01-01",
+   "NH": "2014-08-15",
+   "PA": "2015-01-01",
+   "IN": "2015-02-01",
+   "AK": "2015-09-01",
+   "MT": "2016-01-01",
+   "LA": "2016-07-01",
+   "VA": "2019-01-01",
+   "ME": "2019-01-10",
+   "ID": "2020-01-01",
+   "UT": "2020-01-01",
+   "NE": "2020-10-01",
+   "OK": "2021-07-01",
+   "MO": "2021-10-01",
+   "SD": "2023-07-01",
+   "NC": "2023-12-01"
+  },
+  "never_states": [
+   "AL",
+   "FL",
+   "GA",
+   "KS",
+   "MS",
+   "SC",
+   "TN",
+   "TX",
+   "WI",
+   "WY"
+  ],
+  "early_partial_expanders": [
+   "CA",
+   "CT",
+   "DC",
+   "MN",
+   "NJ",
+   "WA"
+  ],
+  "cohort_rule": "cohort = calendar year of the coverage effective date when coverage began on or before July 1 (>= 6 months treated in that year), else the next calendar year",
+  "cohorts": {
+   "AK": 2016,
+   "AL": -1,
+   "AR": 2014,
+   "AZ": 2014,
+   "CA": 2014,
+   "CO": 2014,
+   "CT": 2014,
+   "DC": 2014,
+   "DE": 2014,
+   "FL": -1,
+   "GA": -1,
+   "HI": 2014,
+   "IA": 2014,
+   "ID": 2020,
+   "IL": 2014,
+   "IN": 2015,
+   "KS": -1,
+   "KY": 2014,
+   "LA": 2016,
+   "MA": 2014,
+   "MD": 2014,
+   "ME": 2019,
+   "MI": 2014,
+   "MN": 2014,
+   "MO": 2022,
+   "MS": -1,
+   "MT": 2016,
+   "NC": 2024,
+   "ND": 2014,
+   "NE": 2021,
+   "NH": 2015,
+   "NJ": 2014,
+   "NM": 2014,
+   "NV": 2014,
+   "NY": 2014,
+   "OH": 2014,
+   "OK": 2021,
+   "OR": 2014,
+   "PA": 2015,
+   "RI": 2014,
+   "SC": -1,
+   "SD": 2023,
+   "TN": -1,
+   "TX": -1,
+   "UT": 2020,
+   "VA": 2019,
+   "VT": 2014,
+   "WA": 2014,
+   "WI": -1,
+   "WV": 2014,
+   "WY": -1
+  },
+  "discretion_d": {
+   "diabetes_mortality": 0.0,
+   "diabetes_diagnosed": 1.0,
+   "hypertension_diagnosed": 0.9,
+   "cholesterol_diagnosed": 1.0,
+   "depression_diagnosed": 0.8,
+   "obesity_bmi_selfreport": 0.05,
+   "current_smoking": 0.0,
+   "no_exercise_past_month": 0.0,
+   "insured_18_64": null,
+   "checkup_past_year": null
+  },
+  "discretion_rationale": {
+   "diabetes_mortality": "bridge, d=0: death registration is complete and does not depend on insurance-induced doctor contact",
+   "diabetes_diagnosed": "d=1.0: respondent can only know via a blood test (glucose/HbA1c) ordered in a clinical encounter and being told",
+   "hypertension_diagnosed": "d=0.9: requires a BP measurement, nearly always clinical; home/pharmacy cuffs give slight lay access",
+   "cholesterol_diagnosed": "d=1.0: requires a venous blood draw and lab panel; no lay route to knowing",
+   "depression_diagnosed": "d=0.8: 'told you have depression' requires a professional, but symptoms are self-perceived and screening also happens outside insurance-dependent primary care",
+   "obesity_bmi_selfreport": "d=0.05: BMI computed from self-reported height/weight; no clinician needed; tiny residual via weighing at checkups",
+   "current_smoking": "d=0.0: pure self-report of own behavior",
+   "no_exercise_past_month": "d=0.0: pure self-report of own behavior",
+   "insured_18_64": "aux (first stage): insurance coverage itself",
+   "checkup_past_year": "aux (mechanism): routine doctor contact itself"
+  },
+  "missing_cells": [
+   [
+    "checkup_past_year",
+    "FL",
+    2021
+   ],
+   [
+    "checkup_past_year",
+    "KY",
+    2023
+   ],
+   [
+    "checkup_past_year",
+    "NJ",
+    2019
+   ],
+   [
+    "checkup_past_year",
+    "PA",
+    2023
+   ],
+   [
+    "checkup_past_year",
+    "TN",
+    2024
+   ],
+   [
+    "cholesterol_diagnosed",
+    "FL",
+    2021
+   ],
+   [
+    "cholesterol_diagnosed",
+    "KY",
+    2023
+   ],
+   [
+    "cholesterol_diagnosed",
+    "NJ",
+    2019
+   ],
+   [
+    "cholesterol_diagnosed",
+    "PA",
+    2023
+   ],
+   [
+    "current_smoking",
+    "FL",
+    2021
+   ],
+   [
+    "current_smoking",
+    "KY",
+    2023
+   ],
+   [
+    "current_smoking",
+    "NJ",
+    2019
+   ],
+   [
+    "current_smoking",
+    "PA",
+    2023
+   ],
+   [
+    "current_smoking",
+    "TN",
+    2024
+   ],
+   [
+    "depression_diagnosed",
+    "FL",
+    2021
+   ],
+   [
+    "depression_diagnosed",
+    "KY",
+    2023
+   ],
+   [
+    "depression_diagnosed",
+    "NJ",
+    2019
+   ],
+   [
+    "depression_diagnosed",
+    "PA",
+    2023
+   ],
+   [
+    "depression_diagnosed",
+    "TN",
+    2024
+   ],
+   [
+    "diabetes_diagnosed",
+    "FL",
+    2021
+   ],
+   [
+    "diabetes_diagnosed",
+    "KY",
+    2023
+   ],
+   [
+    "diabetes_diagnosed",
+    "NJ",
+    2019
+   ],
+   [
+    "diabetes_diagnosed",
+    "PA",
+    2023
+   ],
+   [
+    "diabetes_diagnosed",
+    "TN",
+    2024
+   ],
+   [
+    "hypertension_diagnosed",
+    "FL",
+    2021
+   ],
+   [
+    "hypertension_diagnosed",
+    "KY",
+    2023
+   ],
+   [
+    "hypertension_diagnosed",
+    "NJ",
+    2019
+   ],
+   [
+    "hypertension_diagnosed",
+    "PA",
+    2023
+   ],
+   [
+    "insured_18_64",
+    "FL",
+    2021
+   ],
+   [
+    "insured_18_64",
+    "KY",
+    2023
+   ],
+   [
+    "insured_18_64",
+    "NJ",
+    2019
+   ],
+   [
+    "insured_18_64",
+    "PA",
+    2023
+   ],
+   [
+    "insured_18_64",
+    "TN",
+    2024
+   ],
+   [
+    "no_exercise_past_month",
+    "FL",
+    2021
+   ],
+   [
+    "no_exercise_past_month",
+    "KY",
+    2023
+   ],
+   [
+    "no_exercise_past_month",
+    "NJ",
+    2019
+   ],
+   [
+    "no_exercise_past_month",
+    "PA",
+    2023
+   ],
+   [
+    "no_exercise_past_month",
+    "TN",
+    2024
+   ],
+   [
+    "obesity_bmi_selfreport",
+    "FL",
+    2021
+   ],
+   [
+    "obesity_bmi_selfreport",
+    "KY",
+    2023
+   ],
+   [
+    "obesity_bmi_selfreport",
+    "NJ",
+    2019
+   ],
+   [
+    "obesity_bmi_selfreport",
+    "PA",
+    2023
+   ],
+   [
+    "obesity_bmi_selfreport",
+    "TN",
+    2024
+   ]
+  ],
+  "r0_diabetes": {
+   "value": 0.787,
+   "source": "CDC National Diabetes Statistics Report 2020 (NHANES 2013-2016): 26.9M diagnosed of 34.2M total -> baseline recording rate 0.787. External estimate used only for the multiplicative recording bounds on the diabetes log effect."
+  }
+ }
+}

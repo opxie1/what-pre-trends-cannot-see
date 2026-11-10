@@ -79,9 +79,18 @@ scripts/oa_studentized.py          exchangeability failure, priced two ways
 scripts/oa_onefactor.py            is the one-factor premise of (6.1) credible
 scripts/oa_onefactor_calib.py      calibration check for the above
 scripts/oa_staggered.py            does the blindness result survive staggering
+scripts/crime.py                   builds the crime panel
+scripts/medicaid.py                builds the two health panels
+data/processed/crime_panel.csv     the constructed crime panel
+data/processed/medicaid_panel.csv  the constructed health panel
+data/data_manifest.json            every series, its source and its vintage
 results/inference/                 simulated size and power
 results/coverage/                  coverage under a recording response
 results/empirics/                  application p-values and floors
+results/inference/design_power.json  the 48 screened specifications per panel,
+                                   and the certified_runs block holding every
+                                   figure Section 11 reports for the seven
+                                   adequate crime specifications
 tests/test_core.py                 69 checks
 ```
 
@@ -125,16 +134,43 @@ PYTHONPATH=src python scripts/coverage_zero_ref.py
 PYTHONPATH=src python scripts/oa_staggered.py
 ```
 
-The manuscript is formatted to the ASA and JBES requirements: 12 point, one
-inch margins, double spaced throughout. JBES uses double-anonymous review and
-asks for two PDFs, so each document has an anonymous twin. The four files build
-independently and in any order; the journal forbids LaTeX cross-referencing
-between the paper and the online Appendix, so the Appendix carries the numbers
-it cites rather than resolving them.
+The manuscript is set to the ASA style: 12 point, one inch margins, double
+spaced throughout. An anonymous twin of each document is kept for journals that
+use double-anonymous review, and is not needed where review is single-anonymous.
+The four files build independently and in any order. Nothing cross-references
+between the paper and the online Appendix at the LaTeX level, because some
+journals forbid it, so the Appendix carries the numbers it cites rather than
+resolving them; results keep the paper's numbering, while sections, tables and
+figures belonging to the Appendix carry an S.
 
-`oa_studentized.py` and `oa_onefactor_calib.py` are self-contained and run
-from a clean checkout. `oa_onefactor.py` reads the two application panels from
-`data/processed/`, which are not redistributed here.
+`oa_studentized.py` and `oa_onefactor_calib.py` are self-contained and run from
+a clean checkout. `oa_onefactor.py` and `oa_design.py` read the two application
+panels from `data/processed/`, which are included here.
+
+## The application panels
+
+`data/processed/crime_panel.csv` and `data/processed/medicaid_panel.csv` are the
+two constructed panels, and `scripts/crime.py` and `scripts/medicaid.py` build
+them. Every series in both is a public use file, and
+`data/data_manifest.json` records each one with its source and vintage: FBI
+summary based estimated state totals and NIBRS adoption dates from the Crime
+Data Explorer agency API, reporting rates from Bureau of Justice Statistics,
+*Criminal Victimization 2019*, NCJ 255113, Table 6, BRFSS crude prevalence from
+CDC Socrata dataset `dttw-5yxu`, and Medicaid expansion effective dates from the
+Kaiser Family Foundation table of state decisions.
+
+The government series the builders read are cached under `data/raw/`, so both
+panels rebuild offline from a clean checkout and reproduce the vintages the
+paper reports, which `data_manifest.json` dates to 2026-08-13:
+
+```
+PYTHONPATH=src python scripts/crime.py
+PYTHONPATH=src python scripts/medicaid.py
+```
+
+The Medicaid expansion effective dates are not fetched. They are hardcoded in
+`scripts/medicaid_lib.py` from the KFF adoption table, and the third-party pages
+used to check them are not redistributed here.
 
 The p-value columns written by `oa_onefactor.py` are not calibrated references
 and the paper does not report them. `oa_onefactor_calib.py` generates data from

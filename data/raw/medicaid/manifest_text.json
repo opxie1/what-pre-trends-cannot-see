@@ -1,0 +1,57 @@
+{
+ "design_chosen": "ACA Medicaid expansion as a staggered increase in doctor contact that raises RECORDING of conditions requiring a clinical diagnosis to be self-reported ('ever told by a doctor'), while diagnosis-free self-reports are mechanically unaffected. State x year x condition panel, 51 jurisdictions (50 states + DC), 2011-2024, BRFSS crude prevalence.",
+ "sources": {
+  "brfss": "CDC Socrata API data.cdc.gov, dataset dttw-5yxu ('BRFSS Prevalence Data (2011 to present)'), Overall break_out, crude prevalence, cached 2026-08-13 in data/raw/medicaid/brfss_*.json. Topics: Diabetes (response Yes; excludes pregnancy-related and borderline), High Blood Pressure, Cholesterol High, Depression, BMI Categories (Obese), Current Smoker Status, Exercise (response No), Under 65 Coverage (Yes / 'Have some form of health insurance' after the 2021 redesign), Last Checkup (past year).",
+  "mortality_bridge": "NCHS 'Leading Causes of Death: United States' (data.cdc.gov bi63-dtpu), cause Diabetes, age-adjusted rate per 100k, 1999-2017; panel uses 2011-2017. Cached in nchs_diabetes_deaths.json.",
+  "expansion_dates": "KFF 'Status of State Medicaid Expansion Decisions' adoption table; hardcoded in scripts/medicaid_lib.py, verified to match the cached Wikipedia snapshot exactly on all 16 staggered implementation dates and healthinsurance.org state pages for AK/LA/MI/MO/NE/NH/NC/SD. All cached in data/raw/medicaid/sources/."
+ },
+ "bridge_alternatives_scoped_and_rejected": [
+  "CDC Chronic Disease Indicators (data.cdc.gov hksd-2xuw), question DIA03 'Diabetes mortality, underlying or contributing cause': would extend the bridge past 2017, but it covers 2019-2022 only, uses a different cause definition, leaves a 2018 gap, and its post-2019 years are COVID-contaminated in a way that correlates with expansion status. Rejected.",
+  "Legacy CDI extract g4ie-h725 (2001-2019 diabetes mortality) now requires authentication; data.cdc.gov catalog entries nxxk-8p52 and 3ptd-e7hp are stubs with no queryable resource.",
+  "Obesity from self-reported height/weight (BRFSS, d=0.05) adopted as a SECOND, internal bridge: it is the only series that actually comoves with the diagnosed conditions (see comovement table). Assumes obesity loads on the same latent health factor and that expansion does not shift self-reported height/weight."
+ ],
+ "caveats": [
+  "Crude (not age-adjusted) prevalence; state age-composition drift absorbed only by unit and period-by-category FE.",
+  "BRFSS samples the population regardless of insurance, so the denominator is stable; the recording channel is respondent knowledge of a diagnosis, not claims capture.",
+  "Hypertension and cholesterol asked in odd years only; CS effects exist only for even-year cohorts (odd base years) and only at odd event times, so the gradient test's category composition differs between odd and even event times.",
+  "Missing state-years (BRFSS non-participation): FL 2021, KY 2023, NJ 2019, PA 2023, TN 2024.",
+  "Coverage question redesigned in 2021 (response relabeled); series spliced by selecting both labels. Checkup starts 2013.",
+  "Early partial expanders (CA CT DC MN NJ WA, 2010-11 waivers) coded cohort 2014; robustness excludes them.",
+  "WI covers childless adults to 100% FPL outside the ACA expansion; classified never-treated. ME implemented Jan 2019 with retroactivity to mid-2018; coded 2019.",
+  "MORTALITY BRIDGE IS NOT IDENTIFIED: after unit-by-cat and period-by-cat FE, untreated diabetes mortality residuals correlate |r| <= 0.08 with every BRFSS series (r = +0.003 with diagnosed diabetes). The loading IV denominators are therefore ~0 and its rho are ratios of noise; that decomposition is reported only to document the failure, not as identification.",
+  "Obesity bridge is the defensible one but is not a pure d=0 outcome (d=0.05) and is a correlate of diabetes with a lag, so loading stability is an assumption, not a fact.",
+  "Adjusted gradient test rescales outcomes by loadings from noisy untreated comovement (reference: smoking); several estimated loadings are negative, so its rejection should be read cautiously - and it rejects with a NEGATIVE d-gradient, i.e. against the recording hypothesis.",
+  "COVID-era (2020-21) survey disruption coincides with the 2020-2024 cohorts; pre-2020 robustness reported.",
+  "51 state clusters: CR1/chi-square approximations can over-reject modestly (see Study E).",
+  "SURVEY SAMPLING NOISE MEASURED, NOT ASSUMED: CDC's own design-based confidence limits imply that a median 67% of the within-state-year residual variance of the BRFSS focal series is pure sampling error (69% for diagnosed diabetes). Removing it entirely would still leave an 80%-power MDE 2.9x the mechanism-implied recording response for the best-placed diagnosed condition, so the null is a limit of the state-year aggregate design, not of BRFSS data quality. Inverse-variance weighting of cells does not help (median SE ratio 0.98): the binding constraint is 51 state clusters.",
+  "Disattenuating the untreated comovement by that measured noise does not rescue either failed loading: the mortality bridge still reaches |r| <= 0.10 and the smoking reference |r| <= 0.44 (0.02 for diabetes) against the diagnosed conditions, while the diagnosed conditions comove with obesity at r up to 0.86 once disattenuated."
+ ],
+ "discretion_rationale": {
+  "diabetes_mortality": "bridge, d=0: death registration is complete and does not depend on insurance-induced doctor contact",
+  "diabetes_diagnosed": "d=1.0: respondent can only know via a blood test (glucose/HbA1c) ordered in a clinical encounter and being told",
+  "hypertension_diagnosed": "d=0.9: requires a BP measurement, nearly always clinical; home/pharmacy cuffs give slight lay access",
+  "cholesterol_diagnosed": "d=1.0: requires a venous blood draw and lab panel; no lay route to knowing",
+  "depression_diagnosed": "d=0.8: 'told you have depression' requires a professional, but symptoms are self-perceived and screening also happens outside insurance-dependent primary care",
+  "obesity_bmi_selfreport": "d=0.05: BMI computed from self-reported height/weight; no clinician needed; tiny residual via weighing at checkups",
+  "current_smoking": "d=0.0: pure self-report of own behavior",
+  "no_exercise_past_month": "d=0.0: pure self-report of own behavior",
+  "insured_18_64": "aux (first stage): insurance coverage itself",
+  "checkup_past_year": "aux (mechanism): routine doctor contact itself"
+ },
+ "r0_diabetes_source": "CDC National Diabetes Statistics Report 2020 (NHANES 2013-2016): 26.9M diagnosed of 34.2M total -> baseline recording rate 0.787. External estimate used only for the multiplicative recording bounds on the diabetes log effect.",
+ "_note": "Static provenance prose for the medicaid study, kept beside the cached raw extracts it describes. Loaded by scripts/medicaid_lib.py and merged into data/data_manifest.json by scripts/medicaid.py:write_manifest.",
+ "summary_text": {
+  "design": "ACA Medicaid expansion, BRFSS diagnosed vs diagnosis-free outcomes, 2011-2024",
+  "expected_pattern": "diagnosed-condition prevalence rises with expansion while diagnosis-free self-reports stay flat (positive d_c gradient)",
+  "direction": "negative: recorded effects are if anything SMALLER for high-diagnosis-dependence conditions, the opposite of a recording response",
+  "interpretation": "coverage rose ~2pp but neither routine checkups nor diagnosed prevalence moved detectably, and the d_c gradient is negative. Read with the power calculation: the recording response this mechanism can deliver at a 2pp coverage gain is ~0.06pp, roughly an order of magnitude below what 51 state clusters can detect, so this is an uninformative null on the recording channel, not evidence against it.",
+  "units": "pp of crude prevalence; diabetes_mortality in age-adjusted deaths per 100k",
+  "comovement_definition": "correlation of untreated (D=0) residuals after unit-by-cat and period-by-cat FE; this is the variation identifying the loadings",
+  "comovement_verdict": "the mortality bridge is NOT identified here: |r| <= 0.08 with every BRFSS series and r = +0.003 with diagnosed diabetes, so its rho are ratios of noise. Obesity (d=0.05) comoves with the diagnosed conditions and is the only defensible bridge in this data.",
+  "mortality_verdict": "NOT IDENTIFIED (zero comovement); reported only to document the failure",
+  "obesity_verdict": "preferred bridge: same survey, same respondents, no clinical encounter needed; assumes obesity loads on the same latent health factor and that expansion does not change self-reported height/weight (d=0.05, not 0)",
+  "power_note": "MDE = minimum detectable effect of the CS post-window mean (0-5) at 5% size: 1.96*se for 50% power, 2.802*se for 80%. implied_pp is an arithmetic UPPER BOUND on the recording response, not an estimate: d_c x (insured gain, share) x (unaware pool in pp), where the unaware pool = baseline recorded prevalence x u/(1-u) and u = 0.213 is the CDC-sourced undiagnosed share of diabetes, applied to every condition as a scenario. It assumes every newly insured unaware case is diagnosed inside the window. implied_pp_3x triples the pool for the higher unaware rate plausible among the previously uninsured.",
+  "short_pretrend_note": "full_k6 bins all leads at or before -6, so the joint test is dominated by event times -13..-7 that exist only for the 1-3 states adopting in 2022-2024. short_k4 (leads -4,-3,-2) tests the pre-period the identification actually rests on.",
+  "odd_ell_note": "hypertension and cholesterol are asked in odd years only, so their post-window means average event times {1,3,5} while annual questions average {0,...,5}. The odd-ell column puts every category on that common support."
+ }
+}

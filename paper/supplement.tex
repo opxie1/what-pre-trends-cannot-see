@@ -46,9 +46,10 @@ with Few Clusters}
 Email: \texttt{ethanxie@udel.edu}. Replication code, the simulation scripts and
 the output files underlying the tables are at
 \url{https://github.com/opxie1/what-pre-trends-cannot-see},
-at the tagged release \texttt{v1.0}, which is immutable; the main
+at the tagged release \texttt{v1.1}, which is immutable; the main
 branch may move. The note to each table and figure names the
-output file its entries are read from. The simulations are written in Python and need
+output file its entries are read from, and the two constructed panels
+rebuild from the cached source files under \texttt{data/raw/}. The simulations are written in Python and need
 version 3.11 or later with \texttt{numpy}, \texttt{scipy} and \texttt{pandas}.
 They draw pseudorandom numbers from the NumPy PCG64 generator, seeded once per
 replication by the CRC-32 checksum of a string naming the design cell and the
@@ -75,13 +76,20 @@ Ethan Xie
 
 \vspace{6pt}
 
-\noindent This supplement contains the proofs of every result in the paper, the simulation and application evidence behind the numbers the paper reports, the extended discussion of the related and applied literature, and the figure of exact size against the number of restrictions. Numbering follows the paper: a reference to Theorem 1 here is Theorem 1 there.
+\noindent This supplement contains the proofs of every result in the paper, the simulation and application evidence behind the numbers the paper reports, the extended discussion of the related and applied literature, and the figure of exact size against the number of restrictions. Numbering of results follows the paper: a reference to Theorem 1 here is Theorem 1 there. Sections, tables and figures belonging to this supplement carry an S, so Table S1 is a table of this supplement and Table 1 is the table of the paper.
 
 \vspace{10pt}
 
 \setcounter{section}{0}
 
 \renewcommand{\thesection}{S\arabic{section}}
+
+% Floats carry an S prefix so that a reference to a table of this supplement
+% cannot be read as a reference to Table 1 of the paper.
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
 
 \numberwithin{equation}{section}
 
@@ -217,8 +225,11 @@ representation is unavailable.
 
 \begin{proof}[Proof of Corollary 2]
 By (5.2) the exact size of the nominal chi-square test is
-$\Pr\{F(m,G-m) > (G-m)c_m / (\omega_2(G-1)m)\}$ with $c_m =
-\chi^2_{m,1-\alpha}$. Write $F(m,G-m) \overset{d}{=} (\chi^2_m/m) /
+\[
+\Pr\{F(m,G-m) > (G-m)c_m / (\omega_2(G-1)m)\},
+\qquad c_m = \chi^2_{m,1-\alpha}.
+\]
+Write $F(m,G-m) \overset{d}{=} (\chi^2_m/m) /
 (\chi^2_{G-m}/(G-m))$ with the two chi squares independent, so the size equals
 $\Pr\{\chi^2_m > c_m \,\omega_2^{-1}(G-1)^{-1}\chi^2_{G-m}\}$.
 
@@ -824,7 +835,7 @@ $0.006$ at $0.92$. Output files named in this section sit in
 Two features of the design bear on what the tables can show. The loadings are
 drawn independently of $d$ and the $\varepsilon_{itc}$ are i.i.d.\ across
 categories, so Assumption 4 holds by construction and the
-permutation rows of Table 1 measure the size of a test to which
+permutation rows of Table 1 of the paper measure the size of a test to which
 Theorem 1 applies, for the null (4.2) under the
 randomization of Definition 2; the departure from Assumption
 4 is priced separately below. Assumption 3 does not hold
@@ -899,7 +910,7 @@ Monte Carlo standard error at a rate of $0.5$ is $0.020$. Sources:
 \end{spacing}
 \end{table}
 
-\paragraph{Power.} Table 2 reports size-adjusted power at
+\paragraph{Power.} Table \ref{tab:power} reports size-adjusted power at
 $G = 51$ against a recording response with a flat path, $k(\ell) = 1$ at every
 post-treatment horizon, indexed by the magnitude $\kappa$, over $600$
 replications per cell. Two patterns run in opposite directions. Label
@@ -915,7 +926,7 @@ $\kappa = 0.45$, and at $C = 8$ it reaches $0.842$ at $\kappa = 0.20$ where the
 two sided Wald reaches $0.277$. The gain comes from the direction restriction
 rather than from the randomization.
 
-The directed statistics in Table 2 use the contrast $w =
+The directed statistics in Table \ref{tab:power} use the contrast $w =
 \mathbf{1}_m$, which is the true response path in every cell of the block,
 since $k(\ell) = 1$ throughout. Theorem 3 is stated for known
 $k_P$, and the table measures the directed tests under that condition.
@@ -1021,7 +1032,7 @@ and $B-1$ draws.
 
 \item When the response shape $k_P$ is known up to scale, replace the two sided
 Wald statistic by the directed statistic of Theorem 3 inside
-whichever randomization Step 3 or Step 4 selected. Table 2 reports
+whichever randomization Step 3 or Step 4 selected. Table \ref{tab:power} reports
 what that substitution is worth at $G = 51$.
 
 \item To use (5.2) as a reference distribution rather than as a
@@ -1065,7 +1076,7 @@ three wrong ones, a worst case loss of $0.080$, while the $V^{-1}$ weighted
 statistic attains $0.467$ at the truth and $0.195$, $0.057$ and $0.212$, a worst
 case loss of $0.410$. The optimal statistic is the one a wrong shape destroys.
 
-Two things follow. The power advantage reported in Table 2 does
+Two things follow. The power advantage reported in Table \ref{tab:power} does
 not depend on knowing the response path, since the statistic carrying it loses
 at most $0.08$ of power across shapes that span the plausible range. And Theorem
 3 is an optimality statement about a limit experiment with $V$
@@ -1807,10 +1818,10 @@ construction behind it is a statement about one cohort's pre period, and with
 several cohorts the comparisons that identify a later cohort before it adopts
 can involve units that have already adopted and therefore already carry the
 recording wedge. If that channel leaves a pre-period signature, a pre-period calibration can see the recording response after all and the blindness result is
-weaker under staggering than Table 1 suggests.
+weaker under staggering than Table \ref{tab:cov} suggests.
 
 Table \ref{tab:stag} settles the question by simulation. It repeats the
-experiment of Table 1 with one change: three cohorts adopt at
+experiment of Table \ref{tab:cov} with one change: three cohorts adopt at
 periods $6$, $8$ and $10$ with $40$ percent of units never treated, in place of
 one cohort adopting at period $8$ with half the units never treated. The
 estimator, the reference implementation of the honest sets, the calibration of
@@ -1824,7 +1835,7 @@ adoption. Three cohorts adopting at periods $6$, $8$ and $10$, $40$ percent
 never treated, latent effect $1.0$, recording wedge $0.6$ at the target horizon,
 nominal $95\%$. The column $\max|\hat\beta_{\mathrm{pre}}|$ is the mean over
 replications of the largest pre-treatment event-study coefficient in absolute
-value. Everything else follows Table 1. Source:
+value. Everything else follows Table \ref{tab:cov}. Source:
 \texttt{results/coverage/coverage\_staggered.json}, produced by
 \texttt{scripts/oa\_staggered.py}.}
 \label{tab:stag}
@@ -1848,7 +1859,7 @@ $102{,}400$ & $50$ & $0.0344$ & $0.0095$ & $0.000$ & $0.000$ & $0.000$ & $0.040$
 
 The collapse is the same and arrives sooner. Every relative magnitudes column
 reaches zero coverage of the latent effect one sample size earlier than it does
-in Table 1, the smoothness class calibrated from the pre-period fails at $N = 102{,}400$ rather than at $N = 409{,}600$, and the bound set from
+in Table \ref{tab:cov}, the smoothness class calibrated from the pre-period fails at $N = 102{,}400$ rather than at $N = 409{,}600$, and the bound set from
 the recording institution holds at $1.000$ throughout. The calibrated bound
 $\widehat M$ is smaller at every sample size than its single cohort counterpart,
 which is why the crossing happens earlier: a smaller bound admits a narrower

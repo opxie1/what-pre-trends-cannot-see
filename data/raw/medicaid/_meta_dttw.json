@@ -1,0 +1,1956 @@
+{
+  "id" : "dttw-5yxu",
+  "name" : "Behavioral Risk Factor Surveillance System (BRFSS) Prevalence Data (2011 to present)",
+  "assetType" : "dataset",
+  "attribution" : "Centers for disease control and prevention",
+  "attributionLink" : "http://www.cdc.gov/brfss",
+  "averageRating" : 0,
+  "category" : "Behavioral Risk Factors",
+  "createdAt" : 1433425385,
+  "description" : "2011 to present. BRFSS combined land line and cell phone prevalence data. BRFSS is a continuous, state-based surveillance system that collects information about modifiable risk factors for chronic diseases and other leading causes of death. Data will be updated annually as it becomes available. Detailed information on sampling methodology and quality assurance can be found on the BRFSS website (http://www.cdc.gov/brfss). Methodology: http://www.cdc.gov/brfss/factsheets/pdf/DBS_BRFSS_survey.pdf Glossary: https://data.cdc.gov/Behavioral-Risk-Factors/Behavioral-Risk-Factor-Surveillance-System-BRFSS-H/iuq5-y9ct",
+  "diciBackend" : false,
+  "displayType" : "table",
+  "downloadCount" : 156460,
+  "hideFromCatalog" : false,
+  "hideFromDataJson" : false,
+  "licenseId" : "PUBLIC_DOMAIN",
+  "locked" : false,
+  "newBackend" : true,
+  "numberOfComments" : 0,
+  "oid" : 39782742,
+  "provenance" : "official",
+  "publicationAppendEnabled" : false,
+  "publicationDate" : 1689710309,
+  "publicationGroup" : 3063903,
+  "publicationStage" : "published",
+  "rowsUpdatedAt" : 1784571931,
+  "rowsUpdatedBy" : "fjjr-gap9",
+  "tableId" : 19218322,
+  "totalTimesRated" : 0,
+  "viewCount" : 158087,
+  "viewLastModified" : 1784571636,
+  "viewType" : "tabular",
+  "approvals" : [ {
+    "reviewedAt" : 1740653431,
+    "reviewedAutomatically" : true,
+    "state" : "approved",
+    "submissionId" : 6771820,
+    "submissionObject" : "public_audience_request",
+    "submissionOutcome" : "change_audience",
+    "submittedAt" : 1740653431,
+    "targetAudience" : "public",
+    "workflowId" : 2100,
+    "submissionDetails" : {
+      "permissionType" : "READ"
+    },
+    "submissionOutcomeApplication" : {
+      "endedAt" : 1740653431,
+      "failureCount" : 0,
+      "startedAt" : 1740653431,
+      "status" : "success"
+    },
+    "submitter" : {
+      "id" : "fjjr-gap9",
+      "displayName" : "CDC UserSA"
+    }
+  } ],
+  "clientContext" : {
+    "clientContextVariables" : [ ],
+    "inheritedVariables" : { }
+  },
+  "columns" : [ {
+    "id" : 578254385,
+    "name" : "Year",
+    "dataTypeName" : "number",
+    "description" : "Year",
+    "fieldName" : "year",
+    "position" : 1,
+    "renderTypeName" : "number",
+    "tableColumnId" : 28770285,
+    "width" : 80,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "2024",
+      "null" : "0",
+      "top" : [ {
+        "item" : "2021",
+        "count" : "241435"
+      }, {
+        "item" : "2022",
+        "count" : "240688"
+      }, {
+        "item" : "2017",
+        "count" : "235303"
+      }, {
+        "item" : "2024",
+        "count" : "233371"
+      }, {
+        "item" : "2023",
+        "count" : "232512"
+      }, {
+        "item" : "2015",
+        "count" : "230101"
+      }, {
+        "item" : "2016",
+        "count" : "229714"
+      }, {
+        "item" : "2019",
+        "count" : "223058"
+      }, {
+        "item" : "2020",
+        "count" : "220975"
+      }, {
+        "item" : "2018",
+        "count" : "217579"
+      }, {
+        "item" : "2013",
+        "count" : "202751"
+      }, {
+        "item" : "2014",
+        "count" : "194798"
+      }, {
+        "item" : "2012",
+        "count" : "148824"
+      }, {
+        "item" : "2011",
+        "count" : "145364"
+      } ],
+      "smallest" : "2011",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "precisionStyle" : "standard",
+      "noCommas" : "true",
+      "align" : "right"
+    }
+  }, {
+    "id" : 578254386,
+    "name" : "Locationabbr",
+    "dataTypeName" : "text",
+    "description" : "State Abbreviation",
+    "fieldName" : "locationabbr",
+    "position" : 2,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770286,
+    "width" : 89,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "WY",
+      "null" : "0",
+      "top" : [ {
+        "item" : "NE",
+        "count" : "56496"
+      }, {
+        "item" : "SC",
+        "count" : "56494"
+      }, {
+        "item" : "MA",
+        "count" : "56493"
+      }, {
+        "item" : "KS",
+        "count" : "56492"
+      }, {
+        "item" : "CA",
+        "count" : "56491"
+      }, {
+        "item" : "OK",
+        "count" : "56491"
+      }, {
+        "item" : "MN",
+        "count" : "56490"
+      }, {
+        "item" : "OH",
+        "count" : "56489"
+      }, {
+        "item" : "MI",
+        "count" : "56489"
+      }, {
+        "item" : "NC",
+        "count" : "56487"
+      }, {
+        "item" : "TX",
+        "count" : "56487"
+      }, {
+        "item" : "UT",
+        "count" : "56486"
+      }, {
+        "item" : "LA",
+        "count" : "56484"
+      }, {
+        "item" : "CO",
+        "count" : "56482"
+      }, {
+        "item" : "GA",
+        "count" : "56481"
+      }, {
+        "item" : "VA",
+        "count" : "56481"
+      }, {
+        "item" : "HI",
+        "count" : "56480"
+      }, {
+        "item" : "IN",
+        "count" : "56480"
+      }, {
+        "item" : "MO",
+        "count" : "56477"
+      }, {
+        "item" : "AL",
+        "count" : "56474"
+      } ],
+      "smallest" : "AK",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254387,
+    "name" : "Locationdesc",
+    "dataTypeName" : "text",
+    "description" : "State Name",
+    "fieldName" : "locationdesc",
+    "position" : 3,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770287,
+    "width" : 168,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "Wyoming",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Nebraska",
+        "count" : "56496"
+      }, {
+        "item" : "South Carolina",
+        "count" : "56494"
+      }, {
+        "item" : "Massachusetts",
+        "count" : "56493"
+      }, {
+        "item" : "Kansas",
+        "count" : "56492"
+      }, {
+        "item" : "California",
+        "count" : "56491"
+      }, {
+        "item" : "Oklahoma",
+        "count" : "56491"
+      }, {
+        "item" : "Minnesota",
+        "count" : "56490"
+      }, {
+        "item" : "Ohio",
+        "count" : "56489"
+      }, {
+        "item" : "Michigan",
+        "count" : "56489"
+      }, {
+        "item" : "North Carolina",
+        "count" : "56487"
+      }, {
+        "item" : "Texas",
+        "count" : "56487"
+      }, {
+        "item" : "Utah",
+        "count" : "56486"
+      }, {
+        "item" : "Louisiana",
+        "count" : "56484"
+      }, {
+        "item" : "Colorado",
+        "count" : "56482"
+      }, {
+        "item" : "Georgia",
+        "count" : "56481"
+      }, {
+        "item" : "Virginia",
+        "count" : "56481"
+      }, {
+        "item" : "Hawaii",
+        "count" : "56480"
+      }, {
+        "item" : "Indiana",
+        "count" : "56480"
+      }, {
+        "item" : "Missouri",
+        "count" : "56477"
+      }, {
+        "item" : "New Mexico",
+        "count" : "56474"
+      } ],
+      "smallest" : "Alabama",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254388,
+    "name" : "Class",
+    "dataTypeName" : "text",
+    "description" : "Class Description",
+    "fieldName" : "class",
+    "position" : 4,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770288,
+    "width" : 160,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "Women's Health",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Demographics",
+        "count" : "1053274"
+      }, {
+        "item" : "Chronic Health Indicators",
+        "count" : "585680"
+      }, {
+        "item" : "Health Care Access/Coverage",
+        "count" : "241512"
+      }, {
+        "item" : "Tobacco Use",
+        "count" : "164544"
+      }, {
+        "item" : "Health Status",
+        "count" : "133720"
+      }, {
+        "item" : "Alcohol Consumption",
+        "count" : "114629"
+      }, {
+        "item" : "Physical Activity",
+        "count" : "86296"
+      }, {
+        "item" : "Immunization",
+        "count" : "79379"
+      }, {
+        "item" : "Overweight and Obesity (BMI)",
+        "count" : "76370"
+      }, {
+        "item" : "Colorectal Cancer Screening",
+        "count" : "60761"
+      }, {
+        "item" : "Cholesterol Awareness",
+        "count" : "55144"
+      }, {
+        "item" : "E-Cigarette Use",
+        "count" : "52380"
+      }, {
+        "item" : "Days of Poor Health",
+        "count" : "52068"
+      }, {
+        "item" : "Oral Health",
+        "count" : "51646"
+      }, {
+        "item" : "Women's Health",
+        "count" : "50854"
+      }, {
+        "item" : "Injury",
+        "count" : "41311"
+      }, {
+        "item" : "HIV-AIDS",
+        "count" : "33331"
+      }, {
+        "item" : "Fruits and Vegetables",
+        "count" : "27284"
+      }, {
+        "item" : "Hypertension Awareness",
+        "count" : "19000"
+      }, {
+        "item" : "Prostate Cancer",
+        "count" : "11932"
+      } ],
+      "smallest" : "Alcohol Consumption",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254389,
+    "name" : "Topic",
+    "dataTypeName" : "text",
+    "description" : "Topic Description",
+    "fieldName" : "topic",
+    "position" : 5,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770289,
+    "width" : 160,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "Vision",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Disability status",
+        "count" : "191678"
+      }, {
+        "item" : "Employment",
+        "count" : "152604"
+      }, {
+        "item" : "Cardiovascular Disease",
+        "count" : "140164"
+      }, {
+        "item" : "Marital Status",
+        "count" : "114505"
+      }, {
+        "item" : "Number of Children",
+        "count" : "114394"
+      }, {
+        "item" : "Race",
+        "count" : "98925"
+      }, {
+        "item" : "Overall Health",
+        "count" : "95507"
+      }, {
+        "item" : "Arthritis",
+        "count" : "95063"
+      }, {
+        "item" : "Age",
+        "count" : "87905"
+      }, {
+        "item" : "Income",
+        "count" : "83772"
+      }, {
+        "item" : "Last Checkup",
+        "count" : "83255"
+      }, {
+        "item" : "Asthma",
+        "count" : "76419"
+      }, {
+        "item" : "Smoker Status",
+        "count" : "76407"
+      }, {
+        "item" : "BMI Categories",
+        "count" : "76370"
+      }, {
+        "item" : "Diabetes",
+        "count" : "76000"
+      }, {
+        "item" : "Education",
+        "count" : "64547"
+      }, {
+        "item" : "E-Cigarette Use",
+        "count" : "52380"
+      }, {
+        "item" : "Healthy Days",
+        "count" : "52068"
+      }, {
+        "item" : "Personal Care Provider",
+        "count" : "49994"
+      }, {
+        "item" : "Smokeless Tobacco",
+        "count" : "49926"
+      } ],
+      "smallest" : "Aerobic Activity",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254390,
+    "name" : "Question",
+    "dataTypeName" : "text",
+    "description" : "Question",
+    "fieldName" : "question",
+    "position" : 6,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770290,
+    "width" : 196,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "Women aged 50+ who have had a mammogram within the past two years (variable calculated from one or more BRFSS questions)",
+      "null" : "0",
+      "top" : [ {
+        "item" : "What is your employment status?",
+        "count" : "152604"
+      }, {
+        "item" : "What is your marital status?",
+        "count" : "114505"
+      }, {
+        "item" : "How many children live in your household? (variable calculated from one or more BRFSS questions)",
+        "count" : "114394"
+      }, {
+        "item" : "What is your race/ethnicity?",
+        "count" : "98925"
+      }, {
+        "item" : "How is your general health?",
+        "count" : "95507"
+      }, {
+        "item" : "What is your age?",
+        "count" : "87905"
+      }, {
+        "item" : "What is your annual household income?",
+        "count" : "83772"
+      }, {
+        "item" : "About how long has it been since you last visited a doctor for a routine checkup?",
+        "count" : "83255"
+      }, {
+        "item" : "Four Level Smoking Status (variable calculated from one or more BRFSS questions)",
+        "count" : "76407"
+      }, {
+        "item" : "Weight classification by Body Mass Index (BMI) (variable calculated from one or more BRFSS questions)",
+        "count" : "76370"
+      }, {
+        "item" : "Have you ever been told by a doctor that you have diabetes?",
+        "count" : "76000"
+      }, {
+        "item" : "What is the highest grade or year of school you completed?",
+        "count" : "64547"
+      }, {
+        "item" : "Do you currently use chewing tobacco, snuff, or snus?",
+        "count" : "49926"
+      }, {
+        "item" : "Health Status (variable calculated from one or more BRFSS questions)",
+        "count" : "38213"
+      }, {
+        "item" : "Adults who have been told they have arthritis (variable calculated from one or more BRFSS questions)",
+        "count" : "38213"
+      }, {
+        "item" : "During the past month, did you participate in any physical activities? (variable calculated from one or more BRFSS questions)",
+        "count" : "38212"
+      }, {
+        "item" : "Adults who have had at least one drink of alcohol within the past 30 days",
+        "count" : "38212"
+      }, {
+        "item" : "Adults who have ever been told they have asthma (variable calculated from one or more BRFSS questions)",
+        "count" : "38212"
+      }, {
+        "item" : "Binge drinkers (males having five or more drinks on one occasion, females having four or more drinks on one occasion) (variable calculated from one or more BRFSS questions)",
+        "count" : "38211"
+      }, {
+        "item" : "Adults who are current smokers (variable calculated from one or more BRFSS questions)",
+        "count" : "38211"
+      } ],
+      "smallest" : "About how long has it been since you last visited a doctor for a routine checkup?",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254391,
+    "name" : "Response",
+    "dataTypeName" : "text",
+    "description" : "Evaluated Response ",
+    "fieldName" : "response",
+    "position" : 7,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770291,
+    "width" : 196,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "Zero days when physical health not good",
+      "null" : "0",
+      "top" : [ {
+        "item" : "No",
+        "count" : "660896"
+      }, {
+        "item" : "Yes",
+        "count" : "641343"
+      }, {
+        "item" : "None",
+        "count" : "19107"
+      }, {
+        "item" : "Married",
+        "count" : "19107"
+      }, {
+        "item" : "Good or Better Health",
+        "count" : "19107"
+      }, {
+        "item" : "Good",
+        "count" : "19106"
+      }, {
+        "item" : "Fair or Poor Health",
+        "count" : "19106"
+      }, {
+        "item" : "Former smoker",
+        "count" : "19106"
+      }, {
+        "item" : "Fair",
+        "count" : "19105"
+      }, {
+        "item" : "Never smoked",
+        "count" : "19105"
+      }, {
+        "item" : "Very good",
+        "count" : "19105"
+      }, {
+        "item" : "Never married",
+        "count" : "19105"
+      }, {
+        "item" : "Excellent",
+        "count" : "19104"
+      }, {
+        "item" : "One child",
+        "count" : "19104"
+      }, {
+        "item" : "Two children",
+        "count" : "19104"
+      }, {
+        "item" : "Divorced",
+        "count" : "19103"
+      }, {
+        "item" : "Smoke everyday",
+        "count" : "19102"
+      }, {
+        "item" : "Unable to work",
+        "count" : "19100"
+      }, {
+        "item" : "Three children",
+        "count" : "19096"
+      }, {
+        "item" : "Smoke some days",
+        "count" : "19094"
+      } ],
+      "smallest" : "$100,000 - 199,999",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254392,
+    "name" : "Break_Out",
+    "dataTypeName" : "text",
+    "description" : "Stratification value ",
+    "fieldName" : "break_out",
+    "position" : 8,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770292,
+    "width" : 208,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "White, non-Hispanic",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Overall",
+        "count" : "125935"
+      }, {
+        "item" : "Female",
+        "count" : "120080"
+      }, {
+        "item" : "Male",
+        "count" : "119235"
+      }, {
+        "item" : "College graduate",
+        "count" : "118385"
+      }, {
+        "item" : "H.S. or G.E.D.",
+        "count" : "118383"
+      }, {
+        "item" : "Some post-H.S.",
+        "count" : "118381"
+      }, {
+        "item" : "Less than H.S.",
+        "count" : "118367"
+      }, {
+        "item" : "$15,000-$24,999",
+        "count" : "117214"
+      }, {
+        "item" : "Less than $15,000",
+        "count" : "117210"
+      }, {
+        "item" : "$25,000-$34,999",
+        "count" : "117197"
+      }, {
+        "item" : "$35,000-$49,999",
+        "count" : "117191"
+      }, {
+        "item" : "White, non-Hispanic",
+        "count" : "116032"
+      }, {
+        "item" : "Hispanic",
+        "count" : "115894"
+      }, {
+        "item" : "Other, non-Hispanic",
+        "count" : "115892"
+      }, {
+        "item" : "Multiracial, non-Hispanic",
+        "count" : "115556"
+      }, {
+        "item" : "Black, non-Hispanic",
+        "count" : "115478"
+      }, {
+        "item" : "45-54",
+        "count" : "107977"
+      }, {
+        "item" : "55-64",
+        "count" : "107955"
+      }, {
+        "item" : "65+",
+        "count" : "107908"
+      }, {
+        "item" : "35-44",
+        "count" : "107321"
+      } ],
+      "smallest" : "$100,000-$199,999",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254393,
+    "name" : "Break_Out_Category",
+    "dataTypeName" : "text",
+    "description" : "Breakout_Category Stratification grouping ",
+    "fieldName" : "break_out_category",
+    "position" : 9,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770293,
+    "width" : 316,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "Sex",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Race/Ethnicity",
+        "count" : "835436"
+      }, {
+        "item" : "Age Group",
+        "count" : "668513"
+      }, {
+        "item" : "Household Income",
+        "count" : "653758"
+      }, {
+        "item" : "Education Attained",
+        "count" : "473516"
+      }, {
+        "item" : "Sex",
+        "count" : "239315"
+      }, {
+        "item" : "Overall",
+        "count" : "125935"
+      } ],
+      "smallest" : "Age Group",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254394,
+    "name" : "Sample_Size",
+    "dataTypeName" : "number",
+    "description" : "Sample size used to calculate the data value",
+    "fieldName" : "sample_size",
+    "position" : 10,
+    "renderTypeName" : "number",
+    "tableColumnId" : 28770294,
+    "width" : 112,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "42176",
+      "null" : "0",
+      "top" : [ {
+        "item" : "0",
+        "count" : "74813"
+      }, {
+        "item" : "1",
+        "count" : "52329"
+      }, {
+        "item" : "2",
+        "count" : "44245"
+      }, {
+        "item" : "3",
+        "count" : "38969"
+      }, {
+        "item" : "4",
+        "count" : "35300"
+      }, {
+        "item" : "5",
+        "count" : "31919"
+      }, {
+        "item" : "6",
+        "count" : "29611"
+      }, {
+        "item" : "7",
+        "count" : "27798"
+      }, {
+        "item" : "8",
+        "count" : "25936"
+      }, {
+        "item" : "9",
+        "count" : "24476"
+      }, {
+        "item" : "10",
+        "count" : "23014"
+      }, {
+        "item" : "11",
+        "count" : "21689"
+      }, {
+        "item" : "12",
+        "count" : "20818"
+      }, {
+        "item" : "13",
+        "count" : "20161"
+      }, {
+        "item" : "14",
+        "count" : "19360"
+      }, {
+        "item" : "15",
+        "count" : "18329"
+      }, {
+        "item" : "16",
+        "count" : "17693"
+      }, {
+        "item" : "17",
+        "count" : "17159"
+      }, {
+        "item" : "18",
+        "count" : "16657"
+      }, {
+        "item" : "19",
+        "count" : "16043"
+      } ],
+      "smallest" : "0",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "precisionStyle" : "standard",
+      "noCommas" : "false",
+      "align" : "right"
+    }
+  }, {
+    "id" : 578254395,
+    "name" : "Data_value",
+    "dataTypeName" : "number",
+    "description" : "Data Value, such as 14.7 or no value if footnote symbol is present",
+    "fieldName" : "data_value",
+    "position" : 11,
+    "renderTypeName" : "number",
+    "tableColumnId" : 28770295,
+    "width" : 88,
+    "cachedContents" : {
+      "non_null" : "2410628",
+      "largest" : "100.0",
+      "null" : "585845",
+      "top" : [ {
+        "item" : "4.6",
+        "count" : "7160"
+      }, {
+        "item" : "4.8",
+        "count" : "6946"
+      }, {
+        "item" : "3.8",
+        "count" : "6941"
+      }, {
+        "item" : "4.0",
+        "count" : "6931"
+      }, {
+        "item" : "4.2",
+        "count" : "6887"
+      }, {
+        "item" : "5.4",
+        "count" : "6880"
+      }, {
+        "item" : "4.4",
+        "count" : "6877"
+      }, {
+        "item" : "5.2",
+        "count" : "6828"
+      }, {
+        "item" : "5.0",
+        "count" : "6807"
+      }, {
+        "item" : "5.6",
+        "count" : "6804"
+      }, {
+        "item" : "3.6",
+        "count" : "6681"
+      }, {
+        "item" : "6.0",
+        "count" : "6666"
+      }, {
+        "item" : "5.8",
+        "count" : "6641"
+      }, {
+        "item" : "2.8",
+        "count" : "6617"
+      }, {
+        "item" : "3.4",
+        "count" : "6611"
+      }, {
+        "item" : "3.2",
+        "count" : "6603"
+      }, {
+        "item" : "6.2",
+        "count" : "6565"
+      }, {
+        "item" : "3.0",
+        "count" : "6448"
+      }, {
+        "item" : "2.4",
+        "count" : "6428"
+      }, {
+        "item" : "6.4",
+        "count" : "6417"
+      } ],
+      "smallest" : "0.0",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "precisionStyle" : "standard",
+      "noCommas" : "false",
+      "precision" : "1",
+      "align" : "right"
+    }
+  }, {
+    "id" : 578254396,
+    "name" : "Confidence_limit_Low",
+    "dataTypeName" : "number",
+    "description" : "Low Confidence Limit",
+    "fieldName" : "confidence_limit_low",
+    "position" : 12,
+    "renderTypeName" : "number",
+    "tableColumnId" : 28770296,
+    "width" : 126,
+    "cachedContents" : {
+      "non_null" : "2406066",
+      "largest" : "100.0",
+      "null" : "590407",
+      "top" : [ {
+        "item" : "1.6",
+        "count" : "9219"
+      }, {
+        "item" : "2.6",
+        "count" : "9195"
+      }, {
+        "item" : "2.0",
+        "count" : "9178"
+      }, {
+        "item" : "1.2",
+        "count" : "9125"
+      }, {
+        "item" : "1.0",
+        "count" : "9049"
+      }, {
+        "item" : "2.2",
+        "count" : "9023"
+      }, {
+        "item" : "2.4",
+        "count" : "8979"
+      }, {
+        "item" : "1.8",
+        "count" : "8959"
+      }, {
+        "item" : "2.8",
+        "count" : "8948"
+      }, {
+        "item" : "1.4",
+        "count" : "8893"
+      }, {
+        "item" : "3.4",
+        "count" : "8839"
+      }, {
+        "item" : "3.0",
+        "count" : "8825"
+      }, {
+        "item" : "3.2",
+        "count" : "8821"
+      }, {
+        "item" : "3.6",
+        "count" : "8553"
+      }, {
+        "item" : "3.8",
+        "count" : "8520"
+      }, {
+        "item" : "0.8",
+        "count" : "8496"
+      }, {
+        "item" : "4.0",
+        "count" : "8484"
+      }, {
+        "item" : "4.2",
+        "count" : "8145"
+      }, {
+        "item" : "2.1",
+        "count" : "8140"
+      }, {
+        "item" : "4.4",
+        "count" : "8001"
+      } ],
+      "smallest" : "0.0",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "precisionStyle" : "standard",
+      "noCommas" : "false",
+      "precision" : "1",
+      "align" : "right"
+    }
+  }, {
+    "id" : 578254397,
+    "name" : "Confidence_limit_High",
+    "dataTypeName" : "number",
+    "description" : "High Confidence Limit",
+    "fieldName" : "confidence_limit_high",
+    "position" : 13,
+    "renderTypeName" : "number",
+    "tableColumnId" : 28770297,
+    "width" : 163,
+    "cachedContents" : {
+      "non_null" : "2406066",
+      "largest" : "100.0",
+      "null" : "590407",
+      "top" : [ {
+        "item" : "100.0",
+        "count" : "36497"
+      }, {
+        "item" : "5.6",
+        "count" : "5792"
+      }, {
+        "item" : "5.8",
+        "count" : "5785"
+      }, {
+        "item" : "6.8",
+        "count" : "5777"
+      }, {
+        "item" : "6.0",
+        "count" : "5765"
+      }, {
+        "item" : "7.0",
+        "count" : "5710"
+      }, {
+        "item" : "6.6",
+        "count" : "5701"
+      }, {
+        "item" : "6.4",
+        "count" : "5699"
+      }, {
+        "item" : "7.4",
+        "count" : "5697"
+      }, {
+        "item" : "7.2",
+        "count" : "5654"
+      }, {
+        "item" : "6.2",
+        "count" : "5632"
+      }, {
+        "item" : "5.2",
+        "count" : "5611"
+      }, {
+        "item" : "5.4",
+        "count" : "5580"
+      }, {
+        "item" : "5.0",
+        "count" : "5563"
+      }, {
+        "item" : "4.8",
+        "count" : "5543"
+      }, {
+        "item" : "4.4",
+        "count" : "5517"
+      }, {
+        "item" : "4.6",
+        "count" : "5479"
+      }, {
+        "item" : "7.8",
+        "count" : "5471"
+      }, {
+        "item" : "7.6",
+        "count" : "5467"
+      }, {
+        "item" : "8.0",
+        "count" : "5294"
+      } ],
+      "smallest" : "0.0",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "precisionStyle" : "standard",
+      "noCommas" : "false",
+      "precision" : "1",
+      "align" : "right"
+    }
+  }, {
+    "id" : 578254398,
+    "name" : "Display_order",
+    "dataTypeName" : "number",
+    "description" : "Display order",
+    "fieldName" : "display_order",
+    "position" : 14,
+    "renderTypeName" : "number",
+    "tableColumnId" : 28770298,
+    "width" : 116,
+    "cachedContents" : {
+      "non_null" : "2995879",
+      "largest" : "4493",
+      "null" : "594",
+      "top" : [ {
+        "item" : "1",
+        "count" : "1362678"
+      }, {
+        "item" : "2",
+        "count" : "5948"
+      }, {
+        "item" : "5",
+        "count" : "5834"
+      }, {
+        "item" : "3",
+        "count" : "5834"
+      }, {
+        "item" : "4",
+        "count" : "5834"
+      }, {
+        "item" : "14",
+        "count" : "5830"
+      }, {
+        "item" : "12",
+        "count" : "5830"
+      }, {
+        "item" : "7",
+        "count" : "5830"
+      }, {
+        "item" : "11",
+        "count" : "5830"
+      }, {
+        "item" : "20",
+        "count" : "5830"
+      }, {
+        "item" : "10",
+        "count" : "5830"
+      }, {
+        "item" : "13",
+        "count" : "5830"
+      }, {
+        "item" : "18",
+        "count" : "5830"
+      }, {
+        "item" : "15",
+        "count" : "5830"
+      }, {
+        "item" : "17",
+        "count" : "5830"
+      }, {
+        "item" : "16",
+        "count" : "5830"
+      }, {
+        "item" : "9",
+        "count" : "5830"
+      }, {
+        "item" : "19",
+        "count" : "5830"
+      }, {
+        "item" : "8",
+        "count" : "5830"
+      }, {
+        "item" : "21",
+        "count" : "5830"
+      } ],
+      "smallest" : "1",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "precisionStyle" : "standard",
+      "noCommas" : "false",
+      "align" : "right"
+    }
+  }, {
+    "id" : 578254399,
+    "name" : "Data_value_unit",
+    "dataTypeName" : "text",
+    "description" : "The unit, such as \"%\" for percentage",
+    "fieldName" : "data_value_unit",
+    "position" : 15,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770299,
+    "width" : 111,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "%",
+      "null" : "0",
+      "top" : [ {
+        "item" : "%",
+        "count" : "2996473"
+      } ],
+      "smallest" : "%",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254400,
+    "name" : "Data_value_type",
+    "dataTypeName" : "text",
+    "description" : "The data value type, such as age-adjusted prevalence or crude prevalence",
+    "fieldName" : "data_value_type",
+    "position" : 16,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770300,
+    "width" : 280,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "Crude Prevalence",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Crude Prevalence",
+        "count" : "2996473"
+      } ],
+      "smallest" : "Crude Prevalence",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254401,
+    "name" : "Data_Value_Footnote_Symbol",
+    "dataTypeName" : "text",
+    "description" : "Footnote Symbol",
+    "fieldName" : "data_value_footnote_symbol",
+    "position" : 17,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770301,
+    "width" : 112,
+    "cachedContents" : {
+      "non_null" : "587177",
+      "largest" : "***",
+      "null" : "2409296",
+      "top" : [ {
+        "item" : "*",
+        "count" : "511032"
+      }, {
+        "item" : "***",
+        "count" : "62904"
+      }, {
+        "item" : "**",
+        "count" : "13241"
+      } ],
+      "smallest" : "*",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254402,
+    "name" : "Data_Value_Footnote",
+    "dataTypeName" : "text",
+    "description" : "Footnote Text",
+    "fieldName" : "data_value_footnote",
+    "position" : 18,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770302,
+    "width" : 328,
+    "cachedContents" : {
+      "non_null" : "587177",
+      "largest" : "Prevalence estimate not available if the unweighted sample size for the denominator was < 50 or the Relative Standard Error (RSE) is > 0.3 or if the state did not collect data for that calendar year.",
+      "null" : "2409296",
+      "top" : [ {
+        "item" : "Prevalence estimate not available if the unweighted sample size for the denominator was < 50 or the Relative Standard Error (RSE) is > 0.3 or if the state did not collect data for that calendar year.",
+        "count" : "511032"
+      }, {
+        "item" : "No responses for this data cell",
+        "count" : "66159"
+      }, {
+        "item" : "No responses for this data cell.",
+        "count" : "8652"
+      }, {
+        "item" : "** Median value reported with no confidence intervals.",
+        "count" : "1334"
+      } ],
+      "smallest" : "** Median value reported with no confidence intervals.",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254403,
+    "name" : "DataSource",
+    "dataTypeName" : "text",
+    "description" : "Data Source",
+    "fieldName" : "datasource",
+    "position" : 19,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770303,
+    "width" : 87,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "BRFSS",
+      "null" : "0",
+      "top" : [ {
+        "item" : "BRFSS",
+        "count" : "2996473"
+      } ],
+      "smallest" : "BRFSS",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254404,
+    "name" : "ClassId",
+    "dataTypeName" : "text",
+    "description" : "Class Identifier",
+    "fieldName" : "classid",
+    "position" : 20,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770304,
+    "width" : 111,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "CLASS21",
+      "null" : "0",
+      "top" : [ {
+        "item" : "CLASS05",
+        "count" : "1053274"
+      }, {
+        "item" : "CLASS03",
+        "count" : "585680"
+      }, {
+        "item" : "CLASS07",
+        "count" : "241512"
+      }, {
+        "item" : "CLASS17",
+        "count" : "164544"
+      }, {
+        "item" : "CLASS08",
+        "count" : "133720"
+      }, {
+        "item" : "CLASS01",
+        "count" : "114629"
+      }, {
+        "item" : "CLASS15",
+        "count" : "86296"
+      }, {
+        "item" : "CLASS11",
+        "count" : "79379"
+      }, {
+        "item" : "CLASS14",
+        "count" : "76370"
+      }, {
+        "item" : "CLASS04",
+        "count" : "60761"
+      }, {
+        "item" : "CLASS02",
+        "count" : "55144"
+      }, {
+        "item" : "CLASS19",
+        "count" : "52380"
+      }, {
+        "item" : "CLASS20",
+        "count" : "52068"
+      }, {
+        "item" : "CLASS13",
+        "count" : "51646"
+      }, {
+        "item" : "CLASS18",
+        "count" : "50854"
+      }, {
+        "item" : "CLASS12",
+        "count" : "41311"
+      }, {
+        "item" : "CLASS09",
+        "count" : "33331"
+      }, {
+        "item" : "CLASS06",
+        "count" : "27284"
+      }, {
+        "item" : "CLASS10",
+        "count" : "19000"
+      }, {
+        "item" : "CLASS16",
+        "count" : "11932"
+      } ],
+      "smallest" : "CLASS01",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254405,
+    "name" : "TopicId",
+    "dataTypeName" : "text",
+    "description" : "Topic Identifier",
+    "fieldName" : "topicid",
+    "position" : 21,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770305,
+    "width" : 114,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "TOPIC72",
+      "null" : "0",
+      "top" : [ {
+        "item" : "TOPIC19",
+        "count" : "147760"
+      }, {
+        "item" : "TOPIC22",
+        "count" : "113792"
+      }, {
+        "item" : "TOPIC10",
+        "count" : "110980"
+      }, {
+        "item" : "TOPIC39",
+        "count" : "85344"
+      }, {
+        "item" : "TOPIC38",
+        "count" : "85344"
+      }, {
+        "item" : "TOPIC48",
+        "count" : "79872"
+      }, {
+        "item" : "TOPIC05",
+        "count" : "73088"
+      }, {
+        "item" : "TOPIC41",
+        "count" : "71120"
+      }, {
+        "item" : "TOPIC36",
+        "count" : "71120"
+      }, {
+        "item" : "TOPIC02",
+        "count" : "66264"
+      }, {
+        "item" : "TOPIC33",
+        "count" : "64670"
+      }, {
+        "item" : "TOPIC55",
+        "count" : "56896"
+      }, {
+        "item" : "TOPIC06",
+        "count" : "56896"
+      }, {
+        "item" : "TOPIC09",
+        "count" : "56896"
+      }, {
+        "item" : "TOPIC18",
+        "count" : "56896"
+      }, {
+        "item" : "TOPIC67",
+        "count" : "52380"
+      }, {
+        "item" : "TOPIC71",
+        "count" : "52068"
+      }, {
+        "item" : "TOPIC21",
+        "count" : "48416"
+      }, {
+        "item" : "Topic19",
+        "count" : "43918"
+      }, {
+        "item" : "TOPIC43",
+        "count" : "42672"
+      } ],
+      "smallest" : "TOPIC01",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254406,
+    "name" : "LocationID",
+    "dataTypeName" : "text",
+    "description" : "Column location number value corresponding to geographic location like state",
+    "fieldName" : "locationid",
+    "position" : 22,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770306,
+    "width" : 91,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "99",
+      "null" : "0",
+      "top" : [ {
+        "item" : "31",
+        "count" : "56496"
+      }, {
+        "item" : "45",
+        "count" : "56494"
+      }, {
+        "item" : "25",
+        "count" : "56493"
+      }, {
+        "item" : "20",
+        "count" : "56492"
+      }, {
+        "item" : "06",
+        "count" : "56491"
+      }, {
+        "item" : "40",
+        "count" : "56491"
+      }, {
+        "item" : "27",
+        "count" : "56490"
+      }, {
+        "item" : "39",
+        "count" : "56489"
+      }, {
+        "item" : "26",
+        "count" : "56489"
+      }, {
+        "item" : "37",
+        "count" : "56487"
+      }, {
+        "item" : "48",
+        "count" : "56487"
+      }, {
+        "item" : "49",
+        "count" : "56486"
+      }, {
+        "item" : "22",
+        "count" : "56484"
+      }, {
+        "item" : "08",
+        "count" : "56482"
+      }, {
+        "item" : "13",
+        "count" : "56481"
+      }, {
+        "item" : "51",
+        "count" : "56481"
+      }, {
+        "item" : "18",
+        "count" : "56480"
+      }, {
+        "item" : "15",
+        "count" : "56480"
+      }, {
+        "item" : "29",
+        "count" : "56477"
+      }, {
+        "item" : "01",
+        "count" : "56474"
+      } ],
+      "smallest" : "01",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254407,
+    "name" : "BreakoutID",
+    "dataTypeName" : "text",
+    "description" : "Identifier for the stratification",
+    "fieldName" : "breakoutid",
+    "position" : 23,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770307,
+    "width" : 97,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "SEX2",
+      "null" : "0",
+      "top" : [ {
+        "item" : "BO1",
+        "count" : "125935"
+      }, {
+        "item" : "SEX2",
+        "count" : "120080"
+      }, {
+        "item" : "SEX1",
+        "count" : "119235"
+      }, {
+        "item" : "EDUCA4",
+        "count" : "118385"
+      }, {
+        "item" : "EDUCA2",
+        "count" : "118383"
+      }, {
+        "item" : "EDUCA3",
+        "count" : "118381"
+      }, {
+        "item" : "EDUCA1",
+        "count" : "118367"
+      }, {
+        "item" : "AGE04",
+        "count" : "107977"
+      }, {
+        "item" : "AGE05",
+        "count" : "107955"
+      }, {
+        "item" : "AGE09",
+        "count" : "107908"
+      }, {
+        "item" : "AGE03",
+        "count" : "107321"
+      }, {
+        "item" : "AGE02",
+        "count" : "107246"
+      }, {
+        "item" : "AGE01",
+        "count" : "106988"
+      }, {
+        "item" : "RACE03",
+        "count" : "85528"
+      }, {
+        "item" : "RACE07",
+        "count" : "85528"
+      }, {
+        "item" : "RACE01",
+        "count" : "85528"
+      }, {
+        "item" : "RACE05",
+        "count" : "85528"
+      }, {
+        "item" : "RACE02",
+        "count" : "85528"
+      }, {
+        "item" : "RACE04",
+        "count" : "85528"
+      }, {
+        "item" : "RACE06",
+        "count" : "85528"
+      } ],
+      "smallest" : "AGE01",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254408,
+    "name" : "BreakOutCategoryID",
+    "dataTypeName" : "text",
+    "description" : "Identifier for the stratification Group",
+    "fieldName" : "breakoutcategoryid",
+    "position" : 24,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770308,
+    "width" : 134,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "CAT6",
+      "null" : "0",
+      "top" : [ {
+        "item" : "CAT4",
+        "count" : "835436"
+      }, {
+        "item" : "CAT3",
+        "count" : "668513"
+      }, {
+        "item" : "CAT6",
+        "count" : "653758"
+      }, {
+        "item" : "CAT5",
+        "count" : "473516"
+      }, {
+        "item" : "CAT2",
+        "count" : "239315"
+      }, {
+        "item" : "CAT1",
+        "count" : "125935"
+      } ],
+      "smallest" : "CAT1",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254409,
+    "name" : "QuestionID",
+    "dataTypeName" : "text",
+    "description" : "Question Identifier",
+    "fieldName" : "questionid",
+    "position" : 25,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770309,
+    "width" : 121,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "VETERAN3",
+      "null" : "0",
+      "top" : [ {
+        "item" : "EMPLOY1",
+        "count" : "133188"
+      }, {
+        "item" : "MARITAL",
+        "count" : "114505"
+      }, {
+        "item" : "_CHLDCNT",
+        "count" : "114394"
+      }, {
+        "item" : "GENHLTH",
+        "count" : "95507"
+      }, {
+        "item" : "AGE",
+        "count" : "87905"
+      }, {
+        "item" : "CHECKUP1",
+        "count" : "83255"
+      }, {
+        "item" : "RACE8",
+        "count" : "79872"
+      }, {
+        "item" : "_SMOKER3",
+        "count" : "76407"
+      }, {
+        "item" : "_BMI5CAT",
+        "count" : "76370"
+      }, {
+        "item" : "EDUCA",
+        "count" : "64547"
+      }, {
+        "item" : "INCOME",
+        "count" : "52552"
+      }, {
+        "item" : "USENOW3",
+        "count" : "49926"
+      }, {
+        "item" : "DIABETE3",
+        "count" : "41288"
+      }, {
+        "item" : "_RFHLTH",
+        "count" : "38213"
+      }, {
+        "item" : "_LTASTH1",
+        "count" : "38212"
+      }, {
+        "item" : "_TOTINDA",
+        "count" : "38212"
+      }, {
+        "item" : "_RFSMOK3",
+        "count" : "38211"
+      }, {
+        "item" : "_CASTHM1",
+        "count" : "38207"
+      }, {
+        "item" : "CVDINFR4",
+        "count" : "38181"
+      }, {
+        "item" : "CVDCRHD4",
+        "count" : "38174"
+      } ],
+      "smallest" : "ADDEPEV2",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254410,
+    "name" : "ResponseID",
+    "dataTypeName" : "text",
+    "description" : "Response identifier",
+    "fieldName" : "responseid",
+    "position" : 26,
+    "renderTypeName" : "text",
+    "tableColumnId" : 28770310,
+    "width" : 172,
+    "cachedContents" : {
+      "non_null" : "2996473",
+      "largest" : "RESP238",
+      "null" : "0",
+      "top" : [ {
+        "item" : "RESP054",
+        "count" : "660896"
+      }, {
+        "item" : "RESP046",
+        "count" : "641343"
+      }, {
+        "item" : "RESP033",
+        "count" : "19107"
+      }, {
+        "item" : "RESP061",
+        "count" : "19107"
+      }, {
+        "item" : "RESP095",
+        "count" : "19107"
+      }, {
+        "item" : "RESP039",
+        "count" : "19106"
+      }, {
+        "item" : "RESP070",
+        "count" : "19106"
+      }, {
+        "item" : "RESP058",
+        "count" : "19106"
+      }, {
+        "item" : "RESP062",
+        "count" : "19106"
+      }, {
+        "item" : "RESP041",
+        "count" : "19106"
+      }, {
+        "item" : "RESP059",
+        "count" : "19105"
+      }, {
+        "item" : "RESP040",
+        "count" : "19105"
+      }, {
+        "item" : "RESP057",
+        "count" : "19105"
+      }, {
+        "item" : "RESP037",
+        "count" : "19105"
+      }, {
+        "item" : "RESP071",
+        "count" : "19105"
+      }, {
+        "item" : "RESP093",
+        "count" : "19104"
+      }, {
+        "item" : "RESP094",
+        "count" : "19104"
+      }, {
+        "item" : "RESP056",
+        "count" : "19104"
+      }, {
+        "item" : "RESP034",
+        "count" : "19103"
+      }, {
+        "item" : "RESP068",
+        "count" : "19102"
+      } ],
+      "smallest" : "RESP001",
+      "count" : "2996473",
+      "cardinality" : "2996473"
+    },
+    "format" : {
+      "displayStyle" : "plain",
+      "align" : "left"
+    }
+  }, {
+    "id" : 578254411,
+    "name" : "GeoLocation",
+    "dataTypeName" : "location",
+    "description" : "Location code to be used for Geocoding",
+    "fieldName" : "geolocation",
+    "position" : 27,
+    "renderTypeName" : "location",
+    "tableColumnId" : 28770311,
+    "width" : 283,
+    "format" : {
+      "view" : "address_coords",
+      "align" : "left"
+    }
+  } ],
+  "grants" : [ {
+    "inherited" : false,
+    "type" : "viewer",
+    "flags" : [ "public" ]
+  } ],
+  "license" : {
+    "name" : "Public Domain"
+  },
+  "metadata" : {
+    "rdfSubject" : "0",
+    "jsonQuery" : {
+      "order" : [ {
+        "columnFieldName" : "year",
+        "ascending" : false
+      }, {
+        "columnFieldName" : "locationabbr",
+        "ascending" : true
+      }, {
+        "columnFieldName" : "display_order",
+        "ascending" : true
+      } ]
+    },
+    "custom_fields" : {
+      "Common Core" : {
+        "Contact Email" : "PublicInquiriesDPH@cdc.gov",
+        "Homepage" : "https://www.cdc.gov/brfss/index.html",
+        "Described By" : "http://www.cdc.gov/brfss/factsheets/pdf/DBS_BRFSS_survey.pdf",
+        "References" : "http://www.cdc.gov/brfss",
+        "Contact Name" : "DPH Public Inquiries",
+        "Issued" : "July 27, 2023",
+        "Program Code" : "009:020",
+        "Publisher" : "Centers for disease control and prevention",
+        "Bureau Code" : "009:20",
+        "Public Access Level" : "public"
+      },
+      "Dataset Information" : {
+        "Glossary/Methodology " : "https://chronicdata.cdc.gov/Behavioral-Risk-Factors/Behavioral-Risk-Factor-Surveillance-System-BRFSS-H/iuq5-y9ct/data, http://www.cdc.gov/brfss/factsheets/pdf/DBS_BRFSS_survey.pdf"
+      }
+    },
+    "rowLabel" : "Row",
+    "availableDisplayTypes" : [ "table", "fatrow", "page" ],
+    "renderTypeConfig" : {
+      "visible" : {
+        "table" : true
+      }
+    }
+  },
+  "owner" : {
+    "id" : "fjjr-gap9",
+    "displayName" : "CDC UserSA",
+    "screenName" : "CDC UserSA",
+    "type" : "interactive",
+    "flags" : [ "acceptedEula", "mayBeStoriesCoOwner" ]
+  },
+  "query" : {
+    "orderBys" : [ {
+      "ascending" : false,
+      "expression" : {
+        "columnId" : 578254385,
+        "type" : "column"
+      }
+    }, {
+      "ascending" : true,
+      "expression" : {
+        "columnId" : 578254386,
+        "type" : "column"
+      }
+    }, {
+      "ascending" : true,
+      "expression" : {
+        "columnId" : 578254398,
+        "type" : "column"
+      }
+    } ]
+  },
+  "rights" : [ "read" ],
+  "tableAuthor" : {
+    "id" : "fjjr-gap9",
+    "displayName" : "CDC UserSA",
+    "screenName" : "CDC UserSA",
+    "type" : "interactive",
+    "flags" : [ "acceptedEula", "mayBeStoriesCoOwner" ]
+  },
+  "tags" : [ "survey", "brfss", "behavioral", "risk", "factor" ],
+  "flags" : [ "default", "ownerMayBeContacted", "restorable", "restorePossibleForType" ]
+}

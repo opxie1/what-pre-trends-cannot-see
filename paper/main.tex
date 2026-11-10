@@ -48,9 +48,10 @@ with Few Clusters}
 Email: \texttt{ethanxie@udel.edu}. Replication code, the simulation scripts and
 the output files underlying the tables are at
 \url{https://github.com/opxie1/what-pre-trends-cannot-see},
-at the tagged release \texttt{v1.0}, which is immutable; the main
+at the tagged release \texttt{v1.1}, which is immutable; the main
 branch may move. The note to each table and figure names the
-output file its entries are read from. The simulations are written in Python and need
+output file its entries are read from, and the two constructed panels
+rebuild from the cached source files under \texttt{data/raw/}. The simulations are written in Python and need
 version 3.11 or later with \texttt{numpy}, \texttt{scipy} and \texttt{pandas}.
 They draw pseudorandom numbers from the NumPy PCG64 generator, seeded once per
 replication by the CRC-32 checksum of a string naming the design cell and the
@@ -59,7 +60,7 @@ every output file cited here takes $61.2$ minutes in total
 (\texttt{results/inference/summary.json}, field
 \texttt{runtime\_min\_total}).}}
 
-\date{September 19, 2026}
+\date{November 9, 2026}
 
 \begin{document}
 \maketitle
@@ -134,7 +135,7 @@ class collapses to a single point for every value of its sensitivity parameter
 and the procedure reports no breakdown value at all. In simulations calibrated to
 a latent effect of one and a recording wedge of $0.6$, and computed with a
 reference implementation rather than by hand, coverage of the latent effect at a
-sensitivity parameter of one falls from $0.955$ at $N = 400$ to $0.007$ at
+sensitivity parameter of one falls from $0.955$ at $N = 400$ to $0.008$ at
 $N = 6{,}400$ and to zero thereafter. An interval whose bound is taken from the
 recording institution rather than from the pre-period covers at one throughout.
 More data does not repair the pattern but is instead what produces it, because
@@ -358,6 +359,18 @@ recording response: the class scales a pre-period quantity that Corollary
 of $\bar M$, and the smoothness class calibrated from the pre-period inherits
 the same failure through its estimated bound. The online Appendix develops both
 classes and the calibration the reference software uses.
+
+What is prior here should be marked. That a smoothness constant cannot be read
+off the data while honest coverage is retained is the nonadaptivity result of
+\citet{low1997nonparametric} and \citet{cailow2004adaptation}, stated for
+econometric practice by \citet{armstrong2020simple} and restated in a
+difference-in-differences framing by \citet{freeman2026local}, and
+\citet{arora2026trading} note in prose that uninformative pre trends leave the
+relative magnitudes class with intervals that fail to widen. Proposition
+\ref{prop:rm} improves on none of that. What it adds is the mechanism: under a
+recording response the quantity being scaled is zero by construction rather
+than small by chance, so the collapse is exact, holds at every $\bar M$, and is
+a property of the structure rather than of the realized sample.
 
 \subsection{What coverage does}
 
@@ -942,9 +955,9 @@ detectable response by a factor of $1.524$
 
 At the design of Section \ref{sec:sim} with $C = 5$ and $m = 13$,
 \eqref{eq:mde} returns $\kappa^{\mathrm{Wald}}_{\mathrm{MDE}} = 0.363$ and
-$\kappa^{\mathrm{dir}}_{\mathrm{MDE}} = 0.242$ for the linear wedge; solving the
+$\kappa^{\mathrm{dir}}_{\mathrm{MDE}} = 0.214$ for the linear wedge; solving the
 same noncentrality equation at the nonlinear wedge that design actually
-generates raises the Wald figure to $0.450$. The simulated magnitude at which
+generates raises these to $0.450$ and $0.242$. The simulated magnitude at which
 size-adjusted power first crosses $0.80$ in that design is $0.254$ for the
 directed cluster sign-change test, $0.477$ for the directed label permutation
 test and $0.566$ for the chi square Wald at its size-adjusted critical value.
@@ -1004,6 +1017,80 @@ summarized in the note to Table \ref{tab:size}. We vary $G \in
 \{20,30,51,100\}$ with one unit per cluster, $C \in \{3,5,8\}$ categories,
 $m = 13$ post-treatment restrictions and $T = 120$ periods, over $2{,}000$
 replications per cell.
+
+\begin{table}[!tbp]
+\centering
+\small
+\begin{spacing}{1.0}
+\caption{Null rejection rates, nominal level $0.05$}
+\label{tab:size}
+\begin{tabular}{llrrrr}
+\toprule
+ & & \multicolumn{4}{c}{Clusters $G$} \\
+\cmidrule(lr){3-6}
+Statistic and calibration & $C$ & 20 & 30 & 51 & 100 \\
+\midrule
+Wald, $\chi^2_m$                  & 3 & 0.920 & 0.693 & 0.393 & 0.172 \\
+                                  & 5 & 0.905 & 0.686 & 0.389 & 0.187 \\
+                                  & 8 & 0.917 & 0.690 & 0.356 & 0.172 \\
+\addlinespace
+$W/m$, $F(m,G-1)$                 & 3 & 0.838 & 0.586 & 0.311 & 0.143 \\
+                                  & 5 & 0.821 & 0.558 & 0.309 & 0.153 \\
+                                  & 8 & 0.834 & 0.571 & 0.283 & 0.138 \\
+\addlinespace
+Hotelling at $G$                  & 3 & 0.175 & 0.164 & 0.122 & 0.082 \\
+                                  & 5 & 0.174 & 0.160 & 0.124 & 0.092 \\
+                                  & 8 & 0.172 & 0.167 & 0.106 & 0.088 \\
+\addlinespace
+Hotelling at $G_{\mathrm{eff}}$   & 3 & 0.000 & 0.022 & 0.047 & 0.061 \\
+                                  & 5 & 0.000 & 0.020 & 0.045 & 0.065 \\
+                                  & 8 & 0.000 & 0.021 & 0.045 & 0.055 \\
+\addlinespace
+Label permutation, Wald           & 3 & 0.000 & 0.000 & 0.000 & 0.000 \\
+                                  & 5 & 0.053 & 0.050 & 0.046 & 0.059 \\
+                                  & 8 & 0.051 & 0.051 & 0.043 & 0.058 \\
+\addlinespace
+Label permutation, directed       & 3 & 0.000 & 0.000 & 0.000 & 0.000 \\
+                                  & 5 & 0.052 & 0.053 & 0.048 & 0.052 \\
+                                  & 8 & 0.046 & 0.050 & 0.043 & 0.051 \\
+\addlinespace
+Wild cluster bootstrap, Wald      & 3 & 0.053 & 0.055 & 0.053 & 0.061 \\
+                                  & 5 & 0.064 & 0.062 & 0.051 & 0.067 \\
+                                  & 8 & 0.061 & 0.061 & 0.051 & 0.056 \\
+\addlinespace
+Cluster sign change, Wald         & 3 & 0.027 & 0.036 & 0.046 & 0.058 \\
+                                  & 5 & 0.022 & 0.041 & 0.050 & 0.066 \\
+                                  & 8 & 0.033 & 0.041 & 0.048 & 0.053 \\
+\addlinespace
+Cluster sign change, directed     & 3 & 0.058 & 0.056 & 0.044 & 0.045 \\
+                                  & 5 & 0.058 & 0.061 & 0.057 & 0.046 \\
+                                  & 8 & 0.055 & 0.055 & 0.057 & 0.065 \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\begin{minipage}{0.95\textwidth}
+\footnotesize Notes: rejection rates for the joint null $H_0: \gamma_P = 0$ of
+\eqref{eq:null} in the pooled gradient regression \eqref{eq:pooled}, estimated
+by OLS with the CR1 covariance clustered on $g$, at nominal level $0.05$.
+Design: $m = 13$ post-treatment restrictions, $q = 18$ included horizons,
+$T = 120$, adoption at $t = 48$, $72$ and $96$ by $20\%$ of units each with
+$40\%$ never treated, one unit per cluster, exposure indices equally spaced on
+$[0.1,1]$. The Hotelling rows refer $W$ to the $F$ law of \eqref{eq:Fexact}
+evaluated at $G$ and at $G_{\mathrm{eff}}$, which is $0.727\,G$ at
+$G = 20$, $30$ and $100$ and $0.714\,G$ at $G = 51$. Label permutation
+randomizes the $C!$ assignments of the exposure index to the category data
+arrays, enumerating all of them at $C = 3$ and $C = 5$ and using $998$ sampled
+assignments together with the identity at $C = 8$. The wild cluster bootstrap
+uses $499$ draws and the cluster sign-change test $999$, each including the
+identity draw. The directed rows use the contrast $w = \mathbf{1}_m$.
+$2{,}000$ replications per cell; the Monte Carlo standard error is $0.005$ at
+a rate of $0.05$, $0.011$ at $0.39$ and $0.006$ at $0.92$. Sources:
+\texttt{results/inference/size\_table.csv} and
+\texttt{anatomy\_table.csv}.
+\end{minipage}
+\end{spacing}
+\end{table}
 
 \paragraph{Size.} Table \ref{tab:size} reports null rejection rates for
 \eqref{eq:null} at nominal level $0.05$. The chi-square calibration rejects at
@@ -1068,80 +1155,8 @@ table over the full grid of magnitudes, the contrast used, and the two cells at
 $C = 5$ where the size-adjusted power of the two-sided permutation test is
 nonmonotone in $\kappa$.
 
-\paragraph{Further evidence.} The online Appendix reports five further blocks of this design: the exact null law checked in an experiment built to satisfy Assumption \ref{as:I}, the accuracy of the substitution of $G_{\mathrm{eff}}$, the size distortion when category exchangeability fails and what studentizing does to it, the price label randomization charges relative to a normal benchmark, the behavior of the calibrations in four harder designs with clustered, unequal, serially correlated and heavy tailed errors, and a benchmark against the bias-reduced variance of \citet{bell2002bias}. None of them changes a conclusion drawn here.
+\paragraph{Further evidence.} The online Appendix reports seven further blocks of this design: the exact null law checked in an experiment built to satisfy Assumption \ref{as:I}, the accuracy of the substitution of $G_{\mathrm{eff}}$, the size distortion when category exchangeability fails and what studentizing does to it, the price label randomization charges relative to a normal benchmark, how the exposure spread, the panel length and the pre window move the minimum detectable response, the behavior of the calibrations in four harder designs with clustered, unequal, serially correlated and heavy tailed errors, and a benchmark against the bias-reduced variance of \citet{bell2002bias}. None of them changes a conclusion drawn here.
 
-\begin{table}[htbp]
-\centering
-\small
-\begin{spacing}{1.0}
-\caption{Null rejection rates, nominal level $0.05$}
-\label{tab:size}
-\begin{tabular}{llrrrr}
-\toprule
- & & \multicolumn{4}{c}{Clusters $G$} \\
-\cmidrule(lr){3-6}
-Statistic and calibration & $C$ & 20 & 30 & 51 & 100 \\
-\midrule
-Wald, $\chi^2_m$                  & 3 & 0.920 & 0.693 & 0.393 & 0.172 \\
-                                  & 5 & 0.905 & 0.686 & 0.389 & 0.187 \\
-                                  & 8 & 0.917 & 0.690 & 0.356 & 0.172 \\
-\addlinespace
-$W/m$, $F(m,G-1)$                 & 3 & 0.838 & 0.586 & 0.311 & 0.143 \\
-                                  & 5 & 0.821 & 0.558 & 0.309 & 0.153 \\
-                                  & 8 & 0.834 & 0.571 & 0.283 & 0.138 \\
-\addlinespace
-Hotelling at $G$                  & 3 & 0.175 & 0.164 & 0.122 & 0.082 \\
-                                  & 5 & 0.174 & 0.160 & 0.124 & 0.092 \\
-                                  & 8 & 0.172 & 0.167 & 0.106 & 0.088 \\
-\addlinespace
-Hotelling at $G_{\mathrm{eff}}$   & 3 & 0.000 & 0.022 & 0.047 & 0.061 \\
-                                  & 5 & 0.000 & 0.020 & 0.045 & 0.065 \\
-                                  & 8 & 0.000 & 0.021 & 0.045 & 0.055 \\
-\addlinespace
-Label permutation, Wald           & 3 & 0.000 & 0.000 & 0.000 & 0.000 \\
-                                  & 5 & 0.053 & 0.050 & 0.046 & 0.059 \\
-                                  & 8 & 0.051 & 0.051 & 0.043 & 0.058 \\
-\addlinespace
-Label permutation, directed       & 3 & 0.000 & 0.000 & 0.000 & 0.000 \\
-                                  & 5 & 0.052 & 0.053 & 0.048 & 0.052 \\
-                                  & 8 & 0.046 & 0.050 & 0.043 & 0.051 \\
-\addlinespace
-Wild cluster bootstrap, Wald      & 3 & 0.053 & 0.055 & 0.053 & 0.061 \\
-                                  & 5 & 0.064 & 0.062 & 0.051 & 0.067 \\
-                                  & 8 & 0.061 & 0.061 & 0.051 & 0.056 \\
-\addlinespace
-Cluster sign change, Wald         & 3 & 0.027 & 0.036 & 0.046 & 0.058 \\
-                                  & 5 & 0.022 & 0.041 & 0.050 & 0.066 \\
-                                  & 8 & 0.033 & 0.041 & 0.048 & 0.053 \\
-\addlinespace
-Cluster sign change, directed     & 3 & 0.058 & 0.056 & 0.044 & 0.045 \\
-                                  & 5 & 0.058 & 0.061 & 0.057 & 0.046 \\
-                                  & 8 & 0.055 & 0.055 & 0.057 & 0.065 \\
-\bottomrule
-\end{tabular}
-
-\smallskip
-\begin{minipage}{0.95\textwidth}
-\footnotesize Notes: rejection rates for the joint null $H_0: \gamma_P = 0$ of
-\eqref{eq:null} in the pooled gradient regression \eqref{eq:pooled}, estimated
-by OLS with the CR1 covariance clustered on $g$, at nominal level $0.05$.
-Design: $m = 13$ post-treatment restrictions, $q = 18$ included horizons,
-$T = 120$, adoption at $t = 48$, $72$ and $96$ by $20\%$ of units each with
-$40\%$ never treated, one unit per cluster, exposure indices equally spaced on
-$[0.1,1]$. The Hotelling rows refer $W$ to the $F$ law of \eqref{eq:Fexact}
-evaluated at $G$ and at $G_{\mathrm{eff}} = 0.714\,G$. Label permutation
-randomizes the $C!$ assignments of the exposure index to the category data
-arrays, enumerating all of them at $C = 3$ and $C = 5$ and using $998$ sampled
-assignments together with the identity at $C = 8$. The wild cluster bootstrap
-uses $499$ draws and the cluster sign-change test $999$, each including the
-identity draw. The directed rows use the contrast $w = \mathbf{1}_m$.
-$2{,}000$ replications per cell; the Monte Carlo standard error is $0.005$ at
-a rate of $0.05$, $0.011$ at $0.39$ and $0.006$ at $0.92$. Sources:
-\texttt{results/inference/size\_table.csv} and
-\texttt{anatomy\_table.csv}.
-\end{minipage}
-\end{spacing}
-\end{table}
 
 \section{What the design has to satisfy}
 \label{sec:designcalc}
@@ -1225,11 +1240,18 @@ Table 6. The health series are BRFSS crude prevalence from the CDC Socrata
 dataset \texttt{dttw-5yxu}, and the expansion effective dates come from the
 Kaiser Family Foundation table of state Medicaid expansion decisions. All are
 public. The two constructed panels and the code that builds them are in the
-replication archive named in the title footnote. Every $p$ value,
-$G_{\mathrm{eff}}$ and predicted size reported in this section is read from
-\texttt{results/empirics/inference\_gradient.csv}, and every realized
+replication archive named in the title footnote, under
+\texttt{data/processed/} and \texttt{scripts/}. For the specifications as
+originally run, every $p$ value, $G_{\mathrm{eff}}$ and predicted size is read
+from \texttt{results/empirics/inference\_gradient.csv} and every realized
 resolution floor from
-\texttt{results/empirics/app\_floors\_injection.csv}.
+\texttt{results/empirics/app\_floors\_injection.csv}. The seven certified
+specifications are enumerated in
+\texttt{results/inference/design\_power.csv}, and every figure reported for
+them above, including their $p$ values, $G_{\mathrm{eff}}$, attainable floor
+and permutation inflated minimum detectable response, is read from the
+\texttt{certified\_runs} block of
+\texttt{results/inference/design\_power.json}.
 
 \section{Conclusion}
 
@@ -1301,6 +1323,8 @@ nothing and follows the numbering used here.
 
 \bibitem[Armstrong and Koles\'ar(2020)]{armstrong2020simple} Armstrong, T.~B., and Koles\'ar, M. (2020), ``Simple and Honest Confidence Intervals in Nonparametric Regression,'' \emph{Quantitative Economics}, 11, 1--39, DOI: 10.3982/qe1199.
 
+\bibitem[Arora and Chand(2026)]{arora2026trading} Arora, P., and Chand, A. (2026), ``Trading Scope for Credibility in Difference-in-differences,'', arXiv:2608.16867.
+
 \bibitem[Baicker et al.(2013)]{baicker2013oregon} Baicker, K., Taubman, S.~L., Allen, H.~L., Bernstein, M., Gruber, J.~H., Newhouse, J.~P., Schneider, E.~C., Wright, B.~J., Zaslavsky, A.~M., and Finkelstein, A.~N. (2013), ``The Oregon Experiment: Effects of Medicaid on Clinical Outcomes,'' \emph{New England Journal of Medicine}, 368, 1713--1722, DOI: 10.1056/nejmsa1212321.
 
 \bibitem[Bell and McCaffrey(2002)]{bell2002bias} Bell, R.~M., and McCaffrey, D.~F. (2002), ``Bias Reduction in Standard Errors for Linear Regression With Multi-stage Samples,'' \emph{Survey Methodology}, 28, 169--181.
@@ -1310,6 +1334,8 @@ nothing and follows the numbering used here.
 \bibitem[Borusyak et al.(2024)]{borusyak2024revisiting} Borusyak, K., Jaravel, X., and Spiess, J. (2024), ``Revisiting Event-study Designs: Robust and Efficient Estimation,'' \emph{Review of Economic Studies}, 91, 3253--3285, DOI: 10.1093/restud/rdae007.
 
 \bibitem[Callaway and Sant'Anna(2021)]{callaway2021did} Callaway, B., and Sant'Anna, P.~H.~C. (2021), ``Difference-in-differences With Multiple Time Periods,'' \emph{Journal of Econometrics}, 225, 200--230, DOI: 10.1016/j.jeconom.2020.12.001.
+
+\bibitem[Cai and Low(2004)]{cailow2004adaptation} Cai, T.~T., and Low, M.~G. (2004), ``An Adaptation Theory for Nonparametric Confidence Intervals,'' \emph{The Annals of Statistics}, 32, 1805--1840, DOI: 10.1214/009053604000000049.
 
 \bibitem[Cameron et al.(2008)]{cameron2008bootstrap} Cameron, A.~C., Gelbach, J.~B., and Miller, D.~L. (2008), ``Bootstrap-based Improvements for Inference With Clustered Errors,'' \emph{Review of Economics and Statistics}, 90, 414--427, DOI: 10.1162/rest.90.3.414.
 
@@ -1323,6 +1349,8 @@ nothing and follows the numbering used here.
 
 \bibitem[Djogbenou et al.(2019)]{djogbenou2019asymptotic} Djogbenou, A.~A., MacKinnon, J.~G., and Nielsen, M.~{\O}. (2019), ``Asymptotic Theory and Wild Bootstrap Inference With Clustered Errors,'' \emph{Journal of Econometrics}, 212, 393--412, DOI: 10.1016/j.jeconom.2019.04.035.
 
+\bibitem[Freeman(2026)]{freeman2026local} Freeman, H. (2026), ``Local Asymptotic Power of Honest Confidence Intervals,'', arXiv:2607.10558.
+
 \bibitem[Geruso and Layton(2020)]{geruso2020upcoding} Geruso, M., and Layton, T. (2020), ``Upcoding: Evidence From Medicare on Squishy Risk Adjustment,'' \emph{Journal of Political Economy}, 128, 984--1026, DOI: 10.1086/704756.
 
 \bibitem[Harasztosi and Lindner(2019)]{harasztosi2019minwage} Harasztosi, P., and Lindner, A. (2019), ``Who Pays for the Minimum Wage?'' \emph{American Economic Review}, 109, 2693--2727, DOI: 10.1257/aer.20171445.
@@ -1334,6 +1362,8 @@ nothing and follows the numbering used here.
 \bibitem[Lehmann and Romano(2005)]{lehmann2005testing} Lehmann, E.~L., and Romano, J.~P. (2005), \emph{Testing Statistical Hypotheses}, (3rd ed.). New York: Springer.
 
 \bibitem[Lipsitch et al.(2010)]{lipsitch2010negative} Lipsitch, M., Tchetgen Tchetgen, E., and Cohen, T. (2010), ``Negative Controls: A Tool for Detecting Confounding and Bias in Observational Studies,'' \emph{Epidemiology}, 21, 383--388, DOI: 10.1097/ede.0b013e3181e4bfd7.
+
+\bibitem[Low(1997)]{low1997nonparametric} Low, M.~G. (1997), ``On Nonparametric Confidence Intervals,'' \emph{The Annals of Statistics}, 25, 2547--2554.
 
 \bibitem[MacKinnon and Webb(2017)]{mackinnon2017wild} MacKinnon, J.~G., and Webb, M.~D. (2017), ``Wild Bootstrap Inference for Wildly Different Cluster Sizes,'' \emph{Journal of Applied Econometrics}, 32, 233--254, DOI: 10.1002/jae.2508.
 
