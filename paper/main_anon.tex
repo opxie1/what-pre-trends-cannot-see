@@ -53,7 +53,10 @@ with Few Clusters}
 
 \begin{abstract}
 \noindent
-A policy that changes how an outcome is recorded is invisible to pre-treatment diagnostics. The parallel trends deviation reproducing a recording change is
+A policy that changes how an outcome is recorded is invisible to pre-treatment
+diagnostics. This is the position of any difference-in-differences design whose
+outcome is drawn from an administrative record that the policy, or a reform
+arriving with it, also rebuilt. The parallel trends deviation reproducing a recording change is
 exactly zero before treatment, so pre-trend tests reject no more often than
 their nominal level and sensitivity analysis calibrated from the pre-period loses coverage. Falsification tests across outcome categories graded by
 recording discretion supply the missing information. Run as one joint test with
@@ -110,6 +113,22 @@ the way the outcome is recorded rather than a change in the outcome itself.
 \citet{campbell1963experimental} named this the instrumentation threat and
 advised against shifting the measuring instrument and the policy at the same
 time, advice that is of little use once the policy is what moved the instrument.
+
+How much a recording layer can move is not a small quantity, and it has been
+measured where the recording technology was assigned at random.
+\citet{singh2024administrative} tests over $2{,}400$ schools in Andhra Pradesh
+and finds that paper-based assessments return scores $16$ to $20$ percentage
+points above an independently proctored retest of the same students, while
+tablet-based assessments match the retest. The skill being measured is the same
+in both arms and the instrument is what differs, which is a recording response
+in the sense of Assumption \ref{as:rec} with the wedge identified by design
+rather than assumed. That such a change should coincide with a policy is common
+rather than exotic wherever administrative recording is being rebuilt, which is
+much of the setting in which quantitative work on developing and emerging
+economies is done \citep{singh2020myths}. Where the reform to the record arrives
+with the policy, Assumption \ref{as:rec} is the data generating process and not
+a hypothetical, and the analyst who reaches for an event-study plot is reaching
+for the one diagnostic that Corollary \ref{cor:blind} says cannot help.
 We show that for any recording response there exists a structure
 with no recording response whatever, and with a violation of parallel trends that
 is exactly zero throughout the pre-treatment period, which generates the same
@@ -1431,6 +1450,10 @@ nothing and follows the numbering used here.
 \bibitem[Roth(2022)]{roth2022pretest} Roth, J. (2022), ``Pretest With Caution: Event-study Estimates After Testing for Parallel Trends,'' \emph{American Economic Review: Insights}, 4, 305--322, DOI: 10.1257/aeri.20210236.
 
 \bibitem[Roth et al.(2023)]{roth2023trending} Roth, J., Sant'Anna, P.~H.~C., Bilinski, A., and Poe, J. (2023), ``What's Trending in Difference-in-differences? a Synthesis of the Recent Econometrics Literature,'' \emph{Journal of Econometrics}, 235, 2218--2244, DOI: 10.1016/j.jeconom.2023.03.008.
+
+\bibitem[Singh(2020)]{singh2020myths} Singh, A. (2020), ``Myths of Official Measurement: Auditing and Improving Administrative Data in Developing Countries,'' RISE Working Paper 20/042.
+
+\bibitem[Singh(2024)]{singh2024administrative} Singh, A. (2024), ``Improving Administrative Data at Scale: Experimental Evidence on Digital Testing in Indian Schools,'' \emph{The Economic Journal}, 134, 2207--2223, DOI: 10.1093/ej/ueae017.
 
 \bibitem[Sun and Abraham(2021)]{sunabraham2021} Sun, L., and Abraham, S. (2021), ``Estimating Dynamic Treatment Effects in Event Studies With Heterogeneous Treatment Effects,'' \emph{Journal of Econometrics}, 225, 175--199, DOI: 10.1016/j.jeconom.2020.09.006.
 
