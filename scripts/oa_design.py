@@ -53,9 +53,29 @@ CRIME = [1, 2, 3, 4, 5, 6]
 MED_ANNUAL = [1, 4, 5, 6, 7]
 MED_FOCAL = [1, 2, 3, 4, 5, 6, 7]
 
-# wedge
+# Institution-implied gradient magnitude, sum_c delta_c m_c / sum_c delta_c^2,
+# with m_c the log change in recorded counts the recording change produces in
+# category c.  This is the component of the institutional response that lies in
+# the direction the gradient test is built to detect, and it is external to the
+# outcome panel: both delta_c and m_c come from published sources, so the
+# adequacy ratio is computable before the outcome is examined.
+#
+# crime: m_c from the FBI's 2014 comparison of NIBRS with SRS over 6,299
+# agencies (murder 0.0%, rape <0.1%, robbery 0.6%, aggravated assault 0.6%,
+# burglary 1.0%, larceny 2.6%, motor vehicle theft 2.7%; CRS R46668), projected
+# on the d_c of data_manifest.json, giving 0.0044.  The BJS 2000 comparison over
+# 1,131 agencies gives 0.0017 the same way.  Both are far below the mean
+# response of about 0.011, because the SRS-to-NIBRS change acts through police
+# counting rules while d_c grades victim reporting propensity, so the two are
+# nearly orthogonal: corr(delta_c, m_c) is 0.14 under FBI 2014 and 0.03 under
+# BJS 2000.  See theory/institutional_wedge.md.
+#
+# An earlier version of this file carried 0.074 for crime, which was the largest
+# value of |coef|/d_c across the six categories, i.e. a breakdown value read off
+# the fitted post-treatment means rather than an institutional magnitude.  Using
+# it made the adequacy screen a function of the outcome it screens.
 DESIGNS = {
-    "crime":             (CRIME,      "y", (6, 8), 0.074),
+    "crime":             (CRIME,      "y", (6, 8), 0.0044),
     "medicaid annual":   (MED_ANNUAL, "Y", (5, 6), 0.052),
     "medicaid odd year": (MED_FOCAL,  "Y", (5, 6), 0.052),
 }

@@ -87,10 +87,11 @@ data/data_manifest.json            every series, its source and its vintage
 results/inference/                 simulated size and power
 results/coverage/                  coverage under a recording response
 results/empirics/                  application p-values and floors
-results/inference/design_power.json  the 48 screened specifications per panel,
-                                   and the certified_runs block holding every
-                                   figure Section 11 reports for the seven
-                                   adequate crime specifications
+results/inference/design_power.csv  the 48 screened specifications per panel,
+                                   with minimum detectable responses and
+                                   adequacy ratios
+theory/institutional_wedge.md      how kappa_inst is derived, and why the
+                                   number this replaces was wrong
 tests/test_core.py                 69 checks
 ```
 
@@ -109,11 +110,11 @@ from did_measurement import screen_design, falsification_test
 
 # kappa_inst is the recording wedge the institution implies, per unit of
 # discretion, on the scale of the outcome.
-verdict = screen_design(panel, kappa_inst=0.074)
+verdict = screen_design(panel, kappa_inst=0.0044)
 print(verdict)          # minimum detectable response, G_eff, chi square size
 
 if verdict.adequate:
-    result = falsification_test(panel, kappa_inst=0.074)
+    result = falsification_test(panel, kappa_inst=0.0044)
     print(result.pvalue, result.calibration)
 ```
 

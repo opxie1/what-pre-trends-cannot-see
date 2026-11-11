@@ -1,52 +1,52 @@
 design,pre_window,k_pre,post_window,k_post,loading,bridge,statistic,C,m,sum_delta2,I_k,G_eff,mde,wedge,ratio,powered
-crime,as run,6,as run,8,none,excluded,wald,6,9,0.3491,40.46,45.92,0.296,0.074,4.0,False
-crime,as run,6,as run,8,none,excluded,directed,6,9,0.3491,40.46,45.92,0.1736,0.074,2.346,False
-crime,as run,6,as run,8,none,included,wald,7,9,0.7686,40.46,45.92,0.1823,0.074,2.464,False
-crime,as run,6,as run,8,none,included,directed,7,9,0.7686,40.46,45.92,0.1109,0.074,1.498,False
-crime,as run,6,as run,8,triad,excluded,wald,6,9,0.3491,40.46,45.92,0.3112,0.074,4.205,False
-crime,as run,6,as run,8,triad,excluded,directed,6,9,0.3491,40.46,45.92,0.1819,0.074,2.458,False
-crime,as run,6,as run,8,triad,included,wald,7,9,0.7686,40.46,45.92,0.19,0.074,2.568,False
-crime,as run,6,as run,8,triad,included,directed,7,9,0.7686,40.46,45.92,0.1154,0.074,1.559,False
-crime,as run,6,five,5,none,excluded,wald,6,6,0.3491,40.46,46.35,0.2731,0.074,3.691,False
-crime,as run,6,five,5,none,excluded,directed,6,6,0.3491,40.46,46.35,0.1739,0.074,2.349,False
-crime,as run,6,five,5,none,included,wald,7,6,0.7686,40.46,46.35,0.1693,0.074,2.288,False
-crime,as run,6,five,5,none,included,directed,7,6,0.7686,40.46,46.35,0.111,0.074,1.5,False
-crime,as run,6,five,5,triad,excluded,wald,6,6,0.3491,40.46,46.35,0.2872,0.074,3.881,False
-crime,as run,6,five,5,triad,excluded,directed,6,6,0.3491,40.46,46.35,0.1823,0.074,2.464,False
-crime,as run,6,five,5,triad,included,wald,7,6,0.7686,40.46,46.35,0.1765,0.074,2.385,False
-crime,as run,6,five,5,triad,included,directed,7,6,0.7686,40.46,46.35,0.1156,0.074,1.562,False
-crime,as run,6,three,3,none,excluded,wald,6,4,0.3491,40.46,46.74,0.2534,0.074,3.424,False
-crime,as run,6,three,3,none,excluded,directed,6,4,0.3491,40.46,46.74,0.1743,0.074,2.355,False
-crime,as run,6,three,3,none,included,wald,7,4,0.7686,40.46,46.74,0.158,0.074,2.135,False
-crime,as run,6,three,3,none,included,directed,7,4,0.7686,40.46,46.74,0.1113,0.074,1.503,False
-crime,as run,6,three,3,triad,excluded,wald,6,4,0.3491,40.46,46.74,0.2666,0.074,3.602,False
-crime,as run,6,three,3,triad,excluded,directed,6,4,0.3491,40.46,46.74,0.1829,0.074,2.472,False
-crime,as run,6,three,3,triad,included,wald,7,4,0.7686,40.46,46.74,0.1648,0.074,2.227,False
-crime,as run,6,three,3,triad,included,directed,7,4,0.7686,40.46,46.74,0.116,0.074,1.567,False
-crime,one,1,as run,8,none,excluded,wald,6,9,0.3491,175.47,42.9,0.1292,0.074,1.746,False
-crime,one,1,as run,8,none,excluded,directed,6,9,0.3491,175.47,42.9,0.0787,0.074,1.064,False
-crime,one,1,as run,8,none,included,wald,7,9,0.7686,175.47,42.9,0.0836,0.074,1.13,False
-crime,one,1,as run,8,none,included,directed,7,9,0.7686,175.47,42.9,0.0517,0.074,0.699,True
-crime,one,1,as run,8,triad,excluded,wald,6,9,0.3491,175.47,42.9,0.1353,0.074,1.828,False
-crime,one,1,as run,8,triad,excluded,directed,6,9,0.3491,175.47,42.9,0.0823,0.074,1.112,False
-crime,one,1,as run,8,triad,included,wald,7,9,0.7686,175.47,42.9,0.087,0.074,1.176,False
-crime,one,1,as run,8,triad,included,directed,7,9,0.7686,175.47,42.9,0.0538,0.074,0.727,True
-crime,one,1,five,5,none,excluded,wald,6,6,0.3491,175.47,44.69,0.12,0.074,1.621,False
-crime,one,1,five,5,none,excluded,directed,6,6,0.3491,175.47,44.69,0.0788,0.074,1.065,False
-crime,one,1,five,5,none,included,wald,7,6,0.7686,175.47,44.69,0.0779,0.074,1.052,False
-crime,one,1,five,5,none,included,directed,7,6,0.7686,175.47,44.69,0.0518,0.074,0.7,True
-crime,one,1,five,5,triad,excluded,wald,6,6,0.3491,175.47,44.69,0.1257,0.074,1.699,False
-crime,one,1,five,5,triad,excluded,directed,6,6,0.3491,175.47,44.69,0.0824,0.074,1.114,False
-crime,one,1,five,5,triad,included,wald,7,6,0.7686,175.47,44.69,0.0811,0.074,1.095,False
-crime,one,1,five,5,triad,included,directed,7,6,0.7686,175.47,44.69,0.0539,0.074,0.728,True
-crime,one,1,three,3,none,excluded,wald,6,4,0.3491,175.47,46.72,0.112,0.074,1.513,False
-crime,one,1,three,3,none,excluded,directed,6,4,0.3491,175.47,46.72,0.0789,0.074,1.067,False
-crime,one,1,three,3,none,included,wald,7,4,0.7686,175.47,46.72,0.0728,0.074,0.984,True
-crime,one,1,three,3,none,included,directed,7,4,0.7686,175.47,46.72,0.0519,0.074,0.701,True
-crime,one,1,three,3,triad,excluded,wald,6,4,0.3491,175.47,46.72,0.1174,0.074,1.586,False
-crime,one,1,three,3,triad,excluded,directed,6,4,0.3491,175.47,46.72,0.0827,0.074,1.117,False
-crime,one,1,three,3,triad,included,wald,7,4,0.7686,175.47,46.72,0.0759,0.074,1.025,False
-crime,one,1,three,3,triad,included,directed,7,4,0.7686,175.47,46.72,0.054,0.074,0.73,True
+crime,as run,6,as run,8,none,excluded,wald,6,9,0.3491,40.46,45.92,0.296,0.0044,67.281,False
+crime,as run,6,as run,8,none,excluded,directed,6,9,0.3491,40.46,45.92,0.1736,0.0044,39.458,False
+crime,as run,6,as run,8,none,included,wald,7,9,0.7686,40.46,45.92,0.1823,0.0044,41.435,False
+crime,as run,6,as run,8,none,included,directed,7,9,0.7686,40.46,45.92,0.1109,0.0044,25.195,False
+crime,as run,6,as run,8,triad,excluded,wald,6,9,0.3491,40.46,45.92,0.3112,0.0044,70.726,False
+crime,as run,6,as run,8,triad,excluded,directed,6,9,0.3491,40.46,45.92,0.1819,0.0044,41.34,False
+crime,as run,6,as run,8,triad,included,wald,7,9,0.7686,40.46,45.92,0.19,0.0044,43.182,False
+crime,as run,6,as run,8,triad,included,directed,7,9,0.7686,40.46,45.92,0.1154,0.0044,26.222,False
+crime,as run,6,five,5,none,excluded,wald,6,6,0.3491,40.46,46.35,0.2731,0.0044,62.07,False
+crime,as run,6,five,5,none,excluded,directed,6,6,0.3491,40.46,46.35,0.1739,0.0044,39.513,False
+crime,as run,6,five,5,none,included,wald,7,6,0.7686,40.46,46.35,0.1693,0.0044,38.477,False
+crime,as run,6,five,5,none,included,directed,7,6,0.7686,40.46,46.35,0.111,0.0044,25.226,False
+crime,as run,6,five,5,triad,excluded,wald,6,6,0.3491,40.46,46.35,0.2872,0.0044,65.266,False
+crime,as run,6,five,5,triad,excluded,directed,6,6,0.3491,40.46,46.35,0.1823,0.0044,41.433,False
+crime,as run,6,five,5,triad,included,wald,7,6,0.7686,40.46,46.35,0.1765,0.0044,40.113,False
+crime,as run,6,five,5,triad,included,directed,7,6,0.7686,40.46,46.35,0.1156,0.0044,26.269,False
+crime,as run,6,three,3,none,excluded,wald,6,4,0.3491,40.46,46.74,0.2534,0.0044,57.58,False
+crime,as run,6,three,3,none,excluded,directed,6,4,0.3491,40.46,46.74,0.1743,0.0044,39.604,False
+crime,as run,6,three,3,none,included,wald,7,4,0.7686,40.46,46.74,0.158,0.0044,35.906,False
+crime,as run,6,three,3,none,included,directed,7,4,0.7686,40.46,46.74,0.1113,0.0044,25.284,False
+crime,as run,6,three,3,triad,excluded,wald,6,4,0.3491,40.46,46.74,0.2666,0.0044,60.585,False
+crime,as run,6,three,3,triad,excluded,directed,6,4,0.3491,40.46,46.74,0.1829,0.0044,41.577,False
+crime,as run,6,three,3,triad,included,wald,7,4,0.7686,40.46,46.74,0.1648,0.0044,37.459,False
+crime,as run,6,three,3,triad,included,directed,7,4,0.7686,40.46,46.74,0.116,0.0044,26.354,False
+crime,one,1,as run,8,none,excluded,wald,6,9,0.3491,175.47,42.9,0.1292,0.0044,29.361,False
+crime,one,1,as run,8,none,excluded,directed,6,9,0.3491,175.47,42.9,0.0787,0.0044,17.887,False
+crime,one,1,as run,8,none,included,wald,7,9,0.7686,175.47,42.9,0.0836,0.0044,19.0,False
+crime,one,1,as run,8,none,included,directed,7,9,0.7686,175.47,42.9,0.0517,0.0044,11.757,False
+crime,one,1,as run,8,triad,excluded,wald,6,9,0.3491,175.47,42.9,0.1353,0.0044,30.745,False
+crime,one,1,as run,8,triad,excluded,directed,6,9,0.3491,175.47,42.9,0.0823,0.0044,18.704,False
+crime,one,1,as run,8,triad,included,wald,7,9,0.7686,175.47,42.9,0.087,0.0044,19.774,False
+crime,one,1,as run,8,triad,included,directed,7,9,0.7686,175.47,42.9,0.0538,0.0044,12.228,False
+crime,one,1,five,5,none,excluded,wald,6,6,0.3491,175.47,44.69,0.12,0.0044,27.269,False
+crime,one,1,five,5,none,excluded,directed,6,6,0.3491,175.47,44.69,0.0788,0.0044,17.906,False
+crime,one,1,five,5,none,included,wald,7,6,0.7686,175.47,44.69,0.0779,0.0044,17.695,False
+crime,one,1,five,5,none,included,directed,7,6,0.7686,175.47,44.69,0.0518,0.0044,11.768,False
+crime,one,1,five,5,triad,excluded,wald,6,6,0.3491,175.47,44.69,0.1257,0.0044,28.567,False
+crime,one,1,five,5,triad,excluded,directed,6,6,0.3491,175.47,44.69,0.0824,0.0044,18.736,False
+crime,one,1,five,5,triad,included,wald,7,6,0.7686,175.47,44.69,0.0811,0.0044,18.422,False
+crime,one,1,five,5,triad,included,directed,7,6,0.7686,175.47,44.69,0.0539,0.0044,12.245,False
+crime,one,1,three,3,none,excluded,wald,6,4,0.3491,175.47,46.72,0.112,0.0044,25.444,False
+crime,one,1,three,3,none,excluded,directed,6,4,0.3491,175.47,46.72,0.0789,0.0044,17.94,False
+crime,one,1,three,3,none,included,wald,7,4,0.7686,175.47,46.72,0.0728,0.0044,16.554,False
+crime,one,1,three,3,none,included,directed,7,4,0.7686,175.47,46.72,0.0519,0.0044,11.792,False
+crime,one,1,three,3,triad,excluded,wald,6,4,0.3491,175.47,46.72,0.1174,0.0044,26.675,False
+crime,one,1,three,3,triad,excluded,directed,6,4,0.3491,175.47,46.72,0.0827,0.0044,18.79,False
+crime,one,1,three,3,triad,included,wald,7,4,0.7686,175.47,46.72,0.0759,0.0044,17.247,False
+crime,one,1,three,3,triad,included,directed,7,4,0.7686,175.47,46.72,0.054,0.0044,12.28,False
 medicaid annual,as run,5,as run,6,none,excluded,wald,5,7,0.958,13.88,39.04,1.7107,0.052,32.898,False
 medicaid annual,as run,5,as run,6,none,excluded,directed,5,7,0.958,13.88,39.04,0.9293,0.052,17.871,False
 medicaid annual,as run,5,as run,6,none,included,wald,6,7,1.0721,13.88,39.04,1.822,0.052,35.038,False

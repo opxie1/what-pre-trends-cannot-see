@@ -80,8 +80,10 @@ changes, exact under sign symmetry of the cluster contributions; and the
 restricted wild cluster bootstrap. Label randomization carries a resolution
 floor that requires at least five categories at the five percent level. Whether
 a design can detect the recording change its institution implies is computable
-before the outcome is examined, and in a specification that can, the data exclude a
-recording response as large as the move to incident-based reporting implies.
+before the outcome is examined, and it turns on alignment as well as power: the
+magnitude that matters is the projection of the institutional response on the
+exposure index, and in all three panels we screen it falls an order of magnitude
+short of what the design detects.
 \end{abstract}
 
 \smallskip
@@ -214,9 +216,15 @@ the directed statistic rather than the cluster level calibration.
 A falsification test is worth running only against responses it could
 detect, and whether it can is computable before any outcome is examined. We
 give that calculation and run it over forty eight specifications of each panel.
-Seven crime specifications are adequate and none rejects, which excludes a
-recording response at the magnitude the transition implies. No health
-specification is adequate.
+No specification of either panel is adequate, and the reason in the crime panel
+is not a shortage of data. The response the move to incident-based reporting
+implies is real, averaging $0.011$ log points across index categories, but it
+acts through police counting rules while the exposure index grades victim
+reporting propensity, so the two are nearly orthogonal and the projection of the
+one on the other is $0.0044$ against a minimum detectable response of $0.052$.
+A design can therefore fail this screen through misalignment rather than through
+power, and which of the two it is can be read off before the outcome is
+examined.
 
 The rest of the paper is organized as follows. Section \ref{sec:why} studies what a pre-trend test and a pre-trend calibrated sensitivity analysis can reveal about a recording response. Section \ref{sec:setup} states the design and the null. Sections \ref{sec:anatomy} to \ref{sec:power} give the exact null law, the three calibrations and the power results. Section \ref{sec:sim} reports size and power, Section \ref{sec:designcalc} screens a design before the outcome is examined, and Section \ref{sec:app} applies the procedures to two panels. Proofs and further evidence are in the online Appendix.
 
@@ -1174,13 +1182,31 @@ nonmonotone in $\kappa$.
 
 A falsification test is worth running only against responses it could detect,
 and whether it can is a property of the design that is computable before the
-outcome is examined. Write $\kappa^{\mathrm{inst}}$ for the recording wedge the
-institution implies and $\kappa_{\mathrm{MDE}}$ for the response the design
+outcome is examined. Write $\kappa_{\mathrm{MDE}}$ for the response the design
 detects with probability $0.80$ at level $\alpha$, which by Corollary
 \ref{cor:mde} depends on the number of restrictions, the path information
-$I_k$, the exposure spread $\Sigma_\delta^2$ and the residual variance. The
-design is adequate when $\kappa_{\mathrm{MDE}} \le \kappa^{\mathrm{inst}}$, and
-four features of the specification move the ratio.
+$I_k$, the exposure spread $\Sigma_\delta^2$ and the residual variance.
+
+What $\kappa_{\mathrm{MDE}}$ has to be compared with needs care, because the
+test does not see the whole of a recording response. Let $m_c$ be the log
+response the recording change produces in category $c$. The alternative the
+gradient test is built against has cross-category shape proportional to
+$\delta_c$, so the part of $m$ that the test can detect is its projection on the
+exposure index,
+\begin{equation}
+\kappa^{\mathrm{inst}} = \frac{\sum_c \delta_c m_c}{\sum_c \delta_c^2} ,
+\label{eq:kinst}
+\end{equation}
+and the design is adequate when $\kappa_{\mathrm{MDE}} \le
+\kappa^{\mathrm{inst}}$. Both inputs are external to the outcome panel, $d_c$
+from the recording institution and $m_c$ from whatever is known about the
+recording change, so \eqref{eq:kinst} is computable in advance, which is the
+only reason the comparison is worth making. A quantity read off the
+post-treatment estimates, a per category breakdown value for instance, is not a
+candidate for $\kappa^{\mathrm{inst}}$: it would make the screen a function of
+the outcome it screens.
+
+Five features of the specification move the ratio.
 
 The statistic is the first. By Corollary \ref{cor:mde} the directed statistic
 has the smaller minimum detectable response whenever the response path is
@@ -1194,6 +1220,17 @@ The fourth is the exposure spread, and the cheapest way to widen it is a
 category the recording system has no discretion over, which anchors the low end
 of $d$ at zero.
 
+The fifth is alignment, and it is the one that can defeat the other four. By
+\eqref{eq:kinst} the numerator is an inner product, so a design can have ample
+power against a response of the average size the institution implies and almost
+none against the response it actually implies, if the index orders the
+categories on a different principle from the one the recording system acts on.
+The cosine between $\delta$ and $m$ is the whole of it, and it costs one inner
+product to check. Section \ref{sec:app} reports a design that fails here while
+passing on every other lever, which is the case a researcher most needs to be
+warned about, because widening the spread and narrowing the pre window both
+look like progress and neither helps.
+
 \section{Application}
 \label{sec:app}
 
@@ -1202,42 +1239,59 @@ treatment-induced recording change. The identification claim in each case is
 that under measurement invariance the post-treatment event-study coefficients do
 not vary with the exposure index, so \eqref{eq:null} holds.
 
-Applying the four levers of Section \ref{sec:designcalc} to the crime panel moves $\kappa_{\mathrm{MDE}}/
-\kappa^{\mathrm{inst}}$ from $4.21$ at the specification as originally run to
-$0.699$. Homicide, which the panel already carries and which
-that specification holds out as a $d = 0$ series, more
-than doubles $\Sigma_\delta^2$ from $0.349$ to $0.769$ when it enters the
-gradient, and the narrow pre window supplies the rest. Seven of the forty eight
-specifications we enumerate are adequate in this sense, the best of them at
-$\kappa_{\mathrm{MDE}} = 0.052$ against $\kappa^{\mathrm{inst}} = 0.074$, with
-$C = 7$, $m = 9$ and $G_{\mathrm{eff}} = 42.9$. That closed-form tracks the
-cluster sign-change and bootstrap calibrations and understates the label
-permutation test, whose price of randomization inflates it by $1.166$ at
-$C = 7$, so the adequacy claim is better read at $\kappa_{\mathrm{MDE}} = 0.061$
-and a ratio of $0.818$, at which all seven remain adequate.
+The first four levers of Section \ref{sec:designcalc} move the crime panel a
+long way. Homicide, which the panel already carries and which the specification
+as originally run holds out as a $d = 0$ series, more than doubles
+$\Sigma_\delta^2$ from $0.349$ to $0.769$ when it enters the gradient; dropping
+the pre window from six horizons to one raises $I_k$ from $40.5$ to $175.5$; and
+the directed statistic takes the rest. Over the forty eight specifications we
+enumerate the minimum detectable response falls to $0.052$ at its best, with
+$C = 7$, $m = 9$ and $G_{\mathrm{eff}} = 42.9$.
 
-None of the seven rejects. Over the certified specifications the label
-permutation test returns $p$ values between $0.359$ and $0.559$, the cluster
-sign-change test between $0.221$ and $0.585$ and the restricted wild cluster
-bootstrap between $0.164$ and $0.220$, against an attainable floor of $0.001$.
-The chi-square calibration returns between $0.059$ and $0.159$ and is the only
-one that comes near rejecting, which is the distortion of Section
-\ref{sec:anatomy} rather than evidence. This is an exclusion. The wedge the transition implies, $\kappa^{\mathrm{inst}} = 0.074$, exceeds the $0.061$ the certified
-specification detects four times in five, so a response of that magnitude would
-have been found with probability at least $0.80$ and was not. The move to incident-based reporting leaves no cross-category gradient in recorded index crime, and the data speak against a
-recording response of that size.
+What it has to beat is far smaller. The FBI's comparison of the two reporting
+systems over $6{,}299$ agencies puts the log change in recorded counts at under
+$0.001$ for rape, $0.006$ for robbery and for aggravated assault, $0.010$ for
+burglary, $0.026$ for larceny and $0.027$ for motor vehicle theft, with murder
+unchanged, averaging $0.011$ across the seven index categories (Congressional
+Research Service report R46668, which also reports the earlier Bureau of Justice
+Statistics comparison over $1{,}131$ agencies). Projected on the exposure index
+through \eqref{eq:kinst} the first gives $\kappa^{\mathrm{inst}} = 0.0044$ and
+the second $0.0017$. No specification of the crime panel is adequate, the best
+ratio being $11.8$.
 
-The same calculation screens the health panels out. Neither reaches an adequate
-specification at any of the forty eight, the best ratios being $12.5$ in the
-annual sub design and $14.8$ in the odd-year sub design, against $33.9$ and
-$53.2$ as run. The exposure index there already places three conditions at
-$d = 0$, so widening the spread has little left to buy, and the shortfall is an
-order of magnitude. We therefore report those two designs
-as an illustration of the calculus screening a design out and not as evidence
-about Medicaid expansion. The nonrejections reported here carry no
-information about measurement invariance, and the point of computing
-$\kappa_{\mathrm{MDE}}$ first is that this was knowable without looking at the
-outcome. Source: \texttt{design\_power.csv}.
+The shortfall is misalignment rather than power, and that distinction is the
+useful part. The responses themselves are of the order the design detects; it is
+their projection on $\delta$ that is not, the correlation between the two being
+$0.14$ under the first comparison and $0.03$ under the second. The exposure index
+grades categories by the share of victimizations not reported to police, and the
+move to incident-based reporting does not act on victim reporting at all. It
+drops the hierarchy rule and makes co-occurring offenses countable, which is a
+change in police counting, and the two orderings come apart and in places
+reverse: motor vehicle theft has the second lowest $d_c$ and nearly the largest
+response, because vehicle theft often accompanies another index offense, while
+rape has nearly the highest $d_c$ and no response worth measuring, because it
+rarely accompanies a more serious one. Widening the spread and narrowing the pre
+window both looked like progress here and neither helped.
+
+The same calculation screens the health panels out, the best ratios being $12.5$
+in the annual sub design and $14.8$ in the odd-year sub design against $33.9$
+and $53.2$ as run. The exposure index there already places three conditions at
+$d = 0$, so widening the spread has little left to buy, and the shortfall is
+again an order of magnitude.
+
+We therefore report all three designs as illustrations of the calculus screening
+a design out, and none of them as evidence about incident-based reporting or
+about Medicaid expansion. Across every specification of both panels the
+randomization calibrations reject at about their nominal rate, ten of the two
+hundred and forty three crime $p$ values and nineteen of the three hundred and
+seventy eight health ones falling at or below $0.05$, which is what the null
+predicts and what a design this far from adequate can be expected to produce
+either way. Those nonrejections carry no information about measurement
+invariance. The point of computing $\kappa_{\mathrm{MDE}}$ and
+$\kappa^{\mathrm{inst}}$ before the outcome is that all of this was knowable in
+advance. Sources: \texttt{design\_power.csv} for the screen and
+\texttt{theory/institutional\_wedge.md} for the derivation of
+$\kappa^{\mathrm{inst}}$.
 
 The online Appendix describes the two panels, the loading normalization
 applied to each category array, and what the chi-square calibration returns
@@ -1252,17 +1306,17 @@ dataset \texttt{dttw-5yxu}, and the expansion effective dates come from the
 Kaiser Family Foundation table of state Medicaid expansion decisions. All are
 public. The two constructed panels and the code that builds them are in the
 replication archive named in the title footnote, under
-\texttt{data/processed/} and \texttt{scripts/}. For the specifications as
-originally run, every $p$ value, $G_{\mathrm{eff}}$ and predicted size is read
-from \texttt{results/empirics/inference\_gradient.csv} and every realized
-resolution floor from
-\texttt{results/empirics/app\_floors\_injection.csv}. The seven certified
-specifications are enumerated in
-\texttt{results/inference/design\_power.csv}, and every figure reported for
-them above, including their $p$ values, $G_{\mathrm{eff}}$, attainable floor
-and permutation inflated minimum detectable response, is read from the
-\texttt{certified\_runs} block of
-\texttt{results/inference/design\_power.json}.
+\texttt{data/processed/} and \texttt{scripts/}. The per category changes in
+recorded counts underlying $\kappa^{\mathrm{inst}}$ are from Congressional
+Research Service report R46668, which summarizes the FBI and Bureau of Justice
+Statistics comparisons of the two reporting systems; the projection is derived
+in \texttt{theory/institutional\_wedge.md}. Every $p$ value,
+$G_{\mathrm{eff}}$ and predicted size is read from
+\texttt{results/empirics/inference\_gradient.csv} and every realized resolution
+floor from \texttt{results/empirics/app\_floors\_injection.csv}. The forty
+eight screened specifications of each panel, with their minimum detectable
+responses and adequacy ratios, are in
+\texttt{results/inference/design\_power.csv}.
 
 \section{Conclusion}
 

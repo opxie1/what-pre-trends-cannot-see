@@ -19,9 +19,9 @@ Usage:
 
     from did_measurement import screen_design, falsification_test
 
-    d = screen_design(panel, kappa_inst=0.074)
+    d = screen_design(panel, kappa_inst=0.0044)
     if d.adequate:
-        r = falsification_test(panel, kappa_inst=0.074)
+        r = falsification_test(panel, kappa_inst=0.0044)
         print(r.pvalue, r.calibration)
 """
 from dataclasses import dataclass, field
