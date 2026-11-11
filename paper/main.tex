@@ -108,7 +108,12 @@ categories by their reporting propensity and compare estimated effects across th
 grades. \citet{baicker2013oregon} report effects of Medicaid coverage on measured
 blood pressure and cholesterol alongside self reported diagnoses of the
 corresponding conditions. In epidemiology the same device is formalized as the
-negative control outcome \citep{lipsitch2010negative}. Run as a single test, the
+negative control outcome \citep{lipsitch2010negative}, and
+\citet{nunez2025detection} grade candidate controls by how much of the
+ascertainment process they share with the outcome of interest, which is the
+cross section this paper uses; \citet{zhang2025nco} calibrate a
+difference-in-differences estimate with negative controls, though against
+unmeasured confounding rather than a recording response. Run as a single test, the
 comparison becomes a joint restriction on interaction coefficients, and its $p$
 value is read from a chi-square reference distribution with cluster-robust standard errors.
 
@@ -229,6 +234,12 @@ than at matched degrees of freedom or in a large cluster limit. The design that
 motivates the problem, grading outcome categories by recording discretion, is
 run by \citet{weisburd2024crs}; \citet{roth2022pretest} and
 \citet{rambachan2023credible} treat falsification tests run as pre-trend tests.
+The epidemiological statement of that design is
+\citet{nunez2025detection}, who reach the same grading informally and record
+what is missing from it: that low precision complicates reading a negative
+control, and that no formal guidance exists on how large a response one has to
+be able to detect. Sections \ref{sec:perm} to \ref{sec:designcalc} are an
+answer to those two sentences.
 The online Appendix gives the extended discussion.
 
 \section{What the falsification test is for}
@@ -1369,6 +1380,8 @@ nothing and follows the numbering used here.
 
 \bibitem[Miller and Segal(2019)]{miller2019female} Miller, A.~R., and Segal, C. (2019), ``Do Female Officers Improve Law Enforcement Quality? Effects on Crime Reporting and Domestic Violence,'' \emph{Review of Economic Studies}, 86, 2220--2247, DOI: 10.1093/restud/rdy051.
 
+\bibitem[N\'u\~nez and Matthews(2025)]{nunez2025detection} N\'u\~nez, I., and Matthews, A.~A. (2025), ``Detection Bias and the Role of Negative Control Outcomes,'' \emph{BMJ Medicine}, 4, e001336, DOI: 10.1136/bmjmed-2025-001336.
+
 \bibitem[Ody et al.(2019)]{ody2019readmissions} Ody, C., Msall, L., Dafny, L.~S., Grabowski, D.~C., and Cutler, D.~M. (2019), ``Have Hospital Readmissions Declined in the Wake of the Hospital Readmissions Reduction Program?'' \emph{Health Affairs}, 38, 36--43.
 
 \bibitem[Pustejovsky and Tipton(2018)]{pustejovsky2018small} Pustejovsky, J.~E., and Tipton, E. (2018), ``Small-sample Methods for Cluster-robust Variance Estimation and Hypothesis Testing in Fixed Effects Models,'' \emph{Journal of Business \& Economic Statistics}, 36, 672--683, DOI: 10.1080/07350015.2016.1247004.
@@ -1384,6 +1397,8 @@ nothing and follows the numbering used here.
 \bibitem[Tipton and Pustejovsky(2015)]{tipton2015small} Tipton, E., and Pustejovsky, J.~E. (2015), ``Small-sample Adjustments for Tests of Moderators and Model Fit Using Robust Variance Estimation in Meta-regression,'' \emph{Journal of Educational and Behavioral Statistics}, 40, 604--634, DOI: 10.3102/1076998615606099.
 
 \bibitem[Weisburd et al.(2024)]{weisburd2024crs} Weisburd, D., Wilson, D.~B., Gill, C., Kuen, K., and Zastrow, T. (2024), ``Are We Underestimating the Crime Prevention Outcomes of Community Policing? the Importance of Crime Reporting Sensitivity Bias,'' \emph{Journal of Law and Empirical Analysis}, 1, 1--17, DOI: 10.1177/2755323x241233469.
+
+\bibitem[Zhang et al.(2025)]{zhang2025nco} Zhang, D., Zhang, B., Wang, H., Lu, Y., Wolock, C.~J., Hu, W., Wang, L., Hripcsak, G., and Chen, Y. (2025), ``Negative Control-calibrated Difference-in-difference Analyses: Addressing Unmeasured Confounding in RWD With Application to Racial/ethnic Differences,'' \emph{npj Digital Medicine}, 8, 452, DOI: 10.1038/s41746-025-01821-w.
 
 \end{thebibliography}
 
