@@ -1,0 +1,107 @@
+% Separate title page, required by the Journal of Quantitative Economics
+% double-blind procedure: all identifying information lives here and not in
+% main_anon.tex or supplement_anon.tex.
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{setspace}
+
+% The replication URL is long and unbreakable; let TeX stretch the line rather
+% than overflow the margin.
+\sloppy
+\emergencystretch=3em
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\begin{center}
+{\large\bfseries Testing for Treatment-Induced Recording Change\\[2pt]
+with Few Clusters}
+\end{center}
+
+\vspace{18pt}
+
+\noindent\textbf{Author}
+
+\smallskip
+
+\noindent Ethan Xie\\
+Charter School of Wilmington, Wilmington, Delaware, United States
+
+\vspace{12pt}
+
+\noindent\textbf{Corresponding author}
+
+\smallskip
+
+\noindent Ethan Xie, \texttt{ethanxie@udel.edu}
+
+\vspace{12pt}
+
+\noindent\textbf{ORCID}
+
+\smallskip
+
+\noindent Not yet registered.
+
+\vspace{18pt}
+
+\noindent\textbf{Statements and Declarations}
+
+\smallskip
+
+\noindent\textit{Funding.} No funding was received for conducting this study.
+
+\smallskip
+
+\noindent\textit{Competing interests.} The author has no competing interests to
+declare that are relevant to the content of this article.
+
+\smallskip
+
+\noindent\textit{Ethics approval.} Not applicable. The study uses only
+aggregated public use statistics and involves no human participants, their data
+or biological material.
+
+\smallskip
+
+\noindent\textit{Author contributions.} The author is the sole author and
+carried out all of the work reported.
+
+\smallskip
+
+\noindent\textit{Use of generative AI.} The author used a generative AI
+assistant during preparation of this manuscript, for drafting and editing prose
+and formatting the reference list, and for some of the simulation code. This
+goes beyond AI assisted copy editing and is declared for that reason. All
+theoretical results and their proofs, the design of the empirical analysis, and
+the interpretation of all findings are the author's own. The author has verified
+every reported number against the output files named in the notes to the tables
+and takes full responsibility for the content.
+
+\smallskip
+
+\noindent\textit{Data, material and code availability.} Every series used is a
+public use file. The two constructed panels, the code that builds them, the
+simulation scripts and the output file behind every number reported in the
+paper are at
+\url{https://github.com/opxie1/what-pre-trends-cannot-see}, at the tagged
+release \texttt{v1.2}, which is immutable. Both panels rebuild offline from the
+cached source files under \texttt{data/raw/}. The simulations are written in
+Python and need version 3.11 or later with \texttt{numpy}, \texttt{scipy} and
+\texttt{pandas}. They draw pseudorandom numbers from the NumPy PCG64 generator,
+seeded once per replication by the CRC-32 checksum of a string naming the design
+cell and the replication index, so that any cell can be regenerated on its own.
+Producing every output file cited in the paper takes $61.2$ minutes in total.
+
+\vspace{18pt}
+
+\noindent\textbf{Acknowledgements}
+
+\smallskip
+
+\noindent None.
+
+\end{document}
