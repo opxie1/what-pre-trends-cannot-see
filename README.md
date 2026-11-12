@@ -1,4 +1,4 @@
-# What Pre-Trends Cannot See: Testing for Treatment-Induced Recording Change with Few Clusters
+# Testing for Treatment-Induced Recording Change with Few Clusters
 
 Replication material for the paper of the same name.
 
